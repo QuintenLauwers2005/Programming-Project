@@ -12,7 +12,9 @@ function LoginPage() {
   const [success, setSuccess] = useState(false)
 
   const navigate = useNavigate();
+
   const handleRegistratieClick = () => {navigate('/registratie');}
+  const handleRegistratieBedrijfClick = () => {navigate('/RegistratieBedrijf');}
 
   const handleLogin = () => {
     // Fictieve inloggegevens
@@ -97,7 +99,8 @@ function LoginPage() {
           Register student
         </button>
 
-        <button style={{
+        <button onClick={handleRegistratieBedrijfClick}
+        style={{
           padding: '8px 12px',
           backgroundColor: '#ccc',
           border: 'none',
