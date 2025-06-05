@@ -1,21 +1,15 @@
-// src/HomePage.jsx
-import React from 'react';
+// HomePage.js
+import React from 'react'
 import { Link } from 'react-router-dom';
-import Logo from './Components/Logo';
-import Kaart from './Components/Kaart';
-
+import Logo from './Components/Logo'
+import Kaart from './Components/Kaart'
 
 function HomePage() {
-  const homePath = "/";
-  const stagesPath = "/stages"; 
-  const bedrijvenPath = "/bedrijven"; 
-  const studentenPath = "/studenten"; 
-  const studentProfielPad = "/StudentProfilePage";
-  const loginPath = "/login"; 
-
+  const loginPath = "/login";
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
-
+      
+      {/* Navigatie */}
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <Link to={loginPath}>
@@ -23,13 +17,10 @@ function HomePage() {
           </Link>
         </div>
         <nav style={{ display: 'flex', gap: '10px' }}>
-          <Link to={homePath}><button>Home</button></Link>
-          <Link to={stagesPath}><button>Stages</button></Link>
-          <Link to={bedrijvenPath}><button>Bedrijven</button></Link>
-          <Link to={studentenPath}><button>Studenten</button></Link>
-          <Link to={studentProfielPad}>
-            <button>Profiel</button>
-          </Link>
+          <button>Home</button>
+          <button>Stages</button>
+          <button>Bedrijven</button>
+          <button>Studenten</button>
         </nav>
         <Logo/>
       </header>
