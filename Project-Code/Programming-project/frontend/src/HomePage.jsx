@@ -5,17 +5,11 @@ import Logo from './Components/Logo'
 import Kaart from './Components/Kaart'
 
 function HomePage() {
-  const navigate = useNavigate()
-
-  const handleLoginClick = () => {
-    navigate('/login')
-  }
-
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <button onClick={handleLoginClick}>Login</button> {/* ✅ klik = naar loginpage */}
+          <button>Login</button>
         </div>
         <nav style={{ display: 'flex', gap: '10px' }}>
           <button>Home</button>
