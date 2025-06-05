@@ -1,24 +1,35 @@
-// HomePage.js
-import React from 'react'
-import Logo from './Components/Logo'
-import Kaart from './Components/Kaart'
-import Navbar from './Components/Navbar'
+// src/HomePage.jsx
+import React from 'react';
+import { Link } from 'react-router-dom';
+import Logo from './Components/Logo';
+import Kaart from './Components/Kaart';
 
-function HomePage({ goToLogin }) {
+
+function HomePage() {
+  const homePath = "/";
+  const stagesPath = "/stages"; 
+  const bedrijvenPath = "/bedrijven"; 
+  const studentenPath = "/studenten"; 
+  const studentProfielPad = "/StudentProfilePage";
+  const loginPath = "/login"; 
+
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
-<Navbar/>
-      
-      {/* Navigatie */}
+
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <button onClick={goToLogin}>Login</button>
+          <Link to={loginPath}>
+            <button>Login</button>
+          </Link>
         </div>
         <nav style={{ display: 'flex', gap: '10px' }}>
-          <button>Home</button>
-          <button>Speeddates</button>
-          <button>Bedrijven</button>
-          <button>Vacatures</button>
+          <Link to={homePath}><button>Home</button></Link>
+          <Link to={stagesPath}><button>Stages</button></Link>
+          <Link to={bedrijvenPath}><button>Bedrijven</button></Link>
+          <Link to={studentenPath}><button>Studenten</button></Link>
+          <Link to={studentProfielPad}>
+            <button>Profiel</button>
+          </Link>
         </nav>
         <Logo/>
       </header>
@@ -35,15 +46,15 @@ function HomePage({ goToLogin }) {
 
       {/* Statistieken */}
       <section style={{ display: 'flex', justifyContent: 'space-around', margin: '40px 0' }}>
-          <div style={{ backgroundColor: 'red', padding: '10px', color: 'white', width: '200px' }}>
-              <strong>30</strong><br />Bedrijven
-          </div>
-          <div style={{ backgroundColor: 'red', padding: '10px', color: 'white', width: '200px' }}>
-              <strong>150</strong><br />Vacatures
-          </div>
-          <div style={{ backgroundColor: 'red', padding: '10px', color: 'white', width: '200px' }}>
+        <div style={{ backgroundColor: 'red', padding: '10px', color: 'white', width: '200px' }}>
+          <strong>30</strong><br />Bedrijven
+        </div>
+        <div style={{ backgroundColor: 'red', padding: '10px', color: 'white', width: '200px' }}>
+          <strong>150</strong><br />Vacatures
+        </div>
+        <div style={{ backgroundColor: 'red', padding: '10px', color: 'white', width: '200px' }}>
           <strong>200</strong><br />Studenten
-          </div>
+        </div>
       </section>
 
       {/* Praktisch */}
@@ -85,7 +96,7 @@ function HomePage({ goToLogin }) {
         <p>EhB - Erasmushogeschool Brussel</p>
       </footer>
     </div>
-  )
+  );
 }
 
-export default HomePage
+export default HomePage;

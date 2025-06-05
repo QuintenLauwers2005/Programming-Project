@@ -1,30 +1,40 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+// App.jsx
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'; 
+import HomePage from './HomePage';
+import StudentProfilePage from './StudentProfilePage';
+
 
 function App() {
-  const [stages, setStages] = useState([])
 
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/stages') // 👈 BELANGRIJK!
-      .then(res => {
-        setStages(res.data)
-        console.log('Data opgehaald:', res.data)
-      })
-      .catch(err => {
-        console.error('Fout bij ophalen stages:', err.message)
-      })
-  }, [])
+  const studentProfielPad = "/StudentProfilePage";
 
   return (
-    <div>
-      <h2>Stages</h2>
-      <ul>
-        {stages.map(stage => (
-          <li key={stage.id}>{stage.bedrijf} - {stage.functie} - {stage.locatie}</li>
-        ))}
-      </ul>
-    </div>
-  )
+    <Router>
+      <div>
+        <nav style={{ 
+          padding: '10px 20px', 
+          backgroundColor: '#f0f0f0', 
+          marginBottom: '20px',
+          borderBottom: '1px solid #ccc'
+        }}>
+          <Link to="/" style={{ marginRight: '20px', textDecoration: 'none', color: 'blue' }}>
+            Home
+          </Link>
+          <Link to={studentProfielPad} style={{ marginRight: '20px', textDecoration: 'none', color: 'blue' }}>
+            Studentprofiel
+          </Link>
+        </nav>
+
+        <div style={{ padding: '20px' }}>
+          <Routes> 
+            <Route path="/" element={<HomePage />} />
+            <Route path={studentProfielPad} element={<StudentProfilePage />} />
+          </Routes>
+        </div>
+      </div>
+    </Router>
+  );
 }
 
-export default App
+export default App;
