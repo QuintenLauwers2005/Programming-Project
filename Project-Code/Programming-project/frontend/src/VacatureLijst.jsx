@@ -18,20 +18,20 @@ export default function VacatureLijst() {
   return (
     <div className="container">
       <div className="top-bar">
-        <button className="login-btn">Login</button>
-        <button className="notificatie-btn">Meldingen</button>
+        <button className="login-btn" onClick={() => alert('Login geklikt!')}>Login</button>
+        <button className="notificatie-btn" onClick={() => alert('Meldingen geklikt!')}>Meldingen</button>
         <img src="/erasmus-logo.png" alt="Erasmus logo" className="logo" />
       </div>
 
       <div className="nav-bar">
-        <button>Speeddates</button>
-        <button>Bedrijven</button>
-        <button>Vacatures</button>
+        <button onClick={() => alert('Speeddates geklikt!')}>Speeddates</button>
+        <button onClick={() => alert('Bedrijven geklikt!')}>Bedrijven</button>
+        <button onClick={() => alert('Vacatures geklikt!')}>Vacatures</button>
       </div>
 
       <h2 className="title">Vacatures</h2>
 
-      <button className="filter-btn">Filter</button>
+      <button className="filter-btn" onClick={() => alert('Filter geklikt!')}>Filter</button>
 
       {vacatures.map((vacature) => (
         <div key={vacature.id} className="vacature-card">
@@ -47,7 +47,7 @@ export default function VacatureLijst() {
         </div>
       ))}
 
-      <button className="toonmeer-btn">Toon meer</button>
+      <button className="toonmeer-btn" onClick={() => alert('Toon meer geklikt!')}>Toon meer</button>
     </div>
   );
 }

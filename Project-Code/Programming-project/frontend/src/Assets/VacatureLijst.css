@@ -3,12 +3,22 @@
   margin: 0 auto;
   padding: 20px;
   font-family: sans-serif;
+    max-width: 900px;
+    /* Was 400px */
+    margin: 0 auto;
+    padding: 40px;
+    font-family: sans-serif;
+    background-color: #fff;
 }
 
 .top-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 .login-btn {
@@ -18,22 +28,38 @@
   background-color: white;
   color: green;
   font-weight: bold;
+    border: 2px solid green;
+    padding: 8px 20px;
+    border-radius: 20px;
+    background-color: white;
+    color: green;
+    font-weight: bold;
+    font-size: 16px;
 }
 
 .notificatie-btn {
   background-color: #f0f0f0;
   padding: 5px 10px;
   border: none;
+    background-color: #f0f0f0;
+    padding: 8px 16px;
+    border: none;
+    font-size: 14px;
 }
 
 .logo {
   height: 32px;
+    height: 40px;
 }
 
 .nav-bar {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    gap: 10px;
 }
 
 .nav-bar button {
@@ -43,12 +69,21 @@
   background-color: #d9d9d9;
   border: none;
   font-weight: bold;
+    flex: 1;
+    padding: 12px;
+    background-color: #d9d9d9;
+    border: none;
+    font-weight: bold;
+    font-size: 16px;
 }
 
 .title {
   text-align: center;
   font-size: 20px;
   margin: 30px 0 10px;
+    text-align: center;
+    font-size: 28px;
+    margin: 40px 0 20px;
 }
 
 .filter-btn {
@@ -57,6 +92,13 @@
   background-color: #ccc;
   border: none;
   margin-bottom: 20px;
+    width: 100%;
+    padding: 14px;
+    background-color: #ccc;
+    border: none;
+    margin-bottom: 30px;
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .vacature-card {
@@ -66,6 +108,13 @@
   padding: 15px;
   margin-bottom: 15px;
   border-radius: 8px;
+    display: flex;
+    gap: 20px;
+    background-color: #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    align-items: center;
 }
 
 .logo-blok {
@@ -73,19 +122,33 @@
   height: 60px;
   background-color: #4a90e2;
   border-radius: 6px;
+    width: 80px;
+    height: 80px;
+    background-color: #4a90e2;
+    border-radius: 8px;
 }
 
 .vacature-info {
   flex: 1;
+    flex: 1;
 }
 
 .bedrijf {
   font-weight: bold;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.beschrijving {
+    font-size: 15px;
+    margin: 10px 0;
 }
 
 .beschrijving,
 .functie {
   font-size: 14px;
+    font-size: 15px;
+    font-weight: 500;
 }
 
 .toonmeer-btn {
@@ -95,4 +158,16 @@
   background-color: white;
   margin-top: 20px;
   font-weight: bold;
+    width: 100%;
+    padding: 16px;
+    border: 1px solid black;
+    background-color: white;
+    margin-top: 30px;
+    font-weight: bold;
+    font-size: 16px;
+}
+/* Debug: laat outlines zien rond alle elementen */
+* {
+ 
+  cursor: auto !important;
 }

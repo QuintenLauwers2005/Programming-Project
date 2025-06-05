@@ -1,68 +1,32 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+const express = require('express')
+const cors = require('cors')
+const mysql = require('mysql2')
+const app = express()
+const port = 5000
 
-export default function VacatureLijst() {
-  const [vacatures, setVacatures] = useState([]);
+app.use(cors())
+app.use(express.json())
 
-  useEffect(() => {
-    axios
-      .get('http://localhost:5000/api/vacatures')
-      .then((res) => {
-        setVacatures(res.data);
-        console.log('Data opgehaald:', res.data);
-      })
-      .catch((err) => {
-        console.error('Fout bij ophalen vacatures:', err.message);
-      });
-  }, []);
+// aanpassen als de database verandert
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'carrierlaunch'
+})
 
-  return (
-    <div style={{ maxWidth: '500px', margin: '0 auto', padding: '20px' }}>
-      {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <button>Login</button>
-        <button>Meldingen</button>
-        <img src="/erasmus-logo.png" alt="Erasmus logo" style={{ height: '32px' }} />
-      </div>
+db.connect(err => {
+  if (err) throw err
+  console.log('MySQL connected.')
+})
 
-      {/* Navigatie */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
-        <button>Speeddates</button>
-        <button>Bedrijven</button>
-        <button>Vacatures</button>
-      </div>
+app.get('/api/vacatures', (req, res) => {
+  db.query('SELECT * FROM vacatures', (err, results) => {
+    if (err) return res.status(500).json({ error: err.message })
+    res.json(results)
+  })
+})
 
-      <h2 style={{ textAlign: 'center', marginTop: '30px' }}>Vacatures</h2>
-
-      <button style={{ width: '100%', marginTop: '10px' }}>Filter</button>
-
-      {/* Vacatureblokken */}
-      {vacatures.map((vacature) => (
-        <div
-          key={vacature.id}
-          style={{
-            display: 'flex',
-            gap: '15px',
-            padding: '15px',
-            backgroundColor: '#eee',
-            marginTop: '20px',
-            borderRadius: '6px',
-          }}
-        >
-          <div style={{ width: '64px', height: '64px', backgroundColor: '#4a90e2', borderRadius: '6px' }}></div>
-          <div>
-            <p style={{ fontWeight: 'bold' }}>{vacature.bedrijf}</p>
-            <p style={{ fontSize: '14px' }}>{vacature.beschrijving}</p>
-            <p style={{ fontSize: '14px', fontWeight: '500' }}>
-              Functie: {vacature.functie}
-              <br />
-              Contract: {vacature.contract}
-            </p>
-          </div>
-        </div>
-      ))}
-
-      <button style={{ width: '100%', marginTop: '20px' }}>Toon meer</button>
-    </div>
-  );
-}
+app.listen(port, () => {
+  console.log(`Server draait op http://localhost:${port}`)
+})
