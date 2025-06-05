@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import './Assets/VacatureLijst.css';
+import NavBar from './Components/Navbar';
 
 export default function VacatureLijst() {
   const [vacatures, setVacatures] = useState([]);
@@ -17,17 +18,7 @@ export default function VacatureLijst() {
 
   return (
     <div className="container">
-      <div className="top-bar">
-        <button className="login-btn" onClick={() => alert('Login geklikt!')}>Login</button>
-        <button className="notificatie-btn" onClick={() => alert('Meldingen geklikt!')}>Meldingen</button>
-        <img src="/erasmus-logo.png" alt="Erasmus logo" className="logo" />
-      </div>
-
-      <div className="nav-bar">
-        <button onClick={() => alert('Speeddates geklikt!')}>Speeddates</button>
-        <button onClick={() => alert('Bedrijven geklikt!')}>Bedrijven</button>
-        <button onClick={() => alert('Vacatures geklikt!')}>Vacatures</button>
-      </div>
+      <NavBar/>
 
       <h2 className="title">Vacatures</h2>
 
