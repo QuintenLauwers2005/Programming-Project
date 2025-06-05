@@ -1,12 +1,18 @@
 // src/pages/LoginPage.jsx
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+
 console.log("✅ LoginPage geladen")
+
 
 function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
+
+  const navigate = useNavigate();
+  const handleRegistratieClick = () => {navigate('/registratie');}
 
   const handleLogin = () => {
     // Fictieve inloggegevens
@@ -81,7 +87,8 @@ function LoginPage() {
       {success && <p style={{ color: 'green' }}>Je bent succesvol ingelogd!</p>}
 
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <button style={{
+        <button onClick={handleRegistratieClick}
+        style={{
           padding: '8px 12px',
           backgroundColor: '#ccc',
           border: 'none',
