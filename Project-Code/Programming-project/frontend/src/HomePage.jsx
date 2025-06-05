@@ -1,16 +1,21 @@
 // HomePage.js
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import Logo from './Components/Logo'
 import Kaart from './Components/Kaart'
 
 function HomePage() {
+  const navigate = useNavigate()
+
+  const handleLoginClick = () => {
+    navigate('/login')
+  }
+
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
-      
-      {/* Navigatie */}
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <button>Login</button>
+          <button onClick={handleLoginClick}>Login</button> {/* ✅ klik = naar loginpage */}
         </div>
         <nav style={{ display: 'flex', gap: '10px' }}>
           <button>Home</button>
@@ -18,7 +23,7 @@ function HomePage() {
           <button>Bedrijven</button>
           <button>Studenten</button>
         </nav>
-        <Logo/>
+        <Logo />
       </header>
 
       {/* Hero / Intro */}

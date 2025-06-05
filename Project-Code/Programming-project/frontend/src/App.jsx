@@ -1,29 +1,16 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import HomePage from './HomePage'
+import LoginPage from './Login'
 
 function App() {
-  const [stages, setStages] = useState([])
-
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/stages') // 👈 BELANGRIJK!
-      .then(res => {
-        setStages(res.data)
-        console.log('Data opgehaald:', res.data)
-      })
-      .catch(err => {
-        console.error('Fout bij ophalen stages:', err.message)
-      })
-  }, [])
-
   return (
-    <div>
-      <h2>Stages</h2>
-      <ul>
-        {stages.map(stage => (
-          <li key={stage.id}>{stage.bedrijf} - {stage.functie} - {stage.locatie}</li>
-        ))}
-      </ul>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+      </Routes>
+    </Router>
   )
 }
 
