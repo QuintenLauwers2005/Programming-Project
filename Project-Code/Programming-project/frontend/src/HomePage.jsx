@@ -1,9 +1,10 @@
-// HomePage.jsx
+
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import Logo from './Components/Logo'
 import Kaart from './Components/Kaart'
 import Navbar from './Components/Navbar'
+import { Link } from 'react-router-dom'
 
 function HomePage() {
   const navigate = useNavigate() // ✅ moet boven return
@@ -11,7 +12,7 @@ function HomePage() {
   const handleLoginClick = () => {
     navigate('/login')
   }
-
+  const loginPath = '/login';
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
       {/* Navigatie */}
@@ -21,9 +22,9 @@ function HomePage() {
         </div>
         <nav style={{ display: 'flex', gap: '10px' }}>
           <button>Home</button>
-          <button>Speeddates</button>
+          <button>Stages</button>
           <button>Bedrijven</button>
-          <button>Vacatures</button>
+          <button>Studenten</button>
         </nav>
         <Logo />
       </header>
@@ -40,15 +41,15 @@ function HomePage() {
 
       {/* Statistieken */}
       <section style={{ display: 'flex', justifyContent: 'space-around', margin: '40px 0' }}>
-          <div style={{ backgroundColor: 'red', padding: '10px', color: 'white', width: '200px' }}>
-              <strong>30</strong><br />Bedrijven
-          </div>
-          <div style={{ backgroundColor: 'red', padding: '10px', color: 'white', width: '200px' }}>
-              <strong>150</strong><br />Vacatures
-          </div>
-          <div style={{ backgroundColor: 'red', padding: '10px', color: 'white', width: '200px' }}>
+        <div style={{ backgroundColor: 'red', padding: '10px', color: 'white', width: '200px' }}>
+          <strong>30</strong><br />Bedrijven
+        </div>
+        <div style={{ backgroundColor: 'red', padding: '10px', color: 'white', width: '200px' }}>
+          <strong>150</strong><br />Vacatures
+        </div>
+        <div style={{ backgroundColor: 'red', padding: '10px', color: 'white', width: '200px' }}>
           <strong>200</strong><br />Studenten
-          </div>
+        </div>
       </section>
 
       {/* Praktisch */}
@@ -90,7 +91,7 @@ function HomePage() {
         <p>EhB - Erasmushogeschool Brussel</p>
       </footer>
     </div>
-  )
+  );
 }
 
-export default HomePage
+export default HomePage;
