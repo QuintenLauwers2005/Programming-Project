@@ -2,10 +2,12 @@
 import React from 'react'
 import Logo from './Components/Logo'
 import Kaart from './Components/Kaart'
+import Navbar from './Components/Navbar'
 
 function HomePage({ goToLogin }) {
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
+<Navbar/>
       
       {/* Navigatie */}
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

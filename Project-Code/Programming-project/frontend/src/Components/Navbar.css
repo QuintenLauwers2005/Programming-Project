@@ -1,0 +1,26 @@
+ul{
+   display: flex;
+    flex-flow: row; 
+    width: 100%;
+    justify-content: center;
+    background-color: grey;
+    
+}
+
+li{
+    padding: 1rem;
+    list-style-type: none;
+    border-right: 1px solid white;
+
+    
+
+}
+
+.speeddates{
+    border-left: 1px solid white;
+}
+
+.login{
+    flex-grow: 5;
+    margin-right: auto;
+}
