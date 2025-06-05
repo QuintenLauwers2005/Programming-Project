@@ -1,15 +1,22 @@
-// HomePage.js
+// HomePage.jsx
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import Logo from './Components/Logo'
 import Kaart from './Components/Kaart'
 
 function HomePage() {
+  const navigate = useNavigate() // ✅ moet boven return
+
+  const handleLoginClick = () => {
+    navigate('/login')
+  }
+
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
+      {/* Navigatie */}
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <button>Login</button>
+          <button onClick={handleLoginClick}>Login</button> {/* ✅ login-button werkt */}
         </div>
         <nav style={{ display: 'flex', gap: '10px' }}>
           <button>Home</button>
@@ -24,8 +31,8 @@ function HomePage() {
       <section style={{ margin: '30px 0', textAlign: 'center' }}>
         <h2>Hoe goed schat jij jouw kansen in?</h2>
         <p>
-          Wil je een indrukwekkend bedrijf dat perfect bij jouw interesses past? 
-          Of ben je nieuwsgierig naar andere sectoren? 
+          Wil je een indrukwekkend bedrijf dat perfect bij jouw interesses past?
+          Of ben je nieuwsgierig naar andere sectoren?
           De Career Launch is jouw kans om te ontdekken wat bij jou past en je netwerk uit te breiden!
         </p>
       </section>
@@ -41,7 +48,7 @@ function HomePage() {
       <section style={{ marginBottom: '30px', textAlign: 'center' }}>
         <p><strong>05/06/2025</strong></p>
         <p>Quai de l’Industrie 170, 1070 Anderlecht</p>
-        <Kaart/>
+        <Kaart />
       </section>
 
       {/* Waarom deelnemen */}
@@ -56,7 +63,7 @@ function HomePage() {
       <section style={{ backgroundColor: '#f0f0f0', padding: '20px', margin: '20px 0' }}>
         <h4>Testimonial</h4>
         <blockquote>
-          "De Career Launch was een geweldige ervaring! Ik ontmoette mijn huidige werkgever tijdens het event, 
+          "De Career Launch was een geweldige ervaring! Ik ontmoette mijn huidige werkgever tijdens het event,
           en kreeg direct waardevolle tips."
         </blockquote>
       </section>
