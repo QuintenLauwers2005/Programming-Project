@@ -27,6 +27,10 @@ function HomePage() {
           <Link to={studentProfielPad}>
             <button>Profiel</button>
           </Link>
+
+          <Link to="/Vacaturelijst">
+            <button>Vacatures</button>
+          </Link>
         </nav>
         <Logo />
       </header>
