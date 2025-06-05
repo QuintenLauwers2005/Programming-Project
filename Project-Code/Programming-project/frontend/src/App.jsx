@@ -4,7 +4,7 @@ import HomePage from './HomePage'
 import LoginPage from './Login'
 import RegistratiePage from './Registratie'
 import StudentProfilePage from './StudentProfilePage';
-
+import VacaturelijstPage from './VacatureLijst';
 
 function App() {
   return (
@@ -14,6 +14,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/registratie" element={<RegistratiePage/>} />
         <Route path="/StudentProfilePage" element={<StudentProfilePage />} />
+        <Route path="/Vacaturelijst" element={<VacaturelijstPage />} />
       </Routes>
     </Router>
   )
