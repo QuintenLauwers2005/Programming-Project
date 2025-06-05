@@ -3,6 +3,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import Logo from './Components/Logo'
 import Kaart from './Components/Kaart'
+import Navbar from './Components/Navbar'
 
 function HomePage() {
   const navigate = useNavigate() // ✅ moet boven return
@@ -20,9 +21,9 @@ function HomePage() {
         </div>
         <nav style={{ display: 'flex', gap: '10px' }}>
           <button>Home</button>
-          <button>Stages</button>
+          <button>Speeddates</button>
           <button>Bedrijven</button>
-          <button>Studenten</button>
+          <button>Vacatures</button>
         </nav>
         <Logo />
       </header>
@@ -39,9 +40,15 @@ function HomePage() {
 
       {/* Statistieken */}
       <section style={{ display: 'flex', justifyContent: 'space-around', margin: '40px 0' }}>
-        <div><strong>30</strong><br />Bedrijven</div>
-        <div><strong>150</strong><br />Vacatures</div>
-        <div><strong>200</strong><br />Studenten</div>
+          <div style={{ backgroundColor: 'red', padding: '10px', color: 'white', width: '200px' }}>
+              <strong>30</strong><br />Bedrijven
+          </div>
+          <div style={{ backgroundColor: 'red', padding: '10px', color: 'white', width: '200px' }}>
+              <strong>150</strong><br />Vacatures
+          </div>
+          <div style={{ backgroundColor: 'red', padding: '10px', color: 'white', width: '200px' }}>
+          <strong>200</strong><br />Studenten
+          </div>
       </section>
 
       {/* Praktisch */}
@@ -72,7 +79,7 @@ function HomePage() {
       <section>
         <h4>Veelgestelde vragen</h4>
         <p><strong>Hoe meld ik me aan?</strong><br />Klik op 'Registreren' en volg de stappen.</p>
-        <p><strong>Waar?</strong><br />EhB campus</p>
+        <p><strong>Waar?</strong><br />EhB campus Nijverheidskaai 170 Anderlecht 1070</p>
         <p><strong>Info?</strong><br />Stuur een e-mail of neem contact op met je studentenbegeleider.</p>
       </section>
 
