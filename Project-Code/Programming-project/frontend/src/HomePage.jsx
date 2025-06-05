@@ -21,13 +21,10 @@ function HomePage() {
           <button onClick={handleLoginClick}>Login</button> {/* ✅ login-button werkt */}
         </div>
         <nav style={{ display: 'flex', gap: '10px' }}>
-          <Link to={homePath}><button>Home</button></Link>
-          <Link to={stagesPath}><button>Stages</button></Link>
-          <Link to={bedrijvenPath}><button>Bedrijven</button></Link>
-          <Link to={studentenPath}><button>Studenten</button></Link>
-          <Link to={studentProfielPad}>
-            <button>Profiel</button>
-          </Link>
+          <button>Home</button>
+          <button>Stages</button>
+          <button>Bedrijven</button>
+          <button>Studenten</button>
         </nav>
         <Logo />
       </header>
