@@ -3,14 +3,14 @@ import React from 'react'
 import Logo from './Components/Logo'
 import Kaart from './Components/Kaart'
 
-function HomePage() {
+function HomePage({ goToLogin }) {
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
       
       {/* Navigatie */}
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <button>Login</button>
+          <button onClick={goToLogin}>Login</button>
         </div>
         <nav style={{ display: 'flex', gap: '10px' }}>
           <button>Home</button>
