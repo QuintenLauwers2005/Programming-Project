@@ -14,9 +14,9 @@ function HomePage({ goToLogin }) {
         </div>
         <nav style={{ display: 'flex', gap: '10px' }}>
           <button>Home</button>
-          <button>Stages</button>
+          <button>Speeddates</button>
           <button>Bedrijven</button>
-          <button>Studenten</button>
+          <button>Vacatures</button>
         </nav>
         <Logo/>
       </header>
