@@ -3,6 +3,7 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import Logo from './Components/Logo'
 import Kaart from './Components/Kaart'
+import StudentProfilePage from './StudentProfilePage';
 
 function HomePage() {
   const loginPath = "/login";
@@ -21,6 +22,9 @@ function HomePage() {
           <button>Stages</button>
           <button>Bedrijven</button>
           <button>Studenten</button>
+          <Link to={StudentProfilePage}>
+            <button>Profiel</button>
+          </Link>
         </nav>
         <Logo/>
       </header>
