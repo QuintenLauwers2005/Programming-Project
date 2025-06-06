@@ -8,6 +8,9 @@ Zorg dat je het volgende hebt geïnstalleerd:
 
 - [Node.js & npm](https://nodejs.org/)
 - [XAMPP](https://www.apachefriends.org/index.html)
+  
+sql server poort:3306
+hostserver poort:5000
 
 ## 🚀 Installatie-instructies
 
