@@ -1,6 +1,5 @@
 // HomePage.jsx
 import React from 'react'
-import Logo from './Components/Logo'
 import Kaart from './Components/Kaart'
 import Navbar from './Components/Navbar'
 
