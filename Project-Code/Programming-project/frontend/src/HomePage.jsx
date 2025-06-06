@@ -4,7 +4,12 @@ import Logo from './Components/Logo'
 import Kaart from './Components/Kaart'
 
 function HomePage() {
+<<<<<<< Updated upstream
   return (
+=======
+ 
+  return ( 
+>>>>>>> Stashed changes
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
       
       {/* Navigatie */}
