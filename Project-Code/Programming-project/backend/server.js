@@ -12,7 +12,8 @@ const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'carrierlaunch'
+  database: 'carrierlauch'
+  
 })
 
 db.connect(err => {
