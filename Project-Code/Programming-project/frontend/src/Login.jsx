@@ -2,10 +2,12 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
+
 console.log("✅ LoginPage geladen")
 
 
 function LoginPage() {
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -31,6 +33,7 @@ function LoginPage() {
   }
 
   return (
+    
     <div style={{
       maxWidth: '300px',
       margin: '50px auto',
@@ -39,8 +42,9 @@ function LoginPage() {
       borderRadius: '12px',
       fontFamily: 'Arial'
     }}>
+        <button onClick={() => navigate(-1)}>⬅ Terug</button>
       <h3>LOG IN</h3>
-
+        
       <input
         type="email"
         placeholder="Email"

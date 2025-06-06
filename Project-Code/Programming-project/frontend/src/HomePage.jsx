@@ -1,36 +1,34 @@
-
+// HomePage.jsx
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import Logo from './Components/Logo'
 import Kaart from './Components/Kaart'
+import Navbar from './Components/Navbar'
 import { Link } from 'react-router-dom'
 
 function HomePage() {
-  const navigate = useNavigate()
-  const studentProfielPad = "/StudentProfilePage";
+  const navigate = useNavigate() // ✅ moet boven return
+
   const handleLoginClick = () => {
     navigate('/login')
   }
-  
+  const loginPath = '/login';
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
       {/* Navigatie */}
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <button onClick={handleLoginClick}>Login</button>
+          <button onClick={handleLoginClick}>Login</button> {/* ✅ login-button werkt */}
+          <button onClick={() => navigate(-1)}>⬅ Terug</button>
+
         </div>
         <nav style={{ display: 'flex', gap: '10px' }}>
           <button>Home</button>
           <button>Stages</button>
           <button>Bedrijven</button>
           <button>Studenten</button>
-          <Link to={studentProfielPad}>
-            <button>Profiel</button>
-          </Link>
-
-          <Link to="/Vacaturelijst">
-            <button>Vacatures</button>
-          </Link>
+          <button>Profiel</button>
+          
         </nav>
         <Logo />
       </header>
