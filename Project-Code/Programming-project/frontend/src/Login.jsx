@@ -42,7 +42,7 @@ function LoginPage() {
       borderRadius: '12px',
       fontFamily: 'Arial'
     }}>
-        <button onClick={() => navigate(-1)}>⬅ Terug</button>
+        <button onClick={() => navigate('/')}>⬅ Terug</button>
       <h3>LOG IN</h3>
         
       <input
