@@ -7,7 +7,8 @@ import RegistratieBedrijfPage from './RegistratieBedrijf'
 import StudentProfilePage from './StudentProfilePage';
 import VacaturelijstPage from './VacatureLijst';
 import Agenda from './Agenda';
-import BedrijvenLijst from './bedrijfPage'
+import BedrijvenLijst from './bedrijfPage';
+import VacaturePage from './VacatureAanmaken';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/Vacaturelijst" element={<VacaturelijstPage />} />
         <Route path="/Agenda" element={<Agenda />} />
         <Route path="/BedrijvenLijst" element={<BedrijvenLijst />} />
+        <Route path="/VacaturePage" element={<VacaturePage />} />
       
       </Routes>
     </Router>
