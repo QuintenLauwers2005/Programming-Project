@@ -8,6 +8,8 @@ import StudentProfilePage from './StudentProfilePage';
 import BedrijfProfilePage from './BedrijfProfilePage';
 import VacaturelijstPage from './VacatureLijst';
 import Agenda from './Agenda';
+import BedrijvenLijst from './bedrijfPage';
+import VacaturePage from './VacatureAanmaken';
 
 
 function App() {
@@ -22,6 +24,8 @@ function App() {
         <Route path="/BedrijfProfilePage" element={<BedrijfProfilePage />} />
         <Route path="/Vacaturelijst" element={<VacaturelijstPage />} />
         <Route path="/Agenda" element={<Agenda />} />
+        <Route path="/BedrijvenLijst" element={<BedrijvenLijst />} />
+        <Route path="/VacaturePage" element={<VacaturePage />} />
       
       </Routes>
     </Router>

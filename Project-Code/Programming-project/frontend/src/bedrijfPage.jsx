@@ -1,5 +1,6 @@
 import React from "react";
-import "./BedrijvenLijst.css";
+import "./Components/BedrijvenLijst.css";
+import Navbar from "./Components/Navbar";
 
 const bedrijven = [
   { id: 1, naam: "SAP", kleur: "blauw" },
@@ -11,18 +12,8 @@ const bedrijven = [
 
 export default function BedrijvenLijst() {
   return (
-    <div className="container">
-      <div className="bovenbalk">
-        <button className="login-knop">Login</button>
-        <button className="meldingen-knop">Meldingen</button>
-        <img src="/erasmus-logo.png" alt="Erasmus logo" className="logo" />
-      </div>
-
-      <div className="navigatie">
-        <button>Speeddates</button>
-        <button>Bedrijven</button>
-        <button>Vacatures</button>
-      </div>
+    <div>
+    <Navbar />
 
       <h2 className="titel">Bedrijven</h2>
 
