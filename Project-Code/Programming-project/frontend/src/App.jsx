@@ -6,6 +6,8 @@ import RegistratiePage from './Registratie'
 import RegistratieBedrijfPage from './RegistratieBedrijf'
 import StudentProfilePage from './StudentProfilePage';
 import VacaturelijstPage from './VacatureLijst';
+import Agenda from './Agenda';
+
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
         <Route path="/RegistratieBedrijf" element={<RegistratieBedrijfPage/>} />
         <Route path="/StudentProfilePage" element={<StudentProfilePage />} />
         <Route path="/Vacaturelijst" element={<VacaturelijstPage />} />
+        <Route path="/Agenda" element={<Agenda />} />
+      
       </Routes>
     </Router>
   )
