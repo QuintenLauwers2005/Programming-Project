@@ -60,6 +60,7 @@
     justify-content: space-between;
     margin-top: 20px;
     gap: 10px;
+
 }
 
 .nav-bar button {
@@ -75,4 +76,5 @@
     border: none;
     font-weight: bold;
     font-size: 16px;
+    
 }
