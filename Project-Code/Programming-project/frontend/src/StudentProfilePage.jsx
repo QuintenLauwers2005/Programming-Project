@@ -58,9 +58,9 @@ function StudentProfilePage() {
       <section style={{ marginBottom: '30px', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
         <h3 style={{ borderBottom: '2px solid #ddd', paddingBottom: '10px', marginBottom: '20px', color: '#333' }}>Vaardigheden</h3>
         <ul style={{ listStyleType: 'none', padding: 0, display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-          {studentData.vaardigheden.map((vaardigheid) => ( // index is niet meer nodig als vaardigheid een id heeft
+          {studentData.vaardigheden.map((vaardigheid) => (
             <li 
-              key={vaardigheid.id || vaardigheid.naam} // Gebruik unieke ID van vaardigheid, of naam als fallback
+              key={vaardigheid.id || vaardigheid.naam}
               style={{ backgroundColor: '#007bff', color: 'white', padding: '8px 15px', borderRadius: '20px', fontSize: '0.9em' }}
             >
               {vaardigheid.naam}
