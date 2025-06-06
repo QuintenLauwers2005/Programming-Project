@@ -1,33 +1,20 @@
-import React, { useState } from 'react';
+// src/index.js
+
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import App from './App';
 import HomePage from './HomePage';
-import LoginPage from './loginPage';
 import reportWebVitals from './reportWebVitals';
 
-function Root() {
-  const [currentPage, setCurrentPage] = useState('home');
-
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'login':
-        return <LoginPage goHome={() => setCurrentPage('home')} />;
-      case 'home':
-      default:
-        return <HomePage goToLogin={() => setCurrentPage('login')} />;
-    }
-  };
-
-  return <>{renderPage()}</>;
-}
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
-    <Root />
+    <HomePage />
   </React.StrictMode>
 );
 
-// Optional: performance tracking
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
-

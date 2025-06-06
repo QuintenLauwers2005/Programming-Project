@@ -1,0 +1,83 @@
+.pagina {
+  font-family: Arial, sans-serif;
+  padding: 0;
+  margin: 0;
+  background: white;
+}
+
+.bovenbalk {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.logo-delaware {
+  height: 50px;
+}
+
+.logo-erasmus {
+  height: 40px;
+}
+
+.knop {
+  background-color: lightgray;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+}
+
+.navigatie {
+  display: flex;
+  justify-content: space-evenly;
+  background-color: #ddd;
+}
+
+.navigatie button {
+  flex: 1;
+  padding: 10px;
+  background: #ccc;
+  border: 1px solid #bbb;
+  cursor: pointer;
+}
+
+.inhoud {
+  padding: 20px;
+  text-align: center;
+}
+
+.sectie {
+  margin: 20px 0;
+}
+
+.functie-box {
+  background-color: #d3d3d3;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.tekst-box {
+  background-color: #d3d3d3;
+  padding: 10px;
+  text-align: left;
+  margin: auto;
+  max-width: 300px;
+}
+
+.post-knop {
+  margin-top: 20px;
+  padding: 10px 40px;
+  background-color: #d3d3d3;
+  border-radius: 15px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+}

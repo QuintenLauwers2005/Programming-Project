@@ -1,14 +1,26 @@
-import React from "react";
 import './Navbar.css'
 
+import Logo from './Logo'
+import { useNavigate } from 'react-router-dom';
+
 function Navbar(){
+
+  const navigate = useNavigate();
     return(
-        <ul>
-            <a href=""><li class ='login'>Login</li></a>
-            <a href=""><li class = 'speeddates'>Speeddates</li></a>
-            <a href=""><li>Bedrijven</li></a>
-            <a href=""><li>Vacatures</li></a>
-        </ul>
+         <div>
+      <div className="top-bar">
+        <button className="login-btn" onClick={() => navigate('/login')}>Login</button>
+        <button className="notificatie-btn" onClick={() => alert('Meldingen geklikt!')}>Meldingen</button>
+        <Logo className="logo"/>
+      </div>
+
+      <div className="nav-bar">
+        <button onClick={() => navigate('/')}>Home</button>
+        <button onClick={() => navigate('/Agenda')}>Speeddates</button>
+        <button onClick={() => alert('Bedrijven geklikt!')}>Bedrijven</button>
+        <button onClick={() => navigate('/Vacaturelijst')}>Vacatures</button>
+      </div>
+      </div>
     );
 }
 

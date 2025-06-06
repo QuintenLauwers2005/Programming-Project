@@ -1,4 +1,3 @@
-// backend/server.js
 const express = require('express')
 const cors = require('cors')
 const mysql = require('mysql2')
@@ -13,7 +12,8 @@ const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'stage_app'
+  database: 'carrierlauch'
+  
 })
 
 db.connect(err => {
@@ -21,8 +21,8 @@ db.connect(err => {
   console.log('MySQL connected.')
 })
 
-app.get('/api/stages', (req, res) => {
-  db.query('SELECT * FROM stages', (err, results) => {
+app.get('/api/vacatures', (req, res) => {
+  db.query('SELECT * FROM vacatures', (err, results) => {
     if (err) return res.status(500).json({ error: err.message })
     res.json(results)
   })
