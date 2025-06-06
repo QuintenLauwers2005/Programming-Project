@@ -20,6 +20,14 @@ function RegistratiePage() {
     const handleLogin = () => {navigate('/Login');}
 
     const handleSubmit = () => {
+
+        if (!naam, !achternaam, !leeftijd, !wachtwoord, !mail, !adres, !opleiding, !opleidingsjaar, !specialisatie) {
+        setError('vul alle gegevens in')
+        return;
+        } else {
+        setError('')
+        }
+        
         if (wachtwoord.length > 9) {
             setSuccess(true)
             setError('')
@@ -29,12 +37,7 @@ function RegistratiePage() {
             return;
          }
 
-         if (!naam, !achternaam, !leeftijd, !wachtwoord, !mail, !adres, !opleiding, !opleidingsjaar, !specialisatie) {
-        setError('vul alle gegevens in')
-        return;
-        } else {
-        setError('')
-        }
+         
     }
     
     
