@@ -1,51 +1,63 @@
 # 📦 Project Setup Handleiding
 
-Welkom bij dit project! Volg de onderstaande stappen zorgvuldig om de applicatie lokaal op te zetten.
+Welkom bij dit project! Volg onderstaande stappen zorgvuldig om de applicatie lokaal op te zetten.
+
+---
 
 ## ⚙️ Vereisten
 
-Zorg dat je het volgende hebt geïnstalleerd:
+Zorg ervoor dat je het volgende hebt geïnstalleerd:
 
-- [Node.js & npm](https://nodejs.org/)
-- [XAMPP](https://www.apachefriends.org/index.html)
-  
-sql server poort:3306
-hostserver poort:5000
+- ✅ [Node.js & npm](https://nodejs.org/)
+- ✅ [XAMPP (met Apache & MySQL)](https://www.apachefriends.org/index.html)
+
+> ℹ️ **Standaardpoorten:**
+> - MySQL (database): `3306`  
+> - host server: `5000`
+
+---
 
 ## 🚀 Installatie-instructies
 
-### 1. Backend installeren
+### 1️⃣ Backend installeren
 
-Open een terminal en voer de volgende commando’s uit:
+Open een terminal en voer de volgende stappen uit:
 
 ```bash
-cd  naar de backend folder 
-voer dit commando uit "npm install"
+cd pad/naar/backend     # Navigeer naar de backend-map
+npm install            # Installeer de benodigde dependencies
 ```
 
-2. Frontend installeren
+2️⃣ Frontend installeren
+In dezelfde of een nieuwe terminal:
+
 ```bash
-Ga daarna naar de frontend map:
-cd naar de frontend folder.
-voer dit commando uit "npm install"
+cd pad/naar/frontend    # Navigeer naar de frontend-map
+npm install            # Installeer de benodigde dependencies
 ```
 
-3. XAMPP installeren en opstarten
-Download en installeer XAMPP via https://www.apachefriends.org
+3️⃣ XAMPP opstarten en database importeren
+
+  1. Download en installeer XAMPP via de officiële site.
+  2. Open het XAMPP Control Panel.
+  3. Start Apache en MySQL.
+  4. Klik op MySQL Admin om phpMyAdmin te openen.
+  5. Importeer de database:
+     - Klik bovenin op Importeren.
+     - Selecteer het meegeleverde .sql bestand (te vinden in de map SQL_Export_Doc).
+     - Klik op Starten om de database te importeren.
+
+4️⃣ Applicatie starten
+✅ Backend starten:
 ```bash
-Open de XAMPP Control Panel
-
-Start Apache en MySQL
-  1. klik dan op admin
-  2. Klik bovenin op Importeren
-  3. Selecteer het meegeleverde .sql bestand (te vinden in SQL_Export_Doc)
-
-Klik op Starten om de database te importeren
+cd pad/naar/backend     # Ga naar de backend-map
+node server.js         # Start de server (maakt connectie met de database)
 ```
-4. App opstarten
+
+✅ Frontend starten:
+Open een tweede terminal of tabblad:
+
 ```bash
-
-Voer een cd commando uit naar de backend folder en gebruik het "node server.js" commando om een connectie te maken met de DB.
-Nu kan je het project starten in de frontend folder met "npm start";
+cd pad/naar/frontend    # Ga naar de frontend-map
+npm start              # Start de frontend-app in je browser
 ```
-
