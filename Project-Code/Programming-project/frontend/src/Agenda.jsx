@@ -5,8 +5,9 @@ import Navbar from './Components/Navbar'
 
 function Agenda(){
     return(
-    <div className="page">
+    <div>
       <Navbar />
+      <div className="page">
       <button className="top-button">hoe speeddate reserveren?</button>
 
       <div className="card">
@@ -35,6 +36,7 @@ function Agenda(){
         <div className="company">Klyr</div>
         <div className="room">Aula 4</div>
         <button className="cancel-button">cancel</button>
+      </div>
       </div>
     </div>
     )

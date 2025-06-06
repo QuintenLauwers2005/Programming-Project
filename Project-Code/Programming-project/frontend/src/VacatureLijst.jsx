@@ -37,10 +37,10 @@ export default function VacatureLijst() {
           <div className="logo-blok"></div>
           <div className="vacature-info">
             <p className="bedrijf">{vacature.bedrijf}</p>
-            <p className="beschrijving">{vacature.beschrijving}</p>
+            <p className="beschrijving">{vacature.synopsis}</p>
             <p className="functie">
               Functie: {vacature.functie}<br />
-              Contract: {vacature.contract}
+              Contract: {vacature.contract_type}
             </p>
           </div>
         </div>
