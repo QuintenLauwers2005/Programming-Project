@@ -17,7 +17,7 @@ function Navbar(){
       <div className="nav-bar">
         <button onClick={() => navigate('/')}>Home</button>
         <button onClick={() => navigate('/Agenda')}>Speeddates</button>
-        <button onClick={() => alert('Bedrijven geklikt!')}>Bedrijven</button>
+        <button onClick={() => navigate('/BedrijvenLijst')}>Bedrijven</button>
         <button onClick={() => navigate('/Vacaturelijst')}>Vacatures</button>
       </div>
       </div>
