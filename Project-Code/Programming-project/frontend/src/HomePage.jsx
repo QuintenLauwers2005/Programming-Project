@@ -5,7 +5,7 @@ import Navbar from './Components/Navbar'
 
 function HomePage() {
 
-  return (
+  return ( 
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
       {/* Navigatie */}
       <header>

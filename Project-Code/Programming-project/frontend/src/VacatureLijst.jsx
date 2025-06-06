@@ -28,7 +28,7 @@ export default function VacatureLijst() {
       </header>
 
 
-      <h2 className="title">Vacatures</h2>
+      <h2 className="title">Vacatures</h2> 
 
       <button className="filter-btn" onClick={() => alert('Filter geklikt!')}>Filter</button>
 
