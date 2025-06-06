@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import './Assets/VacatureLijst.css';
-import NavBar from './Components/Navbar';
+import Navbar from './Components/Navbar'
 
 export default function VacatureLijst() {
   const [vacatures, setVacatures] = useState([]);
@@ -17,8 +17,16 @@ export default function VacatureLijst() {
   }, []);
 
   return (
-    <div className="container">
-      <NavBar/>
+    <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
+      {/* Navigatie */}
+      <header>
+
+      
+          <Navbar />
+        
+      
+      </header>
+
 
       <h2 className="title">Vacatures</h2>
 
