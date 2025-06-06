@@ -22,11 +22,13 @@ db.connect(err => {
 })
 
 app.get('/api/vacatures', (req, res) => {
-  db.query('SELECT * FROM vacatures', (err, results) => {
+  db.query(' SELECT  v.vacature_id, b.naam AS bedrijf, v.functie, v.contract_type, v.synopsis, v.open FROM vacature v JOIN bedrijf b ON v.bedrijf_id = b.bedrijf_id', (err, results) => {
     if (err) return res.status(500).json({ error: err.message })
     res.json(results)
   })
 })
+
+
 
 app.listen(port, () => {
   console.log(`Server draait op http://localhost:${port}`)
