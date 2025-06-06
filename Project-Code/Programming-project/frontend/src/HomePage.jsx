@@ -9,12 +9,12 @@ function HomePage() {
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
       {/* Navigatie */}
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <header>
 
-        <nav style={{ display: 'flex', gap: '10px'}}>
+      
           <Navbar />
-        </nav>
-        <Logo />
+        
+      
       </header>
 
       {/* Hero / Intro */}
