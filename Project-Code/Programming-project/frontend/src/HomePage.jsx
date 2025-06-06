@@ -1,29 +1,19 @@
-// HomePage.js
+// HomePage.jsx
 import React from 'react'
-import Logo from './Components/Logo'
 import Kaart from './Components/Kaart'
+import Navbar from './Components/Navbar'
 
 function HomePage() {
-<<<<<<< Updated upstream
-  return (
-=======
- 
+
   return ( 
->>>>>>> Stashed changes
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
-      
       {/* Navigatie */}
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          <button>Login</button>
-        </div>
-        <nav style={{ display: 'flex', gap: '10px' }}>
-          <button>Home</button>
-          <button>Stages</button>
-          <button>Bedrijven</button>
-          <button>Studenten</button>
-        </nav>
-        <Logo/>
+      <header>
+
+      
+          <Navbar/>
+        
+      
       </header>
 
       {/* Hero / Intro */}
