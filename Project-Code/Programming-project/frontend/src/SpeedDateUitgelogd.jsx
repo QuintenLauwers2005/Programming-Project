@@ -17,7 +17,7 @@ return (
         </div>
 
         <div>
-          <button onClick={handleLoginClick}>Login</button>
+        <button onClick={() => navigate('/')}>Terugkeren</button>
         </div>
 
         </body>
