@@ -15,6 +15,11 @@ return (
         <div>
           <button onClick={handleLoginClick}>Login</button>
         </div>
+
+        <div>
+        <button onClick={() => navigate('/')}>Terugkeren</button>
+        </div>
+
         </body>
 
         {/* Footer  */}
