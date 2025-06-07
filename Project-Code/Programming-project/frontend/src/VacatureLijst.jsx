@@ -9,6 +9,8 @@ export default function VacatureLijst() {
   useEffect(() => {
     axios.get('http://localhost:5000/api/vacatures')
       .then((res) => {
+        console.log("Ophaalde vacatures:", res.data);
+
         setVacatures(res.data);
       })
       .catch((err) => {
@@ -20,11 +22,7 @@ export default function VacatureLijst() {
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
       {/* Navigatie */}
       <header>
-
-      
           <Navbar />
-        
-      
       </header>
 
 
@@ -33,7 +31,7 @@ export default function VacatureLijst() {
       <button className="filter-btn" onClick={() => alert('Filter geklikt!')}>Filter</button>
 
       {vacatures.map((vacature) => (
-        <div key={vacature.id} className="vacature-card">
+        <div key={vacature.vacature_id} className="vacature-card">
           <div className="logo-blok"></div>
           <div className="vacature-info">
             <p className="bedrijf">{vacature.bedrijf}</p>
