@@ -26,6 +26,7 @@ function App() {
         <Route path="/Agenda" element={<Agenda />} />
         <Route path="/BedrijvenLijst" element={<BedrijvenLijst />} />
         <Route path="/VacaturePage" element={<VacaturePage />} />
+        <Route path="/bedrijf/:id" element={<BedrijfProfilePage />} />
       
       </Routes>
     </Router>
