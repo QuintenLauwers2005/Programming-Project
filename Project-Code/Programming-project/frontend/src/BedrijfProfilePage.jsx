@@ -77,6 +77,7 @@ function BedrijfProfilePage() {
     }
   ];
 
+
   const companyData = bedrijven.find(b => b.id === parseInt(id));
 
   if (!companyData) {
@@ -85,9 +86,27 @@ function BedrijfProfilePage() {
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
-      <header>
-        {/* Navigatie hier */}
-      </header>
+      {/* Terugknop linksboven, binnen de layout */}
+      <button
+        onClick={() => window.location.href = '/BedrijvenLijst'}
+        style={{
+          position: 'relative',
+          top: '0',
+          left: '0',
+          padding: '10px 15px',
+          backgroundColor: '#007bff', 
+          color: 'white',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer',
+          fontSize: '16px',
+          fontWeight: 'bold',
+          display: 'inline-block',
+          marginBottom: '20px'
+        }}
+      >
+        ← Terug
+      </button>
 
       <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>   
         <img 
@@ -146,8 +165,10 @@ function BedrijfProfilePage() {
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Email:</strong> <a href={`mailto:${companyData.email}`} style={{ color: '#007bff' }}>{companyData.email}</a></p>
       </section>
 
-      <footer>
-        {/* Footer hier */}
+      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px' }}>
+        <h5>Contact</h5>
+        <p>info@careerlaunch.be</p>
+        <p>EhB - Erasmushogeschool Brussel</p>
       </footer>
     </div>
   );
