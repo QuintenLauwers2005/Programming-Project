@@ -100,6 +100,64 @@ app.get('/api/bedrijven', (req, res) => {
   });
 });
 
+app.get('/api/bedrijf/:id', (req, res) => {
+  const bedrijfId = req.params.id;
+
+  const sql = `
+    SELECT 
+      b.bedrijf_id AS id,
+      b.naam,
+      b.locatie,
+      b.vertegenwoordiger,
+      b.telefoon,
+      b.logo_link,
+      v.vacature_id,
+      v.functie,
+      v.contract_type,
+      v.synopsis,
+      v.open
+    FROM bedrijf b
+    LEFT JOIN vacature v ON b.bedrijf_id = v.bedrijf_id
+    WHERE b.bedrijf_id = ?
+  `;
+
+  db.query(sql, [bedrijfId], (err, results) => {
+    if (err) {
+      console.error('Databasefout:', err);
+      return res.status(500).json({ error: 'Interne serverfout' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Bedrijf niet gevonden' });
+    }
+
+    // Eerste rij bevat bedrijfsinfo
+    const bedrijf = {
+      id: results[0].id,
+      naam: results[0].naam,
+      locatie: results[0].locatie,
+      vertegenwoordiger: results[0].vertegenwoordiger,
+      telefoon: results[0].telefoon,
+      logo_link: results[0].logo_link,
+      vacatures: []
+    };
+
+    // Vacatures verzamelen (indien aanwezig)
+    results.forEach(row => {
+      if (row.vacature_id) {
+        bedrijf.vacatures.push({
+          vacature_id: row.vacature_id,
+          functie: row.functie,
+          contract_type: row.contract_type,
+          synopsis: row.synopsis,
+          open: row.open === 1 // boolean
+        });
+      }
+    });
+
+    res.json(bedrijf);
+  });
+});
 
 
 
