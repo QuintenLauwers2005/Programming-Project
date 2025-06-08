@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Gegenereerd op: 06 jun 2025 om 13:55
+-- Gegenereerd op: 08 jun 2025 om 16:05
 -- Serverversie: 10.4.32-MariaDB
--- PHP-versie: 8.0.30
+-- PHP-versie: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `carrierlauch`
 --
-CREATE DATABASE IF NOT EXISTS `carrierlauch` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `carrierlauch`;
 
 -- --------------------------------------------------------
 
@@ -64,7 +62,7 @@ CREATE TABLE `gebruiker` (
 --
 
 INSERT INTO `gebruiker` (`gebruiker_id`, `email`, `wachtwoord`, `rol`) VALUES
-(1, 'susanne.dehaas@ehb.be', 'hashed_password_1', 'student'),
+(1, 'jan.voorbeeld@student.ehb.be', 'veilig_wachtwoord', 'student'),
 (2, 'contact@sap.com', 'hashed_password_2', 'bedrijf'),
 (3, 'contact@delaware.com', 'hashed_password_3', 'bedrijf');
 
@@ -109,15 +107,66 @@ CREATE TABLE `student` (
   `telefoon` varchar(20) DEFAULT NULL,
   `geslacht` varchar(10) DEFAULT NULL,
   `cv_link` varchar(255) DEFAULT NULL,
-  `diploma_link` varchar(255) DEFAULT NULL
+  `diploma_link` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `bio` text DEFAULT NULL,
+  `profiel_foto_url` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Gegevens worden geëxporteerd voor tabel `student`
 --
 
-INSERT INTO `student` (`student_id`, `voornaam`, `naam`, `opleiding`, `specialisatie`, `opleidingsjaar`, `adres`, `talen`, `telefoon`, `geslacht`, `cv_link`, `diploma_link`) VALUES
-(1, 'Susanne', 'Dehaas', 'Toegepaste Informatica', 'Networks & Security', 2, 'Schoorsteen straat 24', 'Nederlands, Frans', '0412 34 56 7', 'Vrouw', 'link_naar_cv.pdf', 'link_naar_diploma.pdf');
+INSERT INTO `student` (`student_id`, `voornaam`, `naam`, `opleiding`, `specialisatie`, `opleidingsjaar`, `adres`, `talen`, `telefoon`, `geslacht`, `cv_link`, `diploma_link`, `email`, `bio`, `profiel_foto_url`) VALUES
+(1, 'Jan', 'Voorbeeldstudent', 'Toegepaste Informatica', NULL, 2025, NULL, NULL, NULL, NULL, NULL, NULL, 'jan.voorbeeld@student.ehb.be', 'Ik ben een enthousiaste student Toegepaste Informatica aan de Erasmushogeschool Brussel. Mijn passie ligt bij front-end ontwikkeling en het creëren van gebruiksvriendelijke webapplicaties. Ik ben leergierig, werk graag in teamverband en ben altijd op zoek naar nieuwe uitdagingen om mijn vaardigheden verder te ontwikkelen.', 'https://via.placeholder.com/150');
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `student_vaardigheid`
+--
+
+CREATE TABLE `student_vaardigheid` (
+  `student_id` int(11) NOT NULL,
+  `vaardigheid_id` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Gegevens worden geëxporteerd voor tabel `student_vaardigheid`
+--
+
+INSERT INTO `student_vaardigheid` (`student_id`, `vaardigheid_id`) VALUES
+(1, 'skill1'),
+(1, 'skill2'),
+(1, 'skill3'),
+(1, 'skill4'),
+(1, 'skill5'),
+(1, 'skill6'),
+(1, 'skill7');
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `vaardigheid`
+--
+
+CREATE TABLE `vaardigheid` (
+  `id` varchar(255) NOT NULL,
+  `naam` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Gegevens worden geëxporteerd voor tabel `vaardigheid`
+--
+
+INSERT INTO `vaardigheid` (`id`, `naam`) VALUES
+('skill1', 'React.js'),
+('skill2', 'JavaScript'),
+('skill3', 'Node.js'),
+('skill4', 'Express.js'),
+('skill5', 'HTML5'),
+('skill6', 'CSS3'),
+('skill7', 'Git');
 
 -- --------------------------------------------------------
 
@@ -175,6 +224,19 @@ ALTER TABLE `student`
   ADD PRIMARY KEY (`student_id`);
 
 --
+-- Indexen voor tabel `student_vaardigheid`
+--
+ALTER TABLE `student_vaardigheid`
+  ADD PRIMARY KEY (`student_id`,`vaardigheid_id`),
+  ADD KEY `vaardigheid_id` (`vaardigheid_id`);
+
+--
+-- Indexen voor tabel `vaardigheid`
+--
+ALTER TABLE `vaardigheid`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexen voor tabel `vacature`
 --
 ALTER TABLE `vacature`
@@ -225,6 +287,13 @@ ALTER TABLE `speeddate`
 --
 ALTER TABLE `student`
   ADD CONSTRAINT `student_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `gebruiker` (`gebruiker_id`);
+
+--
+-- Beperkingen voor tabel `student_vaardigheid`
+--
+ALTER TABLE `student_vaardigheid`
+  ADD CONSTRAINT `student_vaardigheid_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `student_vaardigheid_ibfk_2` FOREIGN KEY (`vaardigheid_id`) REFERENCES `vaardigheid` (`id`) ON DELETE CASCADE;
 
 --
 -- Beperkingen voor tabel `vacature`
