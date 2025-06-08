@@ -21,6 +21,7 @@ db.connect(err => {
   console.log('MySQL connected.')
 })
 
+//vacatures ophalen
 app.get('/api/vacatures', (req, res) => {
   db.query(' SELECT  v.vacature_id, b.naam AS bedrijf, v.functie, v.contract_type, v.synopsis, v.open FROM vacature v JOIN bedrijf b ON v.bedrijf_id = b.bedrijf_id', (err, results) => {
     if (err) return res.status(500).json({ error: err.message })
@@ -28,7 +29,7 @@ app.get('/api/vacatures', (req, res) => {
   })
 })
 
-
+//studenten ophalen
 app.get('/api/student/:id', (req, res) => {
   const studentId = req.params.id;
 
@@ -84,6 +85,21 @@ app.get('/api/student/:id', (req, res) => {
     res.json(studentInfo);
   });
 });
+
+//bedrijven ophalen
+app.get('/api/bedrijven', (req, res) => {
+  const sql = `SELECT bedrijf_id AS id, naam, kleur FROM bedrijf`;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Databasefout:', err);
+      return res.status(500).json({ error: 'Interne serverfout' });
+    }
+
+    res.json(results);
+  });
+});
+
 
 
 
