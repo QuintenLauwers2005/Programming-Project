@@ -10,9 +10,7 @@ const [studentData, setStudentData] = useState(null);
 
   useEffect(() => {
     axios.get(`http://localhost:5000/api/student/${studentId}`)
-      .then(res => {
-        console.log('ges');
-        
+      .then(res => { 
         setStudentData(res.data);
       })
       .catch(err => {
