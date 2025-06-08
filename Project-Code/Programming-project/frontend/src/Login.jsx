@@ -1,120 +1,107 @@
-// src/pages/LoginPage.jsx
-import React, { useState } from 'react'
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
-console.log("✅ LoginPage geladen")
-
-
-function LoginPage() {
-
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState(false)
-
+export default function LoginPage() {
   const navigate = useNavigate();
 
-  const handleRegistratieClick = () => {navigate('/registratie');}
-  const handleRegistratieBedrijfClick = () => {navigate('/RegistratieBedrijf');}
-
-  const handleLogin = () => {
-    // Fictieve inloggegevens
-    const fakeEmail = 'voorbeeld@outlook.com'
-    const fakePassword = 'test1234'
-
-    if (email === fakeEmail && password === fakePassword) {
-      setSuccess(true)
-      setError('')
-    } else {
-      setSuccess(false)
-      setError('Foutieve login. Probeer opnieuw.')
-    }
-  }
-
   return (
-    
-    <div style={{
-      maxWidth: '300px',
-      margin: '50px auto',
-      backgroundColor: '#ddd',
-      padding: '20px',
-      borderRadius: '12px',
-      fontFamily: 'Arial'
-    }}>
-        <button onClick={() => navigate('/')}>⬅ Terug</button>
-      <h3>LOG IN</h3>
-        
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        style={{
-          width: '100%',
-          padding: '10px',
-          margin: '10px 0',
-          backgroundColor: '#c9baba',
-          border: 'none',
-          borderRadius: '6px'
-        }}
-      />
+    <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
+      {/* Navigatie */}
+      <header>
+        <div className="top-bar">
+          <button
+            className="login-btn"
+            onClick={() => navigate('/login')}
+          >
+            Login
+          </button>
+          <button
+            className="notificatie-btn"
+            onClick={() => alert('Meldingen geklikt!')}
+          >
+            Meldingen
+          </button>
+          <img src="https://via.placeholder.com/40"  alt="Logo" className="logo" />
+        </div>
 
-      <input
-        type="password"
-        placeholder="Wachtwoord"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        style={{
-          width: '100%',
-          padding: '10px',
-          marginBottom: '15px',
-          backgroundColor: '#c9baba',
-          border: 'none',
-          borderRadius: '6px'
-        }}
-      />
+        <div className="nav-bar">
+          <button onClick={() => navigate('/')}>Home</button>
+          <button onClick={() => navigate('/Agenda')}>Speeddates</button>
+          <button onClick={() => navigate('/BedrijvenLijst')}>Bedrijven</button>
+          <button onClick={() => navigate('/Vacaturelijst')}>Vacatures</button>
+        </div>
+      </header>
 
-      <button
-        onClick={handleLogin}
-        style={{
-          width: '100%',
-          padding: '10px',
-          backgroundColor: '#bbb',
-          border: 'none',
-          borderRadius: '6px',
-          marginBottom: '15px'
-        }}
-      >
-        Log in
-      </button>
+      <section style={{ margin: '30px 0', textAlign: 'center' }}>
+        <h2>Login</h2>
+        <p>
+          Log in om toegang te krijgen tot je profiel en vacatures.
+        </p>
+      </section>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {success && <p style={{ color: 'green' }}>Je bent succesvol ingelogd!</p>}
+      <section style={{ maxWidth: '400px', margin: '0 auto', padding: '20px' }}>
+        <form>
+          <input
+            type="email"
+            placeholder="Email"
+            style={{
+              width: '100%',
+              padding: '10px',
+              marginBottom: '15px',
+              border: '1px solid #ccc',
+              borderRadius: '4px'
+            }}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Wachtwoord"
+            style={{
+              width: '100%',
+              padding: '10px',
+              marginBottom: '15px',
+              border: '1px solid #ccc',
+              borderRadius: '4px'
+            }}
+            required
+          />
+          <button
+            type="submit"
+            style={{
+              width: '100%',
+              padding: '10px',
+              backgroundColor: '#4a90e2',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+          >
+            Inloggen
+          </button>
+        </form>
+        <p style={{ marginTop: '15px', textAlign: 'center' }}>
+          Nog geen account?{' '}
+          <button
+            onClick={() => navigate('/registratie')}
+            style={{
+              color: '#4a90e2',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              fontWeight: 'bold'
+            }}
+          >
+            Registreer hier
+          </button>
+        </p>
+      </section>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <button onClick={handleRegistratieClick}
-        style={{
-          padding: '8px 12px',
-          backgroundColor: '#ccc',
-          border: 'none',
-          borderRadius: '8px'
-        }}>
-          Register student
-        </button>
-
-        <button onClick={handleRegistratieBedrijfClick}
-        style={{
-          padding: '8px 12px',
-          backgroundColor: '#ccc',
-          border: 'none',
-          borderRadius: '8px'
-        }}>
-          Register bedrijf
-        </button>
-      </div>
+      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px' }}>
+        <h5>Contact</h5>
+        <p>info@careerlaunch.be</p>
+        <p>EhB - Erasmushogeschool Brussel</p>
+      </footer>
     </div>
-  )
+  );
 }
-
-export default LoginPage
