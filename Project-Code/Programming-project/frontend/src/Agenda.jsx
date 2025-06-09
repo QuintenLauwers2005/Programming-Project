@@ -1,25 +1,44 @@
-// src/Agenda.jsx
-import React, { useState } from "react";
-import "./Assets/Agenda.css";
+import React, { useState, useEffect } from 'react';
+import './Assets/Agenda.css';
 import Navbar from './Components/Navbar';
+import { useLocation } from 'react-router-dom';
 
-function Agenda() {
-  const [afspraken, setAfspraken] = useState([
-    { id: 1, time: "14:45", company: "Delaware", room: "Aula 1" },
-    { id: 2, time: "14:45", company: "Zylo", room: "Aula 2" },
-    { id: 3, time: "14:45", company: "Velto", room: "Aula 3" },
-    { id: 4, time: "14:45", company: "Klyr", room: "Aula 4" }
-  ]);
-
+export default function Agenda() {
+  const location = useLocation();
+  const [afspraken, setAfspraken] = useState([]);
   const [showInfo, setShowInfo] = useState(false);
   const [cancelId, setCancelId] = useState(null);
+
+  // Get selected vacature ID from URL
+  const searchParams = new URLSearchParams(location.search);
+  const selectedVacatureId = searchParams.get('vacatureId');
+  const selectedDate = searchParams.get('date');
+  const selectedTime = searchParams.get('time');
+
+  // Simulate adding a new appointment based on selected vacature
+  useEffect(() => {
+    if (selectedVacatureId && selectedDate && selectedTime) {
+      // In real app, fetch the actual vacature by ID from your backend
+      const selectedVacature = {
+        bedrijf: "SAP",
+        functie: "Business Consultant"
+      };
+      const newAfspraak = {
+        id: afspraken.length + 1,
+        time: selectedTime,
+        company: selectedVacature.bedrijf,
+        room: "Aula 1"
+      };
+      setAfspraken([newAfspraak]);
+    }
+  }, [selectedVacatureId, selectedDate, selectedTime]);
 
   const handleCancelConfirm = (id) => {
     setCancelId(id);
   };
 
   const confirmCancel = () => {
-    setAfspraken(prev => prev.filter(afspraak => afspraak.id !== cancelId));
+    setAfspraken(afspraken.filter(app => app.id !== cancelId));
     setCancelId(null);
   };
 
@@ -35,19 +54,25 @@ function Agenda() {
           Hoe speeddate reserveren?
         </button>
 
-        {afspraken.map(afspraak => (
-          <div className="card" key={afspraak.id}>
-            <div className="time">{afspraak.time}</div>
-            <div className="company">{afspraak.company}</div>
-            <div className="room">{afspraak.room}</div>
-            <button
-              className="cancel-button"
-              onClick={() => handleCancelConfirm(afspraak.id)}
-            >
-              Annuleren
-            </button>
+        {afspraken.length > 0 ? (
+          afspraken.map(afspraak => (
+            <div key={afspraak.id} className="card">
+              <div className="time">{afspraak.time}</div>
+              <div className="company">{afspraak.company}</div>
+              <div className="room">Aula 1</div>
+              <button
+                className="cancel-button"
+                onClick={() => handleCancelConfirm(afspraak.id)}
+              >
+                Annuleren
+              </button>
+            </div>
+          ))
+        ) : (
+          <div className="no-appointments">
+            <p>Geen afspraken gereserveerd.</p>
           </div>
-        ))}
+        )}
       </div>
 
       {/* Info modal */}
@@ -77,5 +102,3 @@ function Agenda() {
     </div>
   );
 }
-
-export default Agenda;
