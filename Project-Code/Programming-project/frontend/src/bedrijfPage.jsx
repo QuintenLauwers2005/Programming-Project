@@ -27,17 +27,6 @@ export default function BedrijvenLijst() {
       });
   }, []);
 
-  const getColorCode = (kleur) => {
-    if (!kleur || typeof kleur !== 'string') return '#ccc';
-    switch (kleur.toLowerCase()) {
-      case 'blauw': return '#4a90e2';
-      case 'groen': return '#50c878';
-      case 'geel': return '#ffcc00';
-      case 'paars': return '#800080';
-      case 'rood': return '#ff0000';
-      default: return '#ccc';
-    }
-  };
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
