@@ -149,4 +149,5 @@ export default function BedrijvenLijst() {
       </footer>
     </div>
   );
+
 }

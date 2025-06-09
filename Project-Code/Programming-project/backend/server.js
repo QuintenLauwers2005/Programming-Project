@@ -88,7 +88,7 @@ app.get('/api/student/:id', (req, res) => {
 
 //bedrijven ophalen
 app.get('/api/bedrijven', (req, res) => {
-  const sql = `SELECT bedrijf_id AS id, naam, kleur FROM bedrijf`;
+  const sql = `SELECT bedrijf_id AS id, naam, logo_link FROM bedrijf`;
 
   db.query(sql, (err, results) => {
     if (err) {
