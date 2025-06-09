@@ -76,14 +76,25 @@ export default function BedrijvenLijst() {
               onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
             >
               <div
+              style={{
+                width: '100%',
+                height: '75px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginBottom: '15px'
+              }}
+            >
+              <img
+                src={`/${bedrijf.logo_link}`}
+                alt={`${bedrijf.naam} logo`}
                 style={{
-                  width: '60px',
-                  height: '60px',
-                  borderRadius: '6px',
-                  backgroundColor: getColorCode(bedrijf.kleur),
-                  margin: '0 auto 15px',
+                  maxWidth: '100%',
+                  maxHeight: '60px',
+                  objectFit: 'contain'
                 }}
-              ></div>
+              />
+            </div>
               <p style={{ fontSize: '18px', fontWeight: 'bold' }}>{bedrijf.naam}</p>
             </div>
           ))}
@@ -111,14 +122,4 @@ export default function BedrijvenLijst() {
   );
 }
 
-// 👇 Kleurfunctie
-function getColorCode(kleur) {
-  switch (kleur.toLowerCase()) {
-    case 'blauw': return '#4a90e2';
-    case 'groen': return '#50c878';
-    case 'geel': return '#ffcc00';
-    case 'paars': return '#800080';
-    case 'rood': return '#ff0000';
-    default: return '#ccc';
-  }
-}
+
