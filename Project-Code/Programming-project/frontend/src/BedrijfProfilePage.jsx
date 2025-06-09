@@ -7,7 +7,7 @@ function BedrijfProfilePage() {
   const navigate = useNavigate();
   const [companyData, setCompanyData] = useState(null);
   const [loading, setLoading] = useState(true);
-
+ 
   useEffect(() => {
     axios.get(`http://localhost:5000/api/bedrijf/${id}`)
       .then((response) => {
@@ -52,7 +52,7 @@ function BedrijfProfilePage() {
 
       <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>   
         <img 
-          src={companyData.logo_link} 
+          src={`/${companyData.logo_link}`}       
           alt={`Logo van ${companyData.naam}`}
           style={{ width: '150px', height: '150px', borderRadius: '8px', objectFit: 'cover', marginRight: '30px' }} 
         />
