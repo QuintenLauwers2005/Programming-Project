@@ -32,7 +32,7 @@ export default function VacatureLijst() {
 
       {vacatures.map((vacature) => (
         <div key={vacature.vacature_id} className="vacature-card">
-          <div className="logo-blok"></div>
+          <div className="logo-blok" style={{backgroundColor: getColorCode(vacature.kleur)}}></div>
           <div className="vacature-info">
             <p className="bedrijf">{vacature.bedrijf}</p>
             <p className="beschrijving">{vacature.synopsis}</p>
@@ -47,4 +47,15 @@ export default function VacatureLijst() {
       <button className="toonmeer-btn" onClick={() => alert('Toon meer geklikt!')}>Toon meer</button>
     </div>
   );
+}
+
+function getColorCode(kleur) {
+  switch (kleur) {
+    case 'blauw': return '#4a90e2';
+    case 'groen': return '#50c878';
+    case 'geel': return '#ffcc00';
+    case 'paars': return '#800080';
+    case 'rood': return '#ff0000';
+    default: return '#ccc';
+  }
 }
