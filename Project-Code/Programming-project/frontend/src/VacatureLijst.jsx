@@ -5,10 +5,16 @@ import Navbar from './Components/Navbar';
 
 export default function VacatureLijst() {
   const [vacatures, setVacatures] = useState([]);
+  const [filteredVacatures, setFilteredVacatures] = useState([]);
   const [selectedVacature, setSelectedVacature] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
+  const [filters, setFilters] = useState({
+    bedrijf: '',
+    functie: '',
+    contractType: ''
+  });
 
   // Fetch vacatures from API
   useEffect(() => {
@@ -16,6 +22,7 @@ export default function VacatureLijst() {
       .then((res) => {
         console.log("Ophaalde vacatures:", res.data);
         setVacatures(res.data);
+        setFilteredVacatures(res.data);
       })
       .catch((err) => {
         console.error('Fout bij ophalen vacatures:', err.message);
@@ -33,6 +40,34 @@ export default function VacatureLijst() {
       default: return '#ccc';
     }
   };
+
+  // Handle filter change
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters({
+      ...filters,
+      [name]: value
+    });
+  };
+
+  // Apply filters
+  useEffect(() => {
+    let filtered = vacatures;
+
+    if (filters.bedrijf) {
+      filtered = filtered.filter(v => v.bedrijf.toLowerCase().includes(filters.bedrijf.toLowerCase()));
+    }
+
+    if (filters.functie) {
+      filtered = filtered.filter(v => v.functie.toLowerCase().includes(filters.functie.toLowerCase()));
+    }
+
+    if (filters.contractType) {
+      filtered = filtered.filter(v => v.contract_type.toLowerCase().includes(filters.contractType.toLowerCase()));
+    }
+
+    setFilteredVacatures(filtered);
+  }, [filters, vacatures]);
 
   // Handle selecting a vacature and showing the modal
   const handleSelectVacature = (vacature) => {
@@ -69,10 +104,34 @@ export default function VacatureLijst() {
 
       <main className="inhoud">
         <h2>Vacatures</h2>
-        <button className="filter-btn" onClick={() => alert('Filter geklikt!')}>Filter</button>
+
+        {/* Filter Form */}
+        <div className="filter-form">
+          <input
+            type="text"
+            name="bedrijf"
+            placeholder="Bedrijf"
+            value={filters.bedrijf}
+            onChange={handleFilterChange}
+          />
+          <input
+            type="text"
+            name="functie"
+            placeholder="Functie"
+            value={filters.functie}
+            onChange={handleFilterChange}
+          />
+          <input
+            type="text"
+            name="contractType"
+            placeholder="Contracttype"
+            value={filters.contractType}
+            onChange={handleFilterChange}
+          />
+        </div>
 
         <div className="vacature-list">
-          {vacatures.map((vacature) => (
+          {filteredVacatures.map((vacature) => (
             <div key={vacature.vacature_id} className="vacature-card">
               <div 
                 className="logo-blok" 
