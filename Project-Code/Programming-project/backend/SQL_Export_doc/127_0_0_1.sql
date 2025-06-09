@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Gegenereerd op: 08 jun 2025 om 16:05
+-- Gegenereerd op: 09 jun 2025 om 11:40
 -- Serverversie: 10.4.32-MariaDB
 -- PHP-versie: 8.2.12
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `carrierlauch`
 --
+CREATE DATABASE IF NOT EXISTS `carrierlauch` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `carrierlauch`;
 
 -- --------------------------------------------------------
 
@@ -33,16 +35,17 @@ CREATE TABLE `bedrijf` (
   `locatie` varchar(255) DEFAULT NULL,
   `vertegenwoordiger` varchar(100) DEFAULT NULL,
   `telefoon` varchar(20) DEFAULT NULL,
-  `logo_link` varchar(255) DEFAULT NULL
+  `logo_link` varchar(255) DEFAULT NULL,
+  `kleur` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Gegevens worden geëxporteerd voor tabel `bedrijf`
 --
 
-INSERT INTO `bedrijf` (`bedrijf_id`, `naam`, `locatie`, `vertegenwoordiger`, `telefoon`, `logo_link`) VALUES
-(2, 'SAP', 'Brussel', 'Johan Vermeer', '+32 2 345 67 89', 'logo_sap.png'),
-(3, 'Delaware', 'Kortrijk', 'Tim Smit', '+32 2 987 65 43', 'logo_delaware.png');
+INSERT INTO `bedrijf` (`bedrijf_id`, `naam`, `locatie`, `vertegenwoordiger`, `telefoon`, `logo_link`, `kleur`) VALUES
+(2, 'SAP', 'Brussel', 'Johan Vermeer', '+32 2 345 67 89', 'logo_sap.png', 'blauw'),
+(3, 'Delaware', 'Kortrijk', 'Tim Smit', '+32 2 987 65 43', 'logo_delaware.png', 'rood');
 
 -- --------------------------------------------------------
 

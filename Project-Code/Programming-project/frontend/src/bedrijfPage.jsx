@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Logo from './Components/Logo'
 
 export default function BedrijvenLijst() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ export default function BedrijvenLijst() {
         <div className="top-bar">
           <button className="login-btn" onClick={() => navigate('/login')}>Login</button>
           <button className="notificatie-btn" onClick={() => alert('Meldingen geklikt!')}>Meldingen</button>
-          <img src="https://via.placeholder.com/40" alt="Logo" className="logo" />
+          <Logo/>
         </div>
         <div className="nav-bar">
           <button onClick={() => navigate('/')}>Home</button>
