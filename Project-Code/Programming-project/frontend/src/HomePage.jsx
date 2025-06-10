@@ -70,11 +70,19 @@ function HomePage() {
 
       {/* Veelgestelde vragen */}
       <section className="faq-section">
-        <h4>Veelgestelde vragen</h4>
-        <p><strong>Hoe meld ik me aan?</strong><br />Klik op 'Registreren' en volg de stappen.</p>
-        <p><strong>Waar?</strong><br />EhB campus Nijverheidskaai 170 Anderlecht 1070</p>
-        <p><strong>Info?</strong><br />Stuur een e-mail of neem contact op met je studentenbegeleider.</p>
-      </section>
+  <h4>Veelgestelde vragen</h4>
+  <div className="faq-container">
+    <div className="faq-blok">
+      <p><strong>Hoe meld ik me aan?</strong><br />Klik op 'Registreren' en volg de stappen.</p>
+    </div>
+    <div className="faq-blok">
+      <p><strong>Waar?</strong><br />EhB campus Nijverheidskaai 170 Anderlecht 1070</p>
+    </div>
+    <div className="faq-blok">
+      <p><strong>Info?</strong><br />Stuur een e-mail of neem contact op met je studentenbegeleider.</p>
+    </div>
+  </div>
+</section>
 
       {/* Footer */}
       <footer className="footer">

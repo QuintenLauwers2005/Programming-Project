@@ -55,6 +55,29 @@
 
 .faq-section {
   margin-top: 30px;
+  text-align: center;
+}
+
+.faq-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.faq-blok {
+  background-color: aliceblue;
+  height: 150px;
+  flex: 1;
+  min-width: 180px;
+  max-width: 300px;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
 }
 
 .footer {
