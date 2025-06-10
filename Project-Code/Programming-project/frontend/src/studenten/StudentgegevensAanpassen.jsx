@@ -42,18 +42,6 @@ export default function RegistratiePage() {
       <section style={{ maxWidth: '400px', margin: '0 auto', padding: '20px' }}>
         <form>
           <input
-            type="text"
-            placeholder="Naam"
-            style={{
-              width: '100%',
-              padding: '10px',
-              marginBottom: '15px',
-              border: '1px solid #ccc',
-              borderRadius: '4px'
-            }}
-            required
-          />
-          <input
             type="email"
             placeholder="Email"
             style={{
@@ -92,21 +80,7 @@ export default function RegistratiePage() {
             Registreer
           </button>
         </form>
-        <p style={{ marginTop: '15px', textAlign: 'center' }}>
-          Al een account?{' '}
-          <button
-            onClick={() => navigate('/login')}
-            style={{
-              color: '#4a90e2',
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              fontWeight: 'bold'
-            }}
-          >
-            Log hier in
-          </button>
-        </p>
+       
       </section>
 
       <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px' }}>
