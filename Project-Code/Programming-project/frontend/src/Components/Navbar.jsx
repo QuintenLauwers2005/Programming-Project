@@ -1,11 +1,13 @@
 import './Navbar.css'
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import Logo from './Logo'
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function Navbar(){
 
   const navigate = useNavigate();
+  const homepagePath = "/";
 
     const [showNotifications, setShowNotifications] = useState(false);
     const buttonRef = useRef(null);
@@ -37,7 +39,9 @@ const handleClickOutside = (event) => {
     return(
          <div>
       <div className="top-bar">
-        <Logo className="logo"/>
+        <Link to={homepagePath}>
+          <Logo className="logo" />
+        </Link>
         <button className="login-btn" onClick={() => navigate('/login')}>Login</button>
         <div class = "navigatie-button-popout">
         <button className="notificatie-btn"  ref={buttonRef} onClick={toggleNotifications}>Meldingen</button>
