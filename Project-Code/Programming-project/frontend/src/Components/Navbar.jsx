@@ -60,10 +60,10 @@ const handleClickOutside = (event) => {
       </div>
 
       <div className="nav-bar">
-        <button onClick={() => navigate('/')}>Home</button>
-        <button onClick={() => navigate('/Agenda')}>Speeddates</button>
-        <button onClick={() => navigate('/BedrijvenLijst')}>Bedrijven</button>
-        <button onClick={() => navigate('/Vacaturelijst')}>Vacatures</button>
+        <button className='NavBar-kleur' onClick={() => navigate('/')}>Home</button>
+        <button className='NavBar-kleur' onClick={() => navigate('/Agenda')}>Speeddates</button>
+        <button className='NavBar-kleur' onClick={() => navigate('/BedrijvenLijst')}>Bedrijven</button>
+        <button className='NavBar-kleur' onClick={() => navigate('/Vacaturelijst')}>Vacatures</button>
       </div>
       </div>
     );
