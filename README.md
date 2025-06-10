@@ -9,7 +9,6 @@ Welkom bij dit project! Volg onderstaande stappen zorgvuldig om de applicatie lo
 Zorg ervoor dat je het volgende hebt geïnstalleerd:
 
 - ✅ [Node.js & npm](https://nodejs.org/)
-- ✅ [XAMPP (met Apache & MySQL)](https://www.apachefriends.org/index.html)
 
 > ℹ️ **Standaardpoorten:**
 > - MySQL (database): `3306`  
@@ -36,18 +35,11 @@ cd pad/naar/frontend    # Navigeer naar de frontend-map
 npm install            # Installeer de benodigde dependencies
 ```
 
-3️⃣ XAMPP opstarten en database importeren
+3️⃣ link maken met de school database
 
-  1. Download en installeer XAMPP via de officiële site.
-  2. Open het XAMPP Control Panel.
-  3. Start Apache en MySQL.
-  4. Klik op MySQL Admin om phpMyAdmin te openen.
-  5. Importeer de database:
-     - Klik bovenin op Importeren.
-     - Selecteer het meegeleverde .sql bestand (te vinden in de map SQL_Export_Doc).
-     - Klik op Starten om de database te importeren.
+  1. maak een .env doc aan in de backend voeg de data toe die te vinden is in teams (groep 4)
+  2. zorg ervoor dat je op de school zit anders moet je met de school vpn verbonden zijn.
 
-4️⃣ Applicatie starten
 ✅ Backend starten:
 ```bash
 cd pad/naar/backend     # Ga naar de backend-map
