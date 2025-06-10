@@ -1,7 +1,7 @@
 // HomePage.jsx
 import React from 'react'
-import Kaart from './Components/Kaart'
-import Navbar from './Components/BedrijfNavBar'
+import Kaart from '../Components/Kaart'
+import Navbar from '../Components/BedrijfNavBar'
 
 function BedrijfHomePage() {
 
