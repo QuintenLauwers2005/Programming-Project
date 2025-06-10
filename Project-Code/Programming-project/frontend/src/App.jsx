@@ -4,12 +4,13 @@ import HomePage from './HomePage'
 import LoginPage from './Login'
 import RegistratiePage from './Registratie'
 import RegistratieBedrijfPage from './RegistratieBedrijf'
-import StudentProfilePage from './StudentProfilePage';
+import StudentProfilePage from './studenten/StudentProfilePage';
 import BedrijfProfilePage from './BedrijfProfilePage';
 import VacaturelijstPage from './VacatureLijst';
 import Agenda from './Agenda';
 import BedrijvenLijst from './bedrijfPage';
 import VacaturePage from './VacatureAanmaken';
+import BedrijfHomePage from './BedrijfHomePage'
 
 
 function App() {
@@ -26,6 +27,8 @@ function App() {
         <Route path="/Agenda" element={<Agenda />} />
         <Route path="/BedrijvenLijst" element={<BedrijvenLijst />} />
         <Route path="/VacaturePage" element={<VacaturePage />} />
+        <Route path="/bedrijf/:id" element={<BedrijfProfilePage />} />
+        <Route path="/BedrijfHomePage" element={<BedrijfHomePage/>} />
       
       </Routes>
     </Router>

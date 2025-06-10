@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Logo from './Logo'
 import { useNavigate } from 'react-router-dom';
 
-function Navbar(){
+function BedrijfNavBar(){
 
   const navigate = useNavigate();
 
@@ -37,7 +37,6 @@ const handleClickOutside = (event) => {
     return(
          <div>
       <div className="top-bar">
-        <Logo className="logo"/>
         <button className="login-btn" onClick={() => navigate('/login')}>Login</button>
         <div class = "navigatie-button-popout">
         <button className="notificatie-btn"  ref={buttonRef} onClick={toggleNotifications}>Meldingen</button>
@@ -53,7 +52,7 @@ const handleClickOutside = (event) => {
           </div>
         )}
         </div>
-        
+        <Logo className="logo"/>
 
         
       
@@ -62,11 +61,10 @@ const handleClickOutside = (event) => {
       <div className="nav-bar">
         <button onClick={() => navigate('/')}>Home</button>
         <button onClick={() => navigate('/Agenda')}>Speeddates</button>
-        <button onClick={() => navigate('/BedrijvenLijst')}>Bedrijven</button>
         <button onClick={() => navigate('/Vacaturelijst')}>Vacatures</button>
       </div>
       </div>
     );
 }
 
-export default Navbar;
+export default BedrijfNavBar;

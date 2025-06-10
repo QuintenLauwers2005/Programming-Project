@@ -1,31 +1,30 @@
 // StudentProfilePage.jsx
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import Navbar from '../Components/Navbar'
 
 function StudentProfilePage() {
 
-  const studentData = {
-    id: "1",
-    name: "Jan Voorbeeldstudent",
-    email: "jan.voorbeeld@student.ehb.be",
-    opleiding: "Toegepaste Informatica",
-    instelling: "Erasmushogeschool Brussel",
-    afstudeerjaar: 2025,
-    vaardigheden: [
-      { id: "skill1", naam: "React.js" },
-      { id: "skill2", naam: "JavaScript" },
-      { id: "skill3", naam: "Node.js" },
-      { id: "skill4", naam: "Express.js" },
-      { id: "skill5", naam: "HTML5" },
-      { id: "skill6", naam: "CSS3" },
-      { id: "skill7", naam: "Git" }
-    ],
-    bio: "Ik ben een enthousiaste student Toegepaste Informatica aan de Erasmushogeschool Brussel. Mijn passie ligt bij front-end ontwikkeling en het creëren van gebruiksvriendelijke webapplicaties. Ik ben leergierig, werk graag in teamverband en ben altijd op zoek naar nieuwe uitdagingen om mijn vaardigheden verder te ontwikkelen.",
-    profielFotoUrl: "https://via.placeholder.com/150" 
-  };
+const [studentData, setStudentData] = useState(null);
+  const studentId = "1"; // kan dynamisch uit route params komen bijvoorbeeld
+
+  useEffect(() => {
+    axios.get(`http://localhost:5000/api/student/${studentId}`)
+      .then(res => { 
+        setStudentData(res.data);
+      })
+      .catch(err => {
+        console.error('Fout bij ophalen student:', err.message);
+      });
+  }, [studentId]);
+
+  if (!studentData) return <p>Studentgegevens laden...</p>;
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
-      
+    <header style={{marginBottom: '50px'}}>
+      <Navbar/>
+    </header>
       {/* Profiel Hoofding */}
       <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>
         <img 

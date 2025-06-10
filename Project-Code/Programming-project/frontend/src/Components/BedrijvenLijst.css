@@ -87,3 +87,15 @@
   font-weight: 600;
   font-size: 18px;
 }
+.filter-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-form input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex: 1;
+}

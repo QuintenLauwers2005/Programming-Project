@@ -1,46 +1,104 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
+import './Assets/Agenda.css';
+import Navbar from './Components/Navbar';
+import { useLocation } from 'react-router-dom';
 
-import "./Assets/Agenda.css"; 
-import Navbar from './Components/Navbar'
+export default function Agenda() {
+  const location = useLocation();
+  const [afspraken, setAfspraken] = useState([]);
+  const [showInfo, setShowInfo] = useState(false);
+  const [cancelId, setCancelId] = useState(null);
 
-function Agenda(){
-    return(
+  // Get selected vacature ID from URL
+  const searchParams = new URLSearchParams(location.search);
+  const selectedVacatureId = searchParams.get('vacatureId');
+  const selectedDate = searchParams.get('date');
+  const selectedTime = searchParams.get('time');
+
+  // Simulate adding a new appointment based on selected vacature
+  useEffect(() => {
+    if (selectedVacatureId && selectedDate && selectedTime) {
+      // In real app, fetch the actual vacature by ID from your backend
+      const selectedVacature = {
+        bedrijf: "SAP",
+        functie: "Business Consultant"
+      };
+      const newAfspraak = {
+        id: afspraken.length + 1,
+        time: selectedTime,
+        company: selectedVacature.bedrijf,
+        room: "Aula 1"
+      };
+      setAfspraken([newAfspraak]);
+    }
+  }, [selectedVacatureId, selectedDate, selectedTime]);
+
+  const handleCancelConfirm = (id) => {
+    setCancelId(id);
+  };
+
+  const confirmCancel = () => {
+    setAfspraken(afspraken.filter(app => app.id !== cancelId));
+    setCancelId(null);
+  };
+
+  const closeCancelModal = () => {
+    setCancelId(null);
+  };
+
+  return (
     <div>
       <Navbar />
       <div className="page">
-      <button className="top-button">hoe speeddate reserveren?</button>
+        <button className="top-button" onClick={() => setShowInfo(true)}>
+          Hoe speeddate reserveren?
+        </button>
 
-      <div className="card">
-        <div className="time">14:45</div>
-        <div className="company">Delaware</div>
-        <div className="room">Aula 1</div>
-        <button className="cancel-button">cancel</button>
+        {afspraken.length > 0 ? (
+          afspraken.map(afspraak => (
+            <div key={afspraak.id} className="card">
+              <div className="time">{afspraak.time}</div>
+              <div className="company">{afspraak.company}</div>
+              <div className="room">Aula 1</div>
+              <button
+                className="cancel-button"
+                onClick={() => handleCancelConfirm(afspraak.id)}
+              >
+                Annuleren
+              </button>
+            </div>
+          ))
+        ) : (
+          <div className="no-appointments">
+            <p>Geen afspraken gereserveerd.</p>
+          </div>
+        )}
       </div>
 
-      <div className="card">
-        <div className="time">14:45</div>
-        <div className="company">Zylo</div>
-        <div className="room">Aula 2</div>
-        <button className="cancel-button">cancel</button>
-      </div>
+      {/* Info modal */}
+      {showInfo && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Hoe reserveer je een speeddate?</h3>
+            <p>
+              Ga naar de vacaturepagina en klik op "Reserveer een gesprek" bij het bedrijf dat je interessant vindt.
+            </p>
+            <button onClick={() => setShowInfo(false)}>Sluiten</button>
+          </div>
+        </div>
+      )}
 
-      <div className="card">
-        <div className="time">14:45</div>
-        <div className="company">Velto</div>
-        <div className="room">Aula 3</div>
-        <button className="cancel-button">cancel</button>
-      </div>
-
-      <div className="card">
-        <div className="time">14:45</div>
-        <div className="company">Klyr</div>
-        <div className="room">Aula 4</div>
-        <button className="cancel-button">cancel</button>
-      </div>
-      </div>
+      {/* Cancel bevestiging modal */}
+      {cancelId && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Bevestig annulatie</h3>
+            <p>Ben je zeker dat je deze speeddate wilt annuleren?</p>
+            <button onClick={confirmCancel}>Ja, annuleren</button>
+            <button onClick={closeCancelModal}>Nee, terug</button>
+          </div>
+        </div>
+      )}
     </div>
-    )
-    
+  );
 }
-
-export default Agenda;

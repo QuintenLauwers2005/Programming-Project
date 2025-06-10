@@ -19,6 +19,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    position:relative;
 }
 
 .login-btn {
@@ -35,16 +36,27 @@
     color: green;
     font-weight: bold;
     font-size: 16px;
+    order: 3;
 }
 
 .notificatie-btn {
-  background-color: #f0f0f0;
-  padding: 5px 10px;
-  border: none;
-    background-color: #f0f0f0;
-    padding: 8px 16px;
-    border: none;
-    font-size: 14px;
+
+    
+
+  border: 2px solid green;
+  padding: 5px 15px;
+  border-radius: 20px;
+  background-color: white;
+  color: green;
+  font-weight: bold;
+    border: 2px solid green;
+    padding: 8px 20px;
+    border-radius: 20px;
+    background-color: white;  
+    color: green;
+    font-weight: bold;
+    font-size: 16px;
+    order: 2;
 }
 
 .logo {
@@ -170,4 +182,39 @@
 button {
 
   cursor: pointer !important;
+}
+.notif-popout {
+  position: absolute;
+  top: 100%;
+right: 0;
+  background-color: white;
+  color: black;
+  border: 1px solid #ccc;
+  width: 220px;
+  padding: 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+}
+
+.notif-popout ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notif-popout li {
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.notif-popout li:last-child {
+  border-bottom: none;
+}
+
+.navigatie-button-popout{
+  position: relative;
+  margin-left: auto;
+  margin-right: 2rem;
+
 }

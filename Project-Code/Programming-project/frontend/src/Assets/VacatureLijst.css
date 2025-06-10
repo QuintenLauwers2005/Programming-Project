@@ -117,16 +117,7 @@
     align-items: center;
 }
 
-.logo-blok {
-  width: 60px;
-  height: 60px;
-  background-color: #4a90e2;
-  border-radius: 6px;
-    width: 80px;
-    height: 80px;
-    background-color: #4a90e2;
-    border-radius: 8px;
-}
+
 
 .vacature-info {
   flex: 1;
@@ -170,4 +161,31 @@
 button {
 
   cursor: pointer !important;
+}
+.filter-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-form input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex: 1;
+}
+
+.filter-btn {
+  background-color: #4a90e2;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filter-btn:hover {
+  background-color: #357ab8;
 }
