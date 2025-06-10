@@ -2,21 +2,23 @@ import { useParams, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function BedrijfProfilePage() {
+export default function BedrijfProfilePage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [companyData, setCompanyData] = useState(null);
   const [loading, setLoading] = useState(true);
- 
+  const [error, setError] = useState(null);
+
+  // Fetch company data from the API
   useEffect(() => {
     axios.get(`http://localhost:5000/api/bedrijf/${id}`)
       .then((response) => {
-        console.log(response.data);
-        
+        console.log("Bedrijfsgegevens:", response.data);
         setCompanyData(response.data);
       })
       .catch((error) => {
         console.error('Fout bij ophalen bedrijven:', error);
+        setError('Kon bedrijf niet ophalen');
       })
       .finally(() => {
         setLoading(false);
@@ -24,15 +26,72 @@ function BedrijfProfilePage() {
   }, [id]);
 
   if (loading) {
-    return <div>Bezig met laden...</div>;
+    return (
+      <div style={{ textAlign: 'center', padding: '20px' }}>
+        <h2>Laden...</h2>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ textAlign: 'center', color: 'red', padding: '20px' }}>
+        <h2>{error}</h2>
+        <button 
+          onClick={() => navigate('/BedrijvenLijst')}
+          style={{
+            marginTop: '10px',
+            padding: '10px 20px',
+            backgroundColor: '#007bff',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer'
+          }}
+        >
+          Terug naar bedrijvenlijst
+        </button>
+      </div>
+    );
   }
 
   if (!companyData) {
-    return <div>Bedrijf niet gevonden</div>;
+    return (
+      <div style={{ textAlign: 'center', padding: '20px' }}>
+        <h2>Geen bedrijf gevonden</h2>
+        <button 
+          onClick={() => navigate('/BedrijvenLijst')}
+          style={{
+            marginTop: '10px',
+            padding: '10px 20px',
+            backgroundColor: '#007bff',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer'
+          }}
+        >
+          Terug naar bedrijvenlijst
+        </button>
+      </div>
+    );
   }
+
+  // Function to get color code based on the company's color
+  const getColorCode = (kleur) => {
+    switch (kleur.toLowerCase()) {
+      case 'blauw': return '#4a90e2';
+      case 'groen': return '#50c878';
+      case 'geel': return '#ffcc00';
+      case 'paars': return '#800080';
+      case 'rood': return '#ff0000';
+      default: return '#ccc';
+    }
+  };
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
+      {/* Back Button */}
       <button
         onClick={() => navigate('/BedrijvenLijst')}
         style={{
@@ -50,6 +109,7 @@ function BedrijfProfilePage() {
         ← Terug
       </button>
 
+      {/* Company Profile Section */}
       <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>   
         <img 
           src={`/${companyData.logo_link}`}       
@@ -63,13 +123,12 @@ function BedrijfProfilePage() {
         </div>
       </section>
 
+      {/* Vacatures Section */}
       <section style={{ marginBottom: '30px' }}>
         <h3 style={{ borderBottom: '2px solid #ddd', paddingBottom: '10px', marginBottom: '20px', color: '#333' }}>Openstaande Vacatures & Stages</h3>
-        <div>
-          {companyData.vacatures.length === 0 ? (
-            <p style={{ color: '#777' }}>Geen openstaande vacatures.</p>
-          ) : (
-            companyData.vacatures.map((vacature) => (
+        {companyData.vacatures && companyData.vacatures.length > 0 ? (
+          <div>
+            {companyData.vacatures.map((vacature) => (
               <div key={vacature.vacature_id} style={{ 
                 border: '1px solid #e0e0e0', 
                 padding: '15px', 
@@ -93,11 +152,14 @@ function BedrijfProfilePage() {
                   {vacature.contract_type}
                 </span>
               </div>
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <p style={{ color: '#777' }}>Geen openstaande vacatures.</p>
+        )}
       </section>
 
+      {/* Contact & Locatie Section */}
       <section style={{ marginBottom: '30px', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
         <h3 style={{ borderBottom: '2px solid #ddd', paddingBottom: '10px', marginBottom: '20px', color: '#333' }}>Contact & Locatie</h3>
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Adres:</strong> {companyData.locatie}</p>
@@ -105,6 +167,7 @@ function BedrijfProfilePage() {
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Telefoon:</strong> {companyData.telefoon}</p>
       </section>
 
+      {/* Footer */}
       <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px' }}>
         <h5>Contact</h5>
         <p>info@careerlaunch.be</p>
@@ -113,5 +176,3 @@ function BedrijfProfilePage() {
     </div>
   );
 }
-
-export default BedrijfProfilePage;
