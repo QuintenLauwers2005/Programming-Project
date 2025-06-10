@@ -10,7 +10,7 @@ import VacaturelijstPage from './VacatureLijst';
 import Agenda from './Agenda';
 import BedrijvenLijst from './bedrijfPage';
 import VacaturePage from './VacatureAanmaken';
-import BedrijfHomePage from './BedrijfHomePage'
+import BedrijfHomePage from './bedrijven/BedrijfHomePage'
 
 
 function App() {

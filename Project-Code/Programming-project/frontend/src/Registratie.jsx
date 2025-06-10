@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Navbar from './Components/Navbar'
 
 export default function RegistratiePage() {
   const navigate = useNavigate();
@@ -8,28 +9,7 @@ export default function RegistratiePage() {
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
       {/* Navigatie */}
       <header>
-        <div className="top-bar">
-          <button
-            className="login-btn"
-            onClick={() => navigate('/login')}
-          >
-            Login
-          </button>
-          <button
-            className="notificatie-btn"
-            onClick={() => alert('Meldingen geklikt!')}
-          >
-            Meldingen
-          </button>
-          <img src="https://via.placeholder.com/40"  alt="Logo" className="logo" />
-        </div>
-
-        <div className="nav-bar">
-          <button onClick={() => navigate('/')}>Home</button>
-          <button onClick={() => navigate('/Agenda')}>Speeddates</button>
-          <button onClick={() => navigate('/BedrijvenLijst')}>Bedrijven</button>
-          <button onClick={() => navigate('/Vacaturelijst')}>Vacatures</button>
-        </div>
+        <Navbar/>
       </header>
 
       <section style={{ margin: '30px 0', textAlign: 'center' }}>
