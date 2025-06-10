@@ -10,21 +10,56 @@ export default function BedrijfProfilePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Modal state
+  const [showModal, setShowModal] = useState(false);
+  const [selectedVacature, setSelectedVacature] = useState(null);
+  const [selectedTime, setSelectedTime] = useState('');
+
   // Fetch company data from the API
   useEffect(() => {
     axios.get(`http://localhost:5000/api/bedrijf/${id}`)
       .then((response) => {
-        console.log("Bedrijfsgegevens:", response.data);
         setCompanyData(response.data);
       })
       .catch((error) => {
-        console.error('Fout bij ophalen bedrijven:', error);
         setError('Kon bedrijf niet ophalen');
       })
       .finally(() => {
         setLoading(false);
       });
   }, [id]);
+
+  // Generate time options for the select
+  const generateTimeOptions = () => {
+    const options = [];
+    for (let hour = 8; hour < 19; hour++) {
+      for (let minute = 0; minute < 60; minute += 10) {
+        const time = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+        options.push(<option key={time} value={time}>{time}</option>);
+      }
+    }
+    return options;
+  };
+
+  // Open modal for selected vacature
+  const handleOpenModal = (vacature) => {
+    setSelectedVacature(vacature);
+    setSelectedTime('');
+    setShowModal(true);
+  };
+
+  // Confirm afspraak
+  const handleConfirm = () => {
+    if (!selectedTime) {
+      alert('Kies een datum en tijdstip');
+      return;
+    }
+
+    // Hier kan je bv. data opsturen naar backend of redirecten met params
+    // Voorbeeld: redirect naar agenda pagina met query params
+    window.location.href = `/Agenda?vacatureId=${selectedVacature.vacature_id}&time=${selectedTime}`;
+    setShowModal(false);
+  };
 
   if (loading) {
     return (
@@ -78,14 +113,11 @@ export default function BedrijfProfilePage() {
     );
   }
 
-  // Function to get color code based on the company's color
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
-      {/* Back Button */}
-      
-      <Navbar/>
+      <Navbar />
       {/* Company Profile Section */}
-      <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee',marginTop:'70px' }}>   
+      <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee', marginTop:'70px' }}>
         <img 
           src={`/${companyData.logo_link}`}       
           alt={`Logo van ${companyData.naam}`}
@@ -117,15 +149,31 @@ export default function BedrijfProfilePage() {
                   <h4 style={{ margin: '0 0 5px 0' }}>{vacature.functie}</h4>
                   <p style={{ margin: 0, color: '#666' }}>{vacature.synopsis}</p>
                 </div>
-                <span style={{ 
-                  backgroundColor: vacature.contract_type === 'Stage' ? '#007bff' : '#28a745', 
-                  color: 'white', 
-                  padding: '5px 10px', 
-                  borderRadius: '15px', 
-                  fontSize: '0.8em' 
-                }}>
-                  {vacature.contract_type}
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span style={{ 
+                    backgroundColor: vacature.contract_type === 'Stage' ? '#007bff' : '#28a745', 
+                    color: 'white', 
+                    padding: '5px 10px', 
+                    borderRadius: '15px', 
+                    fontSize: '0.8em' 
+                  }}>
+                    {vacature.contract_type}
+                  </span>
+                  <button
+                    onClick={() => handleOpenModal(vacature)}
+                    style={{
+                      padding: '6px 12px',
+                      backgroundColor: '#007bff',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '5px',
+                      cursor: 'pointer',
+                      fontSize: '0.9em'
+                    }}
+                  >
+                    Reserveer gesprek
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -133,6 +181,66 @@ export default function BedrijfProfilePage() {
           <p style={{ color: '#777' }}>Geen openstaande vacatures.</p>
         )}
       </section>
+
+      {/* Modal */}
+      {showModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex', justifyContent: 'center', alignItems: 'center',
+          zIndex: 1000,
+        }}>
+          <div style={{
+            backgroundColor: 'white',
+            padding: '20px',
+            borderRadius: '8px',
+            width: '320px',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.3)'
+          }}>
+            <h3>Kies een tijdstip</h3>
+
+            <label style={{ display: 'block', margin: '10px 0 5px' }}>Tijdstip:</label>
+            <select
+              value={selectedTime}
+              onChange={(e) => setSelectedTime(e.target.value)}
+              style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
+            >
+              <option value="">Selecteer tijd</option>
+              {generateTimeOptions()}
+            </select>
+
+            <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+              <button
+                onClick={handleConfirm}
+                style={{
+                  backgroundColor: '#28a745',
+                  color: 'white',
+                  border: 'none',
+                  padding: '8px 16px',
+                  borderRadius: '5px',
+                  cursor: 'pointer'
+                }}
+              >
+                Bevestigen
+              </button>
+              <button
+                onClick={() => setShowModal(false)}
+                style={{
+                  backgroundColor: '#dc3545',
+                  color: 'white',
+                  border: 'none',
+                  padding: '8px 16px',
+                  borderRadius: '5px',
+                  cursor: 'pointer'
+                }}
+              >
+                Annuleren
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Contact & Locatie Section */}
       <section style={{ marginBottom: '30px', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
