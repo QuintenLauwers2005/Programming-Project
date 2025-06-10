@@ -117,11 +117,7 @@
     align-items: center;
 }
 
-.logo-blok {
-    width: 80px;
-    height: 80px;
-    border-radius: 8px;
-}
+
 
 .vacature-info {
   flex: 1;
