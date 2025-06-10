@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Logo from './Components/Logo';
+import Navbar from './Components/Navbar';
 
 export default function BedrijvenLijst() {
   const navigate = useNavigate();
@@ -51,17 +52,7 @@ export default function BedrijvenLijst() {
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
       <header>
-        <div className="top-bar">
-          <button className="login-btn" onClick={() => navigate('/login')}>Login</button>
-          <button className="notificatie-btn" onClick={() => alert('Meldingen geklikt!')}>Meldingen</button>
-          <Logo />
-        </div>
-        <div className="nav-bar">
-          <button onClick={() => navigate('/')}>Home</button>
-          <button onClick={() => navigate('/Agenda')}>Speeddates</button>
-          <button onClick={() => navigate('/BedrijvenLijst')}>Bedrijven</button>
-          <button onClick={() => navigate('/Vacaturelijst')}>Vacatures</button>
-        </div>
+       <Navbar />
       </header>
 
       <h2 style={{ textAlign: 'center', fontSize: '28px', margin: '40px 0 20px', fontWeight: 'bold' }}>Bedrijven</h2>
