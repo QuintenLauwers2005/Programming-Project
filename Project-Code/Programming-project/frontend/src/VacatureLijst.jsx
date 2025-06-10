@@ -19,8 +19,7 @@ export default function VacatureLijst() {
   // Fetch vacatures from API
   useEffect(() => {
     axios.get('http://localhost:5000/api/vacatures')
-      .then((res) => {
-        console.log("Ophaalde vacatures:", res.data);
+      .then((res) => {    
         setVacatures(res.data);
         setFilteredVacatures(res.data);
       })
@@ -28,18 +27,6 @@ export default function VacatureLijst() {
         console.error('Fout bij ophalen vacatures:', err.message);
       });
   }, []);
-
-  // Function to get color code based on the company's color
-  const getColorCode = (kleur) => {
-    switch (kleur) {
-      case 'blauw': return '#4a90e2';
-      case 'groen': return '#50c878';
-      case 'geel': return '#ffcc00';
-      case 'paars': return '#800080';
-      case 'rood': return '#ff0000';
-      default: return '#ccc';
-    }
-  };
 
   // Handle filter change
   const handleFilterChange = (e) => {
@@ -133,10 +120,11 @@ export default function VacatureLijst() {
         <div className="vacature-list">
           {filteredVacatures.map((vacature) => (
             <div key={vacature.vacature_id} className="vacature-card">
-              <div 
-                className="logo-blok" 
-                style={{ backgroundColor: getColorCode(vacature.kleur) }}
-              ></div>
+              <div className="logo-blok" >
+                <img 
+          src={`/${vacature.logo_link}`} 
+          style={{ width: '80px', height: '80px', borderRadius: '8px', objectFit: 'cover' }} 
+        /></div>
               <div className="vacature-info">
                 <p className="bedrijf">{vacature.bedrijf}</p>
                 <p className="beschrijving">{vacature.synopsis}</p>
@@ -182,6 +170,11 @@ export default function VacatureLijst() {
           </div>
         </div>
       )}
+      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px' }}>
+        <h5 style={{ marginBottom: '10px' }}>Contact</h5>
+        <p>info@careerlaunch.be</p>
+        <p>EhB - Erasmushogeschool Brussel</p>
+      </footer>
     </div>
   );
 }

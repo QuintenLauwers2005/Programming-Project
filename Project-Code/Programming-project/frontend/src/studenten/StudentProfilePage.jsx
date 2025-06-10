@@ -1,7 +1,7 @@
 // StudentProfilePage.jsx
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import Navbar from './Components/Navbar'
+import Navbar from '../Components/Navbar'
 
 function StudentProfilePage() {
 

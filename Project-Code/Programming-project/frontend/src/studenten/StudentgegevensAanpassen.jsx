@@ -1,25 +1,41 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from './Components/Navbar';
 
-export default function LoginPage() {
+export default function RegistratiePage() {
   const navigate = useNavigate();
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
       {/* Navigatie */}
       <header>
+        <div className="top-bar">
+          <button
+            className="login-btn"
+            onClick={() => navigate('/login')}
+          >
+            Login
+          </button>
+          <button
+            className="notificatie-btn"
+            onClick={() => alert('Meldingen geklikt!')}
+          >
+            Meldingen
+          </button>
+          <img src="https://via.placeholder.com/40"  alt="Logo" className="logo" />
+        </div>
 
-      
-          <Navbar/>
-        
-      
+        <div className="nav-bar">
+          <button onClick={() => navigate('/')}>Home</button>
+          <button onClick={() => navigate('/Agenda')}>Speeddates</button>
+          <button onClick={() => navigate('/BedrijvenLijst')}>Bedrijven</button>
+          <button onClick={() => navigate('/Vacaturelijst')}>Vacatures</button>
+        </div>
       </header>
 
       <section style={{ margin: '30px 0', textAlign: 'center' }}>
-        <h2>Login</h2>
+        <h2>Registreer</h2>
         <p>
-          Log in om toegang te krijgen tot je profiel en vacatures.
+          Vul onderstaande gegevens in om je te registreren.
         </p>
       </section>
 
@@ -61,24 +77,10 @@ export default function LoginPage() {
               cursor: 'pointer'
             }}
           >
-            Inloggen
+            Registreer
           </button>
         </form>
-        <p style={{ marginTop: '15px', textAlign: 'center' }}>
-          Nog geen account?{' '}
-          <button
-            onClick={() => navigate('/registratie')}
-            style={{
-              color: '#4a90e2',
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              fontWeight: 'bold'
-            }}
-          >
-            Registreer hier
-          </button>
-        </p>
+       
       </section>
 
       <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px' }}>

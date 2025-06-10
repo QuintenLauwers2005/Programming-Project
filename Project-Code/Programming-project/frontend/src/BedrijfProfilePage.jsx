@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Navbar from "./Components/Navbar";
 
 export default function BedrijfProfilePage() {
   const { id } = useParams();
@@ -78,39 +79,13 @@ export default function BedrijfProfilePage() {
   }
 
   // Function to get color code based on the company's color
-  const getColorCode = (kleur) => {
-    switch (kleur.toLowerCase()) {
-      case 'blauw': return '#4a90e2';
-      case 'groen': return '#50c878';
-      case 'geel': return '#ffcc00';
-      case 'paars': return '#800080';
-      case 'rood': return '#ff0000';
-      default: return '#ccc';
-    }
-  };
-
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
       {/* Back Button */}
-      <button
-        onClick={() => navigate('/BedrijvenLijst')}
-        style={{
-          padding: '10px 15px',
-          backgroundColor: '#007bff', 
-          color: 'white',
-          border: 'none',
-          borderRadius: '5px',
-          cursor: 'pointer',
-          fontSize: '16px',
-          fontWeight: 'bold',
-          marginBottom: '20px'
-        }}
-      >
-        ← Terug
-      </button>
-
+      
+      <Navbar/>
       {/* Company Profile Section */}
-      <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>   
+      <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee',marginTop:'70px' }}>   
         <img 
           src={`/${companyData.logo_link}`}       
           alt={`Logo van ${companyData.naam}`}

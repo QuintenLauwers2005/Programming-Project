@@ -36,17 +36,27 @@
     color: green;
     font-weight: bold;
     font-size: 16px;
+    order: 2;
 }
 
 .notificatie-btn {
-  background-color: #f0f0f0;
-  padding: 5px 10px;
-  border: none;
-    background-color: #f0f0f0;
-    padding: 8px 16px;
-    border: none;
-    font-size: 14px;
+
     
+
+  border: 2px solid green;
+  padding: 5px 15px;
+  border-radius: 20px;
+  background-color: white;
+  color: green;
+  font-weight: bold;
+    border: 2px solid green;
+    padding: 8px 20px;
+    border-radius: 20px;
+    background-color: white;  
+    color: green;
+    font-weight: bold;
+    font-size: 16px;
+    order: 1;
 }
 
 .logo {
