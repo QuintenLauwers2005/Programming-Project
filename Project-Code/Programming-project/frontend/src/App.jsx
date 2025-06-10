@@ -10,8 +10,10 @@ import VacaturelijstPage from './VacatureLijst';
 import Agenda from './Agenda';
 import BedrijvenLijst from './bedrijfPage';
 import VacaturePage from './VacatureAanmaken';
-import BedrijfHomePage from './BedrijfHomePage'
 import HomePageAdmin from './Admin/HomepageAdmin'
+import BedrijfHomePage from './bedrijven/BedrijfHomePage'
+import ScrollToTopButton from './Components/ScrollToTopButton';
+
 
 
 function App() {
@@ -33,6 +35,7 @@ function App() {
         <Route path="/HomePageAdmin" element={<HomePageAdmin/>} />
       
       </Routes>
+      <ScrollToTopButton />
     </Router>
   )
 }

@@ -3,18 +3,29 @@ const cors = require('cors')
 const mysql = require('mysql2')
 const app = express()
 const port = 5000
+require('dotenv').config();
 
 app.use(cors())
 app.use(express.json())
 
 // aanpassen als de database verandert
-const db = mysql.createConnection({
+/*const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '',
   database: 'carrierlauch'
   
-})
+})*/
+
+
+const db = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
+});
+
+
 
 db.connect(err => {
   if (err) throw err
@@ -23,7 +34,7 @@ db.connect(err => {
 
 //vacatures ophalen
 app.get('/api/vacatures', (req, res) => {
-  db.query(' SELECT  v.vacature_id, b.naam AS bedrijf, v.functie, v.contract_type, v.synopsis, v.open, b.kleur, b.logo_link FROM vacature v JOIN bedrijf b ON v.bedrijf_id = b.bedrijf_id', (err, results) => {
+  db.query(' SELECT  v.vacature_id, b.naam AS bedrijf, v.functie, v.contract_type, v.synopsis, v.open, b.kleur, b.logo_link, b.bedrijf_id FROM vacature v JOIN bedrijf b ON v.bedrijf_id = b.bedrijf_id', (err, results) => {
     if (err) return res.status(500).json({ error: err.message })
     res.json(results)
   })
@@ -160,6 +171,41 @@ app.get('/api/bedrijf/:id', (req, res) => {
 });
 
 
+app.get('/api/HomePageAantalen', (req, res) => {
+  db.query(' SELECT count(*)AS bedrijf_aantal FROM bedrijf UNION SELECT COUNT(*) AS vacature_aantal FROM vacature UNION SELECT COUNT(*) AS student_aantal FROM student', (err, results) => {
+    if (err) return res.status(500).json({ error: err.message })
+    res.json(results)
+  })
+})
+
+
+app.post('/api/speeddate', (req, res) => {
+  const { student_id, bedrijf_id, tijdstip, locatie, status } = req.body;
+
+  const checkSql = `
+    SELECT * FROM speeddate
+    WHERE bedrijf_id = ? AND tijdstip = ?
+  `;
+
+  db.query(checkSql, [bedrijf_id, tijdstip], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+
+    if (results.length > 0) {
+      return res.status(400).json({ error: 'Dit bedrijf is al geboekt op dit tijdstip.' });
+    }
+
+    const insertSql = `
+      INSERT INTO speeddate (student_id, bedrijf_id, tijdstip, locatie, status)
+      VALUES (?, ?, ?, ?, ?)
+    `;
+
+    db.query(insertSql, [student_id, bedrijf_id, tijdstip, locatie, status], (err, result) => {
+      if (err) return res.status(500).json({ error: err.message });
+
+      res.status(201).json({ message: 'Afspraak succesvol opgeslagen.' });
+    });
+  });
+});
 
 
 

@@ -48,23 +48,17 @@ export default function BedrijfProfilePage() {
     setShowModal(true);
   };
 
-  // Handle form submission
+  // Confirm afspraak
   const handleConfirm = () => {
     if (!selectedTime) {
       alert('Kies een datum en tijdstip');
       return;
     }
 
-    // Store the selected date and time
-    const selectedData = {
-      vacatureId: selectedVacature.vacature_id,
-      time: selectedTime
-    };
-
-    // Save to localStorage or send to backend
-    // For now, just redirect to Agenda with query params
-// In de handleConfirm-functie
+    // Hier kan je bv. data opsturen naar backend of redirecten met params
+    // Voorbeeld: redirect naar agenda pagina met query params
     window.location.href = `/Agenda?vacatureId=${selectedVacature.vacature_id}&time=${selectedTime}`;
+    setShowModal(false);
   };
 
   if (loading) {

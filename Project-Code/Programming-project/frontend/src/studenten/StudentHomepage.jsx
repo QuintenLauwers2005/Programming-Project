@@ -1,9 +1,8 @@
-// HomePage.jsx
 import React from 'react'
 import Kaart from './Components/Kaart'
-import Navbar from './Components/BedrijfNavBar'
+import Navbar from './Components/Navbar'
 
-function BedrijfHomePage() {
+function HomePage() {
 
   return ( 
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
@@ -81,4 +80,4 @@ function BedrijfHomePage() {
   );
 }
 
-export default BedrijfHomePage;
+export default HomePage;
