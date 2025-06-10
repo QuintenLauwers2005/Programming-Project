@@ -68,9 +68,11 @@ const [studentData, setStudentData] = useState(null);
         </ul>
       </section>
 
-      {/* Footer  */}
-      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px', textAlign: 'center' }}>
-        <p>&copy; {new Date().getFullYear()} Career Launch - Erasmushogeschool Brussel</p>
+      {/* Footer */}
+      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px' }}>
+        <h5>Contact</h5>
+        <p>info@careerlaunch.be</p>
+        <p>EhB - Erasmushogeschool Brussel</p>
       </footer>
     </div>
   );
