@@ -182,30 +182,61 @@ app.get('/api/HomePageAantalen', (req, res) => {
 app.post('/api/speeddate', (req, res) => {
   const { student_id, bedrijf_id, tijdstip, locatie, status } = req.body;
 
-  const checkSql = `
-    SELECT * FROM speeddate
-    WHERE bedrijf_id = ? AND tijdstip = ?
+  // Check 1: student heeft al een speeddate bij dit bedrijf
+  const checkStudentBedrijfSql = `
+    SELECT * FROM speeddate 
+    WHERE student_id = ? AND bedrijf_id = ?
   `;
 
-  db.query(checkSql, [bedrijf_id, tijdstip], (err, results) => {
+  db.query(checkStudentBedrijfSql, [student_id, bedrijf_id], (err, results1) => {
     if (err) return res.status(500).json({ error: err.message });
 
-    if (results.length > 0) {
-      return res.status(400).json({ error: 'Dit bedrijf is al geboekt op dit tijdstip.' });
+    if (results1.length > 0) {
+      return res.status(400).json({ error: 'Deze student heeft al een speeddate bij dit bedrijf.' });
     }
 
-    const insertSql = `
-      INSERT INTO speeddate (student_id, bedrijf_id, tijdstip, locatie, status)
-      VALUES (?, ?, ?, ?, ?)
+    // Check 2: student heeft al een speeddate op hetzelfde tijdstip (ongeacht bedrijf)
+    const checkStudentTijdstipSql = `
+      SELECT * FROM speeddate 
+      WHERE student_id = ? AND tijdstip = ?
     `;
 
-    db.query(insertSql, [student_id, bedrijf_id, tijdstip, locatie, status], (err, result) => {
+    db.query(checkStudentTijdstipSql, [student_id, tijdstip], (err, results2) => {
       if (err) return res.status(500).json({ error: err.message });
 
-      res.status(201).json({ message: 'Afspraak succesvol opgeslagen.' });
+      if (results2.length > 0) {
+        return res.status(400).json({ error: 'Deze student heeft al een speeddate op dit tijdstip.' });
+      }
+
+      // Check 3: bedrijf al geboekt op dit tijdstip (bestaande check)
+      const checkBedrijfTijdstipSql = `
+        SELECT * FROM speeddate
+        WHERE bedrijf_id = ? AND tijdstip = ?
+      `;
+
+      db.query(checkBedrijfTijdstipSql, [bedrijf_id, tijdstip], (err, results3) => {
+        if (err) return res.status(500).json({ error: err.message });
+
+        if (results3.length > 0) {
+          return res.status(400).json({ error: 'Dit bedrijf is al geboekt op dit tijdstip.' });
+        }
+
+        // Insert afspraak als alles ok is
+        const insertSql = `
+          INSERT INTO speeddate (student_id, bedrijf_id, tijdstip, locatie, status)
+          VALUES (?, ?, ?, ?, ?)
+        `;
+
+        db.query(insertSql, [student_id, bedrijf_id, tijdstip, locatie, status], (err, result) => {
+          if (err) return res.status(500).json({ error: err.message });
+
+          res.status(201).json({ message: 'Afspraak succesvol opgeslagen.' });
+        });
+      });
     });
   });
 });
+
 
 app.get('/api/afspraken/bedrijf/:bedrijfId', (req, res) => {
   const bedrijfId = req.params.bedrijfId;
