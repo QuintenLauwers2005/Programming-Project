@@ -81,6 +81,16 @@ export default function VacatureLijst() {
     window.location.href = `/Agenda?vacatureId=${selectedVacature.vacature_id}&date=${selectedDate}&time=${selectedTime}`;
     setShowModal(false);
   };
+  const generateTimeOptions = () => {
+    const options = [];
+    for (let hour = 8; hour < 19; hour++) {
+      for (let minute = 0; minute < 60; minute += 10) {
+        const time = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+        options.push(<option key={time} value={time}>{time}</option>);
+      }
+    }
+    return options;
+  };
 
   return (
     <div className="pagina">
@@ -146,23 +156,18 @@ export default function VacatureLijst() {
         <button className="toonmeer-btn" onClick={() => alert('Toon meer geklikt!')}>Toon meer</button>
       </main>
 
-      {/* Modal for selecting date and time */}
+      {/* Modal for selecting time */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal">
-            <h3>Kies datum en tijdstip</h3>
-            <label>Datum:</label>
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-            />
+            <h3>Kies een tijdstip</h3>
             <label>Tijdstip:</label>
-            <input
-              type="time"
-              value={selectedTime}
-              onChange={(e) => setSelectedTime(e.target.value)}
-            />
+<select
+  value={selectedTime}
+  onChange={(e) => setSelectedTime(e.target.value)}
+>
+  {generateTimeOptions()}
+</select>
             <div className="modal-buttons">
               <button onClick={handleConfirm}>Bevestigen</button>
               <button onClick={() => setShowModal(false)}>Annuleren</button>
