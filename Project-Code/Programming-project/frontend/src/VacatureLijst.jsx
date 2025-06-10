@@ -170,6 +170,11 @@ export default function VacatureLijst() {
           </div>
         </div>
       )}
+      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px' }}>
+        <h5 style={{ marginBottom: '10px' }}>Contact</h5>
+        <p>info@careerlaunch.be</p>
+        <p>EhB - Erasmushogeschool Brussel</p>
+      </footer>
     </div>
   );
 }
