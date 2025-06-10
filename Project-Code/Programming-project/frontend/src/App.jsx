@@ -4,7 +4,7 @@ import HomePage from './HomePage'
 import LoginPage from './Login'
 import RegistratiePage from './Registratie'
 import RegistratieBedrijfPage from './RegistratieBedrijf'
-import StudentProfilePage from './StudentProfilePage';
+import StudentProfilePage from './studenten/StudentProfilePage';
 import BedrijfProfilePage from './BedrijfProfilePage';
 import VacaturelijstPage from './VacatureLijst';
 import Agenda from './Agenda';
