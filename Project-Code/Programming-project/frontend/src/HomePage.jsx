@@ -1,9 +1,32 @@
 // HomePage.jsx
-import React from 'react'
 import Kaart from './Components/Kaart'
 import Navbar from './Components/Navbar'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 function HomePage() {
+
+   const [stats, setStats] = useState(null)  // for your numbers from SQL
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    // Replace this URL with your actual backend API endpoint that returns your stats
+    axios.get('http://localhost:5000/api/HomePageAantalen') 
+      .then(response => {
+        setStats(response.data)  // assume response.data is { bedrijven: 30, vacatures: 150, studenten: 200 }
+        setLoading(false)
+      })
+      .catch(err => {
+        console.error(err)
+        setError('Failed to fetch stats')
+        setLoading(false)
+      })
+  }, [])
+
+    if (loading) return <div>Loading...</div>
+  if (error) return <div>{error}</div>
+
 
   return ( 
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
@@ -29,13 +52,13 @@ function HomePage() {
       {/* Statistieken */}
       <section style={{ display: 'flex', justifyContent: 'space-around', margin: '40px 0' }}>
         <div style={{ backgroundColor: 'red', padding: '10px', color: 'white', width: '200px' }}>
-          <strong>30</strong><br />Bedrijven
+          <strong>{stats[0].bedrijf_aantal}</strong><br />Bedrijven
         </div>
         <div style={{ backgroundColor: 'red', padding: '10px', color: 'white', width: '200px' }}>
-          <strong>150</strong><br />Vacatures
+          <strong>{stats[1].bedrijf_aantal}</strong><br />Vacatures
         </div>
         <div style={{ backgroundColor: 'red', padding: '10px', color: 'white', width: '200px' }}>
-          <strong>200</strong><br />Studenten
+          <strong>{stats[2].bedrijf_aantal}</strong><br />Studenten
         </div>
       </section>
 
