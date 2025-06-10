@@ -64,15 +64,14 @@ export default function VacatureLijst() {
 
   // Handle form submission
   const handleConfirm = () => {
-    if (!selectedDate || !selectedTime) {
-      alert('Kies een datum en tijdstip');
+    if (!selectedTime) {
+      alert('Kies een tijdstip');
       return;
     }
 
     // Store the selected date and time
     const selectedData = {
       vacatureId: selectedVacature.vacature_id,
-      date: selectedDate,
       time: selectedTime
     };
 
