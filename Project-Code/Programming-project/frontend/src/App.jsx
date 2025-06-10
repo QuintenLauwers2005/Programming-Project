@@ -10,6 +10,7 @@ import VacaturelijstPage from './VacatureLijst';
 import Agenda from './Agenda';
 import BedrijvenLijst from './bedrijfPage';
 import VacaturePage from './VacatureAanmaken';
+import BedrijfHomePage from './BedrijfHomePage'
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/BedrijvenLijst" element={<BedrijvenLijst />} />
         <Route path="/VacaturePage" element={<VacaturePage />} />
         <Route path="/bedrijf/:id" element={<BedrijfProfilePage />} />
+        <Route path="/BedrijfHomePage" element={<BedrijfHomePage/>} />
       
       </Routes>
     </Router>
