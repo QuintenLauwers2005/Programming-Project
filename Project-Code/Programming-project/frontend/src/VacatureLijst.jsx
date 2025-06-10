@@ -150,13 +150,7 @@ export default function VacatureLijst() {
       {showModal && (
         <div className="modal-overlay">
           <div className="modal">
-            <h3>Kies datum en tijdstip</h3>
-            <label>Datum:</label>
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-            />
+            <h3>Kies een tijdstip</h3>
             <label>Tijdstip:</label>
             <input
               type="time"
