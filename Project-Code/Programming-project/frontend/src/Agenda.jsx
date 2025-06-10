@@ -1,44 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import './Assets/Agenda.css';
 import Navbar from './Components/Navbar';
-import { useLocation } from 'react-router-dom';
 
 export default function Agenda() {
-  const location = useLocation();
   const [afspraken, setAfspraken] = useState([]);
   const [showInfo, setShowInfo] = useState(false);
   const [cancelId, setCancelId] = useState(null);
 
-  // Get selected vacature ID from URL
-  const searchParams = new URLSearchParams(location.search);
-  const selectedVacatureId = searchParams.get('vacatureId');
-  const selectedTime = searchParams.get('time');
-
-  // Simulate adding a new appointment based on selected vacature
   useEffect(() => {
-    if (selectedVacatureId  && selectedTime) {
-      // In real app, fetch the actual vacature by ID from your backend
-      const selectedVacature = {
-        bedrijf: "SAP",
-        functie: "Business Consultant"
-      };
-      const newAfspraak = {
-        id: afspraken.length + 1,
-        time: selectedTime,
-        company: selectedVacature.bedrijf,
-        room: "Aula 1"
-      };
-      setAfspraken([newAfspraak]);
-    }
-  }, [selectedVacatureId, selectedTime]);
+    fetch('http://localhost:5000/api/afspraken')
+      .then(res => res.json())
+      .then(data => {
+        setAfspraken(data);
+      })
+      .catch(err => {
+        console.error('Fout bij ophalen van afspraken:', err);
+      });
+  }, []);
 
   const handleCancelConfirm = (id) => {
     setCancelId(id);
   };
 
   const confirmCancel = () => {
-    setAfspraken(afspraken.filter(app => app.id !== cancelId));
-    setCancelId(null);
+    fetch(`http://localhost:5000/api/speeddate/${cancelId}`, {
+      method: 'DELETE',
+    })
+      .then(res => res.json())
+      .then(() => {
+        setAfspraken(prev => prev.filter(app => app.id !== cancelId));
+        setCancelId(null);
+      })
+      .catch(err => {
+        console.error('Fout bij annuleren van afspraak:', err);
+        setCancelId(null);
+      });
   };
 
   const closeCancelModal = () => {
@@ -57,8 +53,10 @@ export default function Agenda() {
           afspraken.map(afspraak => (
             <div key={afspraak.id} className="card">
               <div className="time">{afspraak.time}</div>
-              <div className="company">{afspraak.company}</div>
-              <div className="room">Aula 1</div>
+              <div className="company">
+                {afspraak.voornaam} {afspraak.naam} — {afspraak.bedrijf_naam}
+              </div>
+              <div className="room">{afspraak.locatie}</div>
               <button
                 className="cancel-button"
                 onClick={() => handleCancelConfirm(afspraak.id)}
@@ -69,7 +67,7 @@ export default function Agenda() {
           ))
         ) : (
           <div className="no-appointments">
-            <p>Geen afspraken gereserveerd.</p>
+            <p>Geen afspraken gevonden.</p>
           </div>
         )}
       </div>
@@ -87,7 +85,7 @@ export default function Agenda() {
         </div>
       )}
 
-      {/* Cancel bevestiging modal */}
+      {/* Annulatie bevestiging */}
       {cancelId && (
         <div className="modal-overlay">
           <div className="modal">
