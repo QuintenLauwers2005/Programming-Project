@@ -207,6 +207,51 @@ app.post('/api/speeddate', (req, res) => {
   });
 });
 
+app.get('/api/afspraken/bedrijf/:bedrijfId', (req, res) => {
+  const bedrijfId = req.params.bedrijfId;
+
+  const sql = `
+    SELECT s.speeddate_id AS id, s.tijdstip AS time, st.voornaam, st.naam, s.locatie
+    FROM speeddate s
+    JOIN student st ON s.student_id = st.student_id
+    WHERE s.bedrijf_id = ?
+  `;
+
+  db.query(sql, [bedrijfId], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+});
+
+app.get('/api/afspraken', (req, res) => {
+  const sql = `
+    SELECT 
+      s.speeddate_id AS id, 
+      s.tijdstip AS time, 
+      st.voornaam, 
+      st.naam, 
+      s.locatie, 
+      b.naam AS bedrijf_naam
+    FROM speeddate s
+    JOIN student st ON s.student_id = st.student_id
+    JOIN bedrijf b ON s.bedrijf_id = b.bedrijf_id
+  `;
+
+  db.query(sql, (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+});
+
+app.delete('/api/speeddate/:id', (req, res) => {
+  const id = req.params.id;
+
+  db.query('DELETE FROM speeddate WHERE speeddate_id = ?', [id], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ message: 'Afspraak geannuleerd' });
+  });
+});
+
 
 
 app.listen(port, () => {
