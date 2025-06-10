@@ -12,12 +12,11 @@ export default function Agenda() {
   // Get selected vacature ID from URL
   const searchParams = new URLSearchParams(location.search);
   const selectedVacatureId = searchParams.get('vacatureId');
-  const selectedDate = searchParams.get('date');
   const selectedTime = searchParams.get('time');
 
   // Simulate adding a new appointment based on selected vacature
   useEffect(() => {
-    if (selectedVacatureId && selectedDate && selectedTime) {
+    if (selectedVacatureId  && selectedTime) {
       // In real app, fetch the actual vacature by ID from your backend
       const selectedVacature = {
         bedrijf: "SAP",
@@ -31,7 +30,7 @@ export default function Agenda() {
       };
       setAfspraken([newAfspraak]);
     }
-  }, [selectedVacatureId, selectedDate, selectedTime]);
+  }, [selectedVacatureId, selectedTime]);
 
   const handleCancelConfirm = (id) => {
     setCancelId(id);
