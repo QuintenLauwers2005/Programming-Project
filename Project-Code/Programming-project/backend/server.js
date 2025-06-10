@@ -171,7 +171,12 @@ app.get('/api/bedrijf/:id', (req, res) => {
 });
 
 
-
+app.get('/api/HomePageAantalen', (req, res) => {
+  db.query(' SELECT count(*)AS bedrijf_aantal FROM bedrijf UNION SELECT COUNT(*) AS vacature_aantal FROM vacature UNION SELECT COUNT(*) AS student_aantal FROM student', (err, results) => {
+    if (err) return res.status(500).json({ error: err.message })
+    res.json(results)
+  })
+})
 
 
 app.listen(port, () => {
