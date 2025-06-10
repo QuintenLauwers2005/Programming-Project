@@ -11,6 +11,7 @@ import Agenda from './Agenda';
 import BedrijvenLijst from './bedrijfPage';
 import VacaturePage from './VacatureAanmaken';
 import BedrijfHomePage from './BedrijfHomePage'
+import HomePageAdmin from './Admin/HomepageAdmin'
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path="/VacaturePage" element={<VacaturePage />} />
         <Route path="/bedrijf/:id" element={<BedrijfProfilePage />} />
         <Route path="/BedrijfHomePage" element={<BedrijfHomePage/>} />
+        <Route path="/HomePageAdmin" element={<HomePageAdmin/>} />
       
       </Routes>
     </Router>
