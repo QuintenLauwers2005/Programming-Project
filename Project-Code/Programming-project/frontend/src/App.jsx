@@ -11,6 +11,7 @@ import Agenda from './Agenda';
 import BedrijvenLijst from './bedrijfPage';
 import VacaturePage from './VacatureAanmaken';
 import BedrijfHomePage from './bedrijven/BedrijfHomePage'
+import ScrollToTopButton from './Components/ScrollToTopButton';
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
         <Route path="/BedrijfHomePage" element={<BedrijfHomePage/>} />
       
       </Routes>
+      <ScrollToTopButton />
     </Router>
   )
 }
