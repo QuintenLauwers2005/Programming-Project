@@ -34,7 +34,7 @@ db.connect(err => {
 
 //vacatures ophalen
 app.get('/api/vacatures', (req, res) => {
-  db.query(' SELECT  v.vacature_id, b.naam AS bedrijf, v.functie, v.contract_type, v.synopsis, v.open, b.kleur, b.logo_link FROM vacature v JOIN bedrijf b ON v.bedrijf_id = b.bedrijf_id', (err, results) => {
+  db.query(' SELECT  v.vacature_id, b.naam AS bedrijf, v.functie, v.contract_type, v.synopsis, v.open, b.kleur, b.logo_link, b.bedrijf_id FROM vacature v JOIN bedrijf b ON v.bedrijf_id = b.bedrijf_id', (err, results) => {
     if (err) return res.status(500).json({ error: err.message })
     res.json(results)
   })
@@ -177,6 +177,36 @@ app.get('/api/HomePageAantalen', (req, res) => {
     res.json(results)
   })
 })
+
+
+app.post('/api/speeddate', (req, res) => {
+  const { student_id, bedrijf_id, tijdstip, locatie, status } = req.body;
+
+  const checkSql = `
+    SELECT * FROM speeddate
+    WHERE bedrijf_id = ? AND tijdstip = ?
+  `;
+
+  db.query(checkSql, [bedrijf_id, tijdstip], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+
+    if (results.length > 0) {
+      return res.status(400).json({ error: 'Dit bedrijf is al geboekt op dit tijdstip.' });
+    }
+
+    const insertSql = `
+      INSERT INTO speeddate (student_id, bedrijf_id, tijdstip, locatie, status)
+      VALUES (?, ?, ?, ?, ?)
+    `;
+
+    db.query(insertSql, [student_id, bedrijf_id, tijdstip, locatie, status], (err, result) => {
+      if (err) return res.status(500).json({ error: err.message });
+
+      res.status(201).json({ message: 'Afspraak succesvol opgeslagen.' });
+    });
+  });
+});
+
 
 
 app.listen(port, () => {

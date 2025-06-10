@@ -8,7 +8,6 @@ export default function VacatureLijst() {
   const [filteredVacatures, setFilteredVacatures] = useState([]);
   const [selectedVacature, setSelectedVacature] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [filters, setFilters] = useState({
     bedrijf: '',
@@ -77,8 +76,22 @@ export default function VacatureLijst() {
 
     // Save to localStorage or send to backend
     // For now, just redirect to Agenda with query params
-    window.location.href = `/Agenda?vacatureId=${selectedVacature.vacature_id}&date=${selectedDate}&time=${selectedTime}`;
-    setShowModal(false);
+    axios.post('http://localhost:5000/api/speeddate', {
+    student_id: 1,
+    bedrijf_id: selectedVacature.bedrijf_id,
+    tijdstip: selectedTime + ':00',
+    locatie: 'Aula 1', 
+    status: 'bevestigd'
+    })
+    .then(() => {
+      alert('Afspraak succesvol vastgelegd!');
+      setShowModal(false);
+      })
+      .catch(err => {
+      alert(err.response?.data?.error || 'Er ging iets mis bij het reserveren.');
+      });
+
+    
   };
   const generateTimeOptions = () => {
     const options = [];
