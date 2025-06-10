@@ -38,7 +38,7 @@ const handleClickOutside = (event) => {
          <div>
       <div className="top-bar">
         <button className="login-btn" onClick={() => navigate('/login')}>Login</button>
-        <div class = "navigatie-button-popout">
+        <div className = "navigatie-button-popout">
         <button className="notificatie-btn"  ref={buttonRef} onClick={toggleNotifications}>Meldingen</button>
 
           {showNotifications && (
