@@ -1,8 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'
 import Navbar from './Components/Navbar';
 import './HomePage.css';
+import axios from 'axios'
 
 function HomePage() {
+
+  const [stats, setStats] = useState(null)  // for your numbers from SQL
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(true)
+
+  useEffect(() => {
+    // Replace this URL with your actual backend API endpoint that returns your stats
+    axios.get('http://localhost:5000/api/HomePageAantalen') 
+      .then(response => {
+        setStats(response.data)  // assume response.data is { bedrijven: 30, vacatures: 150, studenten: 200 }
+        setLoading(false)
+      })
+      .catch(err => {
+        console.error(err)
+        setError('Failed to fetch stats')
+        setLoading(false)
+      })
+  }, [])
+
+
+
+
+
   return (
     <div className="home-layout">
       {/* Navigatie */}
@@ -21,9 +45,9 @@ function HomePage() {
 
         {/* Statistieken */}
         <section className="stats">
-          <div className="stat"><strong>30</strong><br />Bedrijven</div>
-          <div className="stat"><strong>150</strong><br />Vacatures</div>
-          <div className="stat"><strong>200</strong><br />Studenten</div>
+          <div className="stat"><strong>{stats[0].bedrijf_aantal}</strong><br />Bedrijven</div>
+          <div className="stat"><strong>{stats[1].bedrijf_aantal}</strong><br />Vacatures</div>
+          <div className="stat"><strong>{stats[2].bedrijf_aantal}</strong><br />Studenten</div>
         </section>
 
         {/* Praktisch */}
