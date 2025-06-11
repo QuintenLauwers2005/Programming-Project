@@ -52,58 +52,7 @@ export default function RegistratiePage() {
       </section>
 
       <section style={{ maxWidth: '400px', margin: '0 auto', padding: '20px' }}>
-        <form>
-          <input
-            type="text"
-            placeholder="Naam"
-            style={{
-              width: '100%',
-              padding: '10px',
-              marginBottom: '15px',
-              border: '1px solid #ccc',
-              borderRadius: '4px'
-            }}
-            required
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            style={{
-              width: '100%',
-              padding: '10px',
-              marginBottom: '15px',
-              border: '1px solid #ccc',
-              borderRadius: '4px'
-            }}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Wachtwoord"
-            style={{
-              width: '100%',
-              padding: '10px',
-              marginBottom: '15px',
-              border: '1px solid #ccc',
-              borderRadius: '4px'
-            }}
-            required
-          />
-          <button
-            type="submit"
-            style={{
-              width: '100%',
-              padding: '10px',
-              backgroundColor: '#4a90e2',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer'
-            }}
-          >
-            Registreer
-          </button>
-        </form>
+        
         <p style={{ marginTop: '15px', textAlign: 'center' }}>
           Al een account?{' '}
           <button
