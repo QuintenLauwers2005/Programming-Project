@@ -128,7 +128,6 @@ app.get('/api/student/:id', (req, res) => {
       s.email,
       s.opleiding,
       s.opleidingsjaar,
-      s.bio,
       s.profiel_foto_url,
       v.id AS vaardigheid_id,
       v.naam AS vaardigheid_naam

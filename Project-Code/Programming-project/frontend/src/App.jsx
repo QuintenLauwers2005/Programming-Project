@@ -46,8 +46,10 @@ function App() {
         <Route path="/AdminAgenda" element={<AdminAgenda/>} />
         <Route path="/AdminBedrijfProfiel" element={<AdminBedrijfProfiel/>} />
         <Route path="/AdminStudentProfiel" element={<AdminStudentProfiel/>} />
-        <Route path="/AdminStudentInstellingen" element={<AdminStudentInstellingen/>} />
+        <Route path="/admin/student/:id/instellingen" element={<AdminStudentInstellingen />} />
+        <Route path="/admin/student/:id/profiel" element={<AdminStudentProfiel />} />
         <Route path="/register/student" element={<RegistratieStudentPage />} />
+        
 
 
 
