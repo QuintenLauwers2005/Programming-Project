@@ -46,7 +46,7 @@ export default function LoginPage() {
       alert(message || 'Succesvol ingelogd!');
 
       setTimeout(() => {
-        if(localStorage.getItem('rol') == 'student')
+        if(localStorage.getItem('rol') === 'student')
         navigate('/HomePageStudent');  // ga naar home na logins
       }, 100);
 

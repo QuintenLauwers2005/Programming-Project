@@ -252,11 +252,18 @@ app.get('/api/bedrijf/:id', (req, res) => {
 
 
 app.get('/api/HomePageAantalen', (req, res) => {
-  db.query(' SELECT count(*)AS bedrijf_aantal FROM bedrijf UNION SELECT COUNT(*) AS vacature_aantal FROM vacature UNION SELECT COUNT(*) AS student_aantal FROM student', (err, results) => {
+  const sql = `
+    SELECT
+      (SELECT COUNT(*) FROM bedrijf) AS bedrijf_aantal,
+      (SELECT COUNT(*) FROM vacature) AS vacature_aantal,
+      (SELECT COUNT(*) FROM student) AS student_aantal
+  `
+  db.query(sql, (err, results) => {
     if (err) return res.status(500).json({ error: err.message })
-    res.json(results)
+    res.json(results[0])  // stuur het eerste (en enige) object terug
   })
 })
+
 
 
 app.post('/api/speeddate', (req, res) => {
