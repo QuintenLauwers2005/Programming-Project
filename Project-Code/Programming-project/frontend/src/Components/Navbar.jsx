@@ -44,15 +44,15 @@ const handleClickOutside = (event) => {
         </Link>
         <button className="login-btn" onClick={() => navigate('/login')}>Login</button>
         <div className = "navigatie-button-popout">
-        <button className="notificatie-btn"  ref={buttonRef} onClick={toggleNotifications}>Meldingen</button>
+        <button className="notificatie-btn" ref={buttonRef} onClick={toggleNotifications} style={{ position: 'relative' }}>
+  🔔</button>
 
           {showNotifications && (
           <div className="notif-popout" ref={popoutRef}>
           
             <ul>
-              <li>New speeddate booked</li>
-              <li>Reminder: Interview at 15:30</li>
-              <li>Room change for Klyr</li>
+              <li>U bent niet ingelogd</li>
+              
             </ul>
           </div>
         )}
