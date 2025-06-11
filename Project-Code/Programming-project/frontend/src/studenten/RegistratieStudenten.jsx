@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../Components/Navbar';
 
 export default function RegistratieStudentPage() {
   const [naamAchternaam, setNaamAchternaam] = useState('');
@@ -47,10 +48,9 @@ export default function RegistratieStudentPage() {
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
       {/* Navigatie */}
       <header>
-        <nav style={{ backgroundColor: '#333', color: '#fff', padding: '10px 20px' }}>
-          <h2 style={{ margin: 0 }}>CareerLaunch</h2>
-        </nav>
+        <Navbar />
       </header>
+
 
       <section style={{ margin: '30px 0', textAlign: 'center' }}>
         <h2>Registreer als Student</h2>
