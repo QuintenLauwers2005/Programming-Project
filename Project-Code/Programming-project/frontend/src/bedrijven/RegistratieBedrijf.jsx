@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from './Components/Navbar';
+import Navbar from '../Components/Navbar';
 
 export default function RegistratieBedrijfPage() {
   const [bedrijfsnaam, setBedrijfsnaam] = useState('');

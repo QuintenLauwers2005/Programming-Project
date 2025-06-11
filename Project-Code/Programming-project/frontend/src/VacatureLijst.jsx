@@ -78,7 +78,7 @@ export default function VacatureLijst() {
     // Save to localStorage or send to backend
     // For now, just redirect to Agenda with query params
     axios.post('http://localhost:5000/api/speeddate', {
-    student_id: 1,
+    student_id: localStorage.getItem("gebruiker_id"),
     bedrijf_id: selectedVacature.bedrijf_id,
     tijdstip: selectedTime + ':00',
     locatie: 'Aula 1', 
