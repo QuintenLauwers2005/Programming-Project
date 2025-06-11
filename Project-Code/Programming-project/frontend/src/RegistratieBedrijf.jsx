@@ -1,200 +1,181 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+export default function RegistratieBedrijfPage() {
+  const [bedrijfsnaam, setBedrijfsnaam] = useState('');
+  const [wachtwoord, setWachtwoord] = useState('');
+  const [mail, setMail] = useState('');
+  const [locatie, setLocatie] = useState('');
+  const [vertegenwoordiger, setVertegenwoordiger] = useState('');
+  const [telefoonnummer, setTelefoonnummer] = useState('');
 
-function RegistratieBedrijfPage() {
-    
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
 
-        const [bedrijfsnaam, setBedrijfsnaam] = useState('')
-        const [wachtwoord, setWachtwoord] = useState('')
-        const [mail, setMail] = useState('')
-        const [Locatie, setLocatie] = useState('')
-        const [vertegenwoordiger, setVertegenwoordiger] = useState('')
-        const [telefoonnummer, setTelefoonnummer] = useState('')
-    
-        const [error, setError] = useState('')
-        const [success, setSuccess] = useState(false)
-    
-        const navigate = useNavigate();
-        const handleLogin = () => {navigate('/Login');}
-    
-        const handleSubmit = () => {
-            
-            if (!bedrijfsnaam, !Locatie, !wachtwoord, !mail, !vertegenwoordiger, !telefoonnummer) {
-            setError('vul alle gegevens in')
-            return;
-            } else {
-            setError('')
-            }
+  const navigate = useNavigate();
 
-            if (wachtwoord.length > 9) {
-                setSuccess(true)
-                setError('')
-            } else {
-                setSuccess(false)
-                setError('Gebruik een langere wachtwoord')
-                return;
-             }
-    
-             
-        }
-        
-        
-        
-        return (
-    
-        <body>
-        
-        <div style={ {
-            textAlign: 'center',
-            marginTop: '20px'
-        }}>
-        <button
-        style={{
-          padding: '10px 20px',
-          backgroundColor: '#4a90e2',
-          color: 'white',
-          border: 'none',
-          borderRadius: '6px',
-          cursor: 'pointer',
-          height: '40px',
-          alignSelf: 'start',
-        }}
-        onClick={() => handleLogin()}
-        >
-        Terug naar Login
-        </button>
-        </div>
-    
-        <div style={{
-          maxWidth: '300px',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          marginTop: '10px',
-          backgroundColor: '#ddd',
-          padding: '20px',
-          borderRadius: '12px',
-          fontFamily: 'Arial'
-        }}>
-          <h3>Register Bedrijf</h3>
-    
-          <input 
-          type='text'
-          value={bedrijfsnaam}
-          onChange={(e) => setBedrijfsnaam(e.target.value)}
-          placeholder='Bedrijfsnaam'
-            style={{
-              width: '100%',
-              padding: '10px',
-              margin: '10px 0',
-              backgroundColor: '#c9baba',
-              border: 'none',
-              borderRadius: '6px',
-              boxSizing: "border-box"
-            }}
-          />
-    
+  const handleLogin = () => {
+    navigate('/login');
+  };
+
+  const handleSubmit = () => {
+    if (!bedrijfsnaam || !locatie || !wachtwoord || !mail || !vertegenwoordiger || !telefoonnummer) {
+      setError('Vul alle gegevens in');
+      return;
+    }
+
+    if (wachtwoord.length > 9) {
+      setSuccess(true);
+      setError('');
+    } else {
+      setSuccess(false);
+      setError('Gebruik een langere wachtwoord');
+      return;
+    }
+  };
+
+  return (
+    <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
+      {/* Navigatie */}
+      <header>
+        <nav style={{ backgroundColor: '#333', color: '#fff', padding: '10px 20px' }}>
+          <h2 style={{ margin: 0 }}>CareerLaunch</h2>
+        </nav>
+      </header>
+
+      <section style={{ margin: '30px 0', textAlign: 'center' }}>
+        <h2>Registreer als Bedrijf</h2>
+        <p>
+          Vul onderstaande gegevens in om je te registreren.
+        </p>
+      </section>
+
+      <section style={{ maxWidth: '400px', margin: '0 auto', padding: '20px' }}>
+        <form>
           <input
-          type='number'
-          value={telefoonnummer}
-          onChange={e => setTelefoonnummer(e.target.value)}
-            placeholder='Telefoonnummer'
+            type="text"
+            placeholder="Bedrijfsnaam"
+            value={bedrijfsnaam}
+            onChange={(e) => setBedrijfsnaam(e.target.value)}
             style={{
               width: '100%',
               padding: '10px',
               marginBottom: '15px',
-              backgroundColor: '#c9baba',
-              border: 'none',
-              borderRadius: '6px',
-              boxSizing: "border-box"
+              border: '1px solid #ccc',
+              borderRadius: '4px'
             }}
+            required
           />
-    
           <input
-          type='text'
-            value={Locatie}
-            onChange={e => setLocatie(e.target.value)} 
-            placeholder='Locatie'
+            type="number"
+            placeholder="Telefoonnummer"
+            value={telefoonnummer}
+            onChange={(e) => setTelefoonnummer(e.target.value)}
             style={{
               width: '100%',
               padding: '10px',
               marginBottom: '15px',
-              backgroundColor: '#c9baba',
-              border: 'none',
-              borderRadius: '6px',
-              boxSizing: "border-box"
+              border: '1px solid #ccc',
+              borderRadius: '4px'
             }}
+            required
           />
-    
           <input
-          type='text'
+            type="text"
+            placeholder="Locatie"
+            value={locatie}
+            onChange={(e) => setLocatie(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '10px',
+              marginBottom: '15px',
+              border: '1px solid #ccc',
+              borderRadius: '4px'
+            }}
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email"
             value={mail}
-            onChange={e => setMail(e.target.value)} 
-            placeholder='Mail'
+            onChange={(e) => setMail(e.target.value)}
             style={{
               width: '100%',
               padding: '10px',
               marginBottom: '15px',
-              backgroundColor: '#c9baba',
-              border: 'none',
-              borderRadius: '6px',
-              boxSizing: "border-box"
+              border: '1px solid #ccc',
+              borderRadius: '4px'
             }}
+            required
           />
-    
           <input
-          type='text'
+            type="text"
+            placeholder="Vertegenwoordiger"
             value={vertegenwoordiger}
-            onChange={e => setVertegenwoordiger(e.target.value)} 
-            placeholder='vertegenwoordiger'
+            onChange={(e) => setVertegenwoordiger(e.target.value)}
             style={{
               width: '100%',
               padding: '10px',
               marginBottom: '15px',
-              backgroundColor: '#c9baba',
-              border: 'none',
-              borderRadius: '6px',
-              boxSizing: "border-box"
+              border: '1px solid #ccc',
+              borderRadius: '4px'
             }}
+            required
           />
-    
-
           <input
-          type='password'
+            type="password"
+            placeholder="Wachtwoord"
             value={wachtwoord}
-            onChange={e => setWachtwoord(e.target.value)} 
-            placeholder='Wachtwoord'
+            onChange={(e) => setWachtwoord(e.target.value)}
             style={{
               width: '100%',
               padding: '10px',
               marginBottom: '15px',
-              backgroundColor: '#c9baba',
-              border: 'none',
-              borderRadius: '6px',
-              boxSizing: "border-box"
+              border: '1px solid #ccc',
+              borderRadius: '4px'
             }}
+            required
           />
-    
-          
-    
           <button
+            type="submit"
             onClick={handleSubmit}
             style={{
               width: '100%',
-              padding: '15px',
-              backgroundColor: '#bbb',
+              padding: '10px',
+              backgroundColor: '#4a90e2',
+              color: 'white',
               border: 'none',
-              borderRadius: '6px',
-              marginBottom: '15px'
-              
+              borderRadius: '4px',
+              cursor: 'pointer'
             }}
           >
             Registreer
           </button>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-          {success && <p style={{ color: 'green' }}>Registratie is compleet!</p>}
-        </div>
-        </body>
-      )
+        </form>
+        {error && <p style={{ color: 'red', marginTop: '15px' }}>{error}</p>}
+        {success && <p style={{ color: 'green', marginTop: '15px' }}>Registratie is compleet!</p>}
+      </section>
+
+      <section style={{ textAlign: 'center', marginTop: '20px' }}>
+        <button
+          onClick={handleLogin}
+          style={{
+            color: '#4a90e2',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            fontWeight: 'bold'
+          }}
+        >
+          Terug naar Login
+        </button>
+      </section>
+
+      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px' }}>
+        <h5>Contact</h5>
+        <p>info@careerlaunch.be</p>
+        <p>EhB - Erasmushogeschool Brussel</p>
+      </footer>
+    </div>
+  );
 }
-export default RegistratieBedrijfPage
