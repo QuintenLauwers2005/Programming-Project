@@ -4,6 +4,7 @@ import Navbar from './Components/Navbar';
 import axios from 'axios';
 import eyeIconPath from './Assets/eye-empty.svg';
 import eyeSlashIconPath from './Assets/eye-off.svg';
+import Footer from './Components/Footer';
 
 
 export default function LoginPage() {
@@ -167,18 +168,8 @@ export default function LoginPage() {
         </p>
       </section>
 
-      <footer
-        style={{
-          backgroundColor: '#333',
-          color: '#fff',
-          padding: '20px',
-          marginTop: '40px',
-          textAlign: 'center',
-        }}
-      >
-        <h5>Contact</h5>
-        <p>info@careerlaunch.be</p>
-        <p>EhB - Erasmushogeschool Brussel</p>
+      <footer>
+       <Footer />
       </footer>
     </div>
   );
