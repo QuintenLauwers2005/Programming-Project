@@ -219,31 +219,51 @@ app.post('/api/speeddate', (req, res) => {
         }
 
         // ✅ INSERT speeddate
-        const insertSql = `
-          INSERT INTO speeddate (student_id, bedrijf_id, tijdstip, locatie, status)
-          VALUES (?, ?, ?, ?, ?)
-        `;
+        const insertSql = ` INSERT INTO speeddate (student_id, bedrijf_id, tijdstip, locatie, status) VALUES (?, ?, ?, ?, ?)`;
 
-        db.query(insertSql, [student_id, bedrijf_id, tijdstip, locatie, status], (err, result) => {
+          db.query(insertSql, [student_id, bedrijf_id, tijdstip, locatie, status], (err, result) => {
           if (err) return res.status(500).json({ error: err.message });
 
-          // ✅ INSERT melding (naar bedrijf)
-          const boodschap = `📅 Een student heeft een speeddate ingepland op ${tijdstip} te ${locatie || 'onbekende locatie'}.`;
+        // Haal studentnaam op
+          const getStudentSql = `SELECT voornaam, naam FROM student WHERE student_id = ?`;
+
+          db.query(getStudentSql, [student_id], (err2, studentResults) => {
+          if (err2) return res.status(500).json({ error: err2.message });
+
+          const { voornaam, naam } = studentResults[0] || { voornaam: 'Student', naam: '' };
+          const volledigeNaam = `${voornaam} ${naam}`.trim();
+
+          // ✅ INSERT melding met naam
+          const boodschap = `📅 ${volledigeNaam} heeft een speeddate ingepland op ${tijdstip} te ${locatie || 'onbekende locatie'}.`;
           const insertMeldingSql = `
             INSERT INTO melding (gebruiker_id, boodschap)
             VALUES (?, ?)
           `;
 
-          db.query(insertMeldingSql, [bedrijf_id, boodschap], (err2) => {
-            if (err2) return res.status(500).json({ error: err2.message });
+          db.query(insertMeldingSql, [bedrijf_id, boodschap], (err3) => {
+            if (err3) return res.status(500).json({ error: err3.message });
 
             res.status(201).json({ message: 'Afspraak en melding succesvol opgeslagen.' });
           });
         });
       });
+      });
     });
   });
 });
+
+
+app.delete('/api/meldingen/:meldingId', (req, res) => {
+  const meldingId = req.params.meldingId;
+
+  const sql = `DELETE FROM melding WHERE melding_id = ?`;
+
+  db.query(sql, [meldingId], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ message: 'Melding verwijderd' });
+  });
+});
+
 
 
 app.get('/api/afspraken/bedrijf/:bedrijfId', (req, res) => {
@@ -283,14 +303,64 @@ app.get('/api/afspraken', (req, res) => {
 });
 
 app.delete('/api/speeddate/:id', (req, res) => {
-  const id = req.params.id;
+  const speeddateId = req.params.id;
 
-  db.query('DELETE FROM speeddate WHERE speeddate_id = ?', [id], (err, result) => {
+  // Eerst de student en bedrijf ophalen uit de speeddate
+  const fetchSql = `
+    SELECT s.student_id, s.bedrijf_id, s.tijdstip, s.locatie, st.voornaam, st.naam
+    FROM speeddate s
+    JOIN student st ON s.student_id = st.student_id
+    WHERE s.speeddate_id = ?
+  `;
+
+  db.query(fetchSql, [speeddateId], (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
-    res.json({ message: 'Afspraak geannuleerd' });
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Speeddate niet gevonden' });
+    }
+
+    const { student_id, bedrijf_id, tijdstip, locatie, voornaam, naam } = results[0];
+
+    // Verwijder de speeddate
+    const deleteSql = `DELETE FROM speeddate WHERE speeddate_id = ?`;
+
+    db.query(deleteSql, [speeddateId], (err, result) => {
+      if (err) return res.status(500).json({ error: err.message });
+
+      // Nieuwe boodschap
+      const boodschap = `❌ ${voornaam} ${naam} heeft de speeddate op ${tijdstip} te ${locatie || 'onbekende locatie'} geannuleerd.`;
+
+      // Voeg een nieuwe melding toe (of je kan dit ook als update doen)
+      const insertMeldingSql = `
+        INSERT INTO melding (gebruiker_id, boodschap)
+        VALUES (?, ?)
+      `;
+
+      db.query(insertMeldingSql, [bedrijf_id, boodschap], (err2) => {
+        if (err2) return res.status(500).json({ error: err2.message });
+
+        res.json({ message: 'Afspraak verwijderd en melding verzonden' });
+      });
+    });
   });
 });
 
+
+app.get('/api/meldingen/:gebruikerId', (req, res) => {
+  const gebruikerId = req.params.gebruikerId;
+
+  const sql = `
+    SELECT melding_id, boodschap, datum, gelezen 
+    FROM melding 
+    WHERE gebruiker_id = ? 
+    ORDER BY datum DESC
+  `;
+
+  db.query(sql, [gebruikerId], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+});
 
 
 app.listen(port, () => {
