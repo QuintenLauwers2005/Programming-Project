@@ -14,7 +14,7 @@ export default function RegistratieStudentPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
   const handleLogin = () => {
     navigate('/login');

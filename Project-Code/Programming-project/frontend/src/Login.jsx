@@ -23,12 +23,21 @@ export default function LoginPage() {
         password
       });
 
-      const { gebruiker_id, rol, message } = response.data;
+      const { gebruiker_id, rol, naam,logo_link,message } = response.data;
 
       console.log('Login response:', response.data);
 
       localStorage.setItem('gebruiker_id', gebruiker_id);
       localStorage.setItem('rol', rol);
+
+      // Naam alleen opslaan als die bestaat (dus bij studenten)
+      if (naam) {
+        localStorage.setItem('naam', naam);
+        localStorage.removeItem('Bedrijf_Logo')
+      } else if(logo_link) {
+        localStorage.removeItem('naam')
+        localStorage.setItem('Bedrijf_Logo',logo_link); // schoonmaken indien geen naam
+      }
 
       alert(message || 'Succesvol ingelogd!');
 
