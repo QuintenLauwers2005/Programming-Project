@@ -1,7 +1,6 @@
 // HomePage.jsx
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
-import Kaart from '../Components/Kaart'
 import Navbar from '../Components/AdminNavBar'
 
 function HomePageAdmin() {
