@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../Components/AdminNavBar';
 
 export default function RegistratiePage() {
   const navigate = useNavigate();
