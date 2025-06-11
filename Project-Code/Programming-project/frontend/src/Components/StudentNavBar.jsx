@@ -32,23 +32,23 @@ function Navbar(){
   };
 
   useEffect(() => {
-    if (showNotifications) {
-      document.addEventListener("mousedown", handleClickOutside);
+  fetch(`http://localhost:5000/api/meldingen/${gebruikerId}`)
+    .then(res => res.json())
+    .then(data => setMeldingen(data))
+    .catch(err => console.error("Meldingen ophalen mislukt:", err));
+}, [gebruikerId]);
 
-      // 🔁 Meldingen ophalen
-      fetch(`http://localhost:5000/api/meldingen/${gebruikerId}`)
-        .then(res => res.json())
-        .then(data => setMeldingen(data))
-        .catch(err => console.error("Meldingen ophalen mislukt:", err));
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
+useEffect(() => {
+  if (showNotifications) {
+    document.addEventListener("mousedown", handleClickOutside);
+  } else {
+    document.removeEventListener("mousedown", handleClickOutside);
+  }
 
-    // Cleanup
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showNotifications, gebruikerId]);
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, [showNotifications]);
 
 
   const verwijderMelding = (id) => {
@@ -72,9 +72,11 @@ function Navbar(){
         </Link>
         <button className="login-btn" onClick={() => navigate('/login')}>Login</button>
         <div className="navigatie-button-popout">
-          <button className="notificatie-btn" ref={buttonRef} onClick={toggleNotifications}>
-            Meldingen ({meldingen.filter(m => !m.gelezen).length})
-          </button>
+          <button className="notificatie-btn" ref={buttonRef} onClick={toggleNotifications} style={{ position: 'relative' }}>
+  🔔{meldingen.some(m => !m.gelezen) && (
+              <span
+                style={{position: 'absolute',top: 0,right: 0,width: '10px',
+                height: '10px',backgroundColor: 'red', borderRadius: '50%',border: '2px solid white',}}></span>)}</button>
 
           {showNotifications && (
             <div className="notif-popout" ref={popoutRef}>
