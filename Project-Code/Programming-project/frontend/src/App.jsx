@@ -9,7 +9,7 @@ import BedrijfProfilePage from './BedrijfProfilePage';
 import VacaturelijstPage from './VacatureLijst';
 import Agenda from './Agenda';
 import BedrijvenLijst from './bedrijfPage';
-import VacaturePage from './VacatureAanmaken';
+import VacaturePage from './bedrijven/VacatureAanmaken';
 import HomePageAdmin from './Admin/HomepageAdmin'
 import BedrijfHomePage from './bedrijven/BedrijfHomePage'
 import ScrollToTopButton from './Components/ScrollToTopButton';

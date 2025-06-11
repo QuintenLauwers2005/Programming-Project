@@ -1,5 +1,5 @@
 import React from 'react';
-import './Components/VacaturePage.css';
+import '../Components/VacaturePage.css';
 
 export default function VacaturePage() {
   return (
