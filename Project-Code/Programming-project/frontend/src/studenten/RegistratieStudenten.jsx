@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from './Components/Navbar';
+import Navbar from '../Components/Navbar';
 
-export default function RegistratieBedrijfPage() {
-  const [bedrijfsnaam, setBedrijfsnaam] = useState('');
-  const [wachtwoord, setWachtwoord] = useState('');
+export default function RegistratieStudentPage() {
+  const [naamAchternaam, setNaamAchternaam] = useState('');
   const [mail, setMail] = useState('');
-  const [locatie, setLocatie] = useState('');
-  const [vertegenwoordiger, setVertegenwoordiger] = useState('');
-  const [telefoonnummer, setTelefoonnummer] = useState('');
+  const [opleiding, setOpleiding] = useState('');
+  const [specialisatie, setSpecialisatie] = useState('');
+  const [opleidingsjaar, setOpleidingsjaar] = useState('');
+  const [adres, setAdres] = useState('');
+  const [wachtwoord, setWachtwoord] = useState('');
 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -20,7 +21,15 @@ export default function RegistratieBedrijfPage() {
   };
 
   const handleSubmit = () => {
-    if (!bedrijfsnaam || !locatie || !wachtwoord || !mail || !vertegenwoordiger || !telefoonnummer) {
+    if (
+      !naamAchternaam ||
+      !mail ||
+      !opleiding ||
+      !specialisatie ||
+      !opleidingsjaar ||
+      !adres ||
+      !wachtwoord
+    ) {
       setError('Vul alle gegevens in');
       return;
     }
@@ -42,8 +51,9 @@ export default function RegistratieBedrijfPage() {
         <Navbar />
       </header>
 
+
       <section style={{ margin: '30px 0', textAlign: 'center' }}>
-        <h2>Registreer als Bedrijf</h2>
+        <h2>Registreer als Student</h2>
         <p>
           Vul onderstaande gegevens in om je te registreren.
         </p>
@@ -53,37 +63,9 @@ export default function RegistratieBedrijfPage() {
         <form>
           <input
             type="text"
-            placeholder="Bedrijfsnaam"
-            value={bedrijfsnaam}
-            onChange={(e) => setBedrijfsnaam(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px',
-              marginBottom: '15px',
-              border: '1px solid #ccc',
-              borderRadius: '4px'
-            }}
-            required
-          />
-          <input
-            type="number"
-            placeholder="Telefoonnummer"
-            value={telefoonnummer}
-            onChange={(e) => setTelefoonnummer(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px',
-              marginBottom: '15px',
-              border: '1px solid #ccc',
-              borderRadius: '4px'
-            }}
-            required
-          />
-          <input
-            type="text"
-            placeholder="Locatie"
-            value={locatie}
-            onChange={(e) => setLocatie(e.target.value)}
+            placeholder="Naam + Achternaam"
+            value={naamAchternaam}
+            onChange={(e) => setNaamAchternaam(e.target.value)}
             style={{
               width: '100%',
               padding: '10px',
@@ -109,9 +91,51 @@ export default function RegistratieBedrijfPage() {
           />
           <input
             type="text"
-            placeholder="Vertegenwoordiger"
-            value={vertegenwoordiger}
-            onChange={(e) => setVertegenwoordiger(e.target.value)}
+            placeholder="Opleiding"
+            value={opleiding}
+            onChange={(e) => setOpleiding(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '10px',
+              marginBottom: '15px',
+              border: '1px solid #ccc',
+              borderRadius: '4px'
+            }}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Specialisatie"
+            value={specialisatie}
+            onChange={(e) => setSpecialisatie(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '10px',
+              marginBottom: '15px',
+              border: '1px solid #ccc',
+              borderRadius: '4px'
+            }}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Opleidingsjaar"
+            value={opleidingsjaar}
+            onChange={(e) => setOpleidingsjaar(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '10px',
+              marginBottom: '15px',
+              border: '1px solid #ccc',
+              borderRadius: '4px'
+            }}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Adres"
+            value={adres}
+            onChange={(e) => setAdres(e.target.value)}
             style={{
               width: '100%',
               padding: '10px',

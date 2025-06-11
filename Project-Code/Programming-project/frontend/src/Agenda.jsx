@@ -81,6 +81,7 @@ export default function Agenda() {
             <p>
               Ga naar de vacaturepagina en klik op "Reserveer een gesprek" bij het bedrijf dat je interessant vindt.
             </p>
+            <p>Of <br />Ga naar bedrijvenpagina, klik op een bedrijf naar keuze en klik op 'Reserveer gesprek' </p>
             <button onClick={() => setShowInfo(false)}>Sluiten</button>
           </div>
         </div>
