@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Components/AdminNavBar';
-import Footer from './Components/Footer';
+import Footer from '../Components/Footer';
 
 export default function RegistratiePage() {
   const navigate = useNavigate();

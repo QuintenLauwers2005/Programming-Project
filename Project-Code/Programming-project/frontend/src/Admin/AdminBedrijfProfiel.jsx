@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from "../Components/AdminNavBar";
-import Footer from './Components/Footer';
+import Footer from '../Components/Footer';
 
 export default function AdminBedrijfProfiel() {
   const { id } = useParams();

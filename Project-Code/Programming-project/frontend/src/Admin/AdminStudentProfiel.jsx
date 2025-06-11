@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Navbar from '../Components/AdminNavBar'
-import Footer from './Components/Footer';
+import Footer from '../Components/Footer';
 
 function AdminStudentProfiel() {
 

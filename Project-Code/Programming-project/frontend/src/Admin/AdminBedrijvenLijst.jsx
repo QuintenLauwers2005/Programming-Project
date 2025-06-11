@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Logo from '../Components/Logo';
 import Navbar from '../Components/AdminNavBar';
-import Footer from './Components/Footer';
+import Footer from '../Components/Footer';
 
 export default function AdminBedrijvenLijst() {
   const navigate = useNavigate();

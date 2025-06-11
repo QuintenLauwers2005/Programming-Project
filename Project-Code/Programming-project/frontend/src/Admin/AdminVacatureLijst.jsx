@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../Assets/VacatureLijst.css';
 import Navbar from '../Components/AdminNavBar';
-import Footer from './Components/Footer';
+import Footer from '../Components/Footer';
 
 export default function AdminVacatureLijst() {
   const [vacatures, setVacatures] = useState([]);
