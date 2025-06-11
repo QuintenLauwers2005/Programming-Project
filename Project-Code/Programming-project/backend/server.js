@@ -182,7 +182,6 @@ app.get('/api/HomePageAantalen', (req, res) => {
 app.post('/api/speeddate', (req, res) => {
   const { student_id, bedrijf_id, tijdstip, locatie, status } = req.body;
 
-  // Check 1: student heeft al een speeddate bij dit bedrijf
   const checkStudentBedrijfSql = `
     SELECT * FROM speeddate 
     WHERE student_id = ? AND bedrijf_id = ?
@@ -195,7 +194,6 @@ app.post('/api/speeddate', (req, res) => {
       return res.status(400).json({ error: 'Deze student heeft al een speeddate bij dit bedrijf.' });
     }
 
-    // Check 2: student heeft al een speeddate op hetzelfde tijdstip (ongeacht bedrijf)
     const checkStudentTijdstipSql = `
       SELECT * FROM speeddate 
       WHERE student_id = ? AND tijdstip = ?
@@ -208,7 +206,6 @@ app.post('/api/speeddate', (req, res) => {
         return res.status(400).json({ error: 'Deze student heeft al een speeddate op dit tijdstip.' });
       }
 
-      // Check 3: bedrijf al geboekt op dit tijdstip (bestaande check)
       const checkBedrijfTijdstipSql = `
         SELECT * FROM speeddate
         WHERE bedrijf_id = ? AND tijdstip = ?
@@ -221,7 +218,7 @@ app.post('/api/speeddate', (req, res) => {
           return res.status(400).json({ error: 'Dit bedrijf is al geboekt op dit tijdstip.' });
         }
 
-        // Insert afspraak als alles ok is
+        // ✅ INSERT speeddate
         const insertSql = `
           INSERT INTO speeddate (student_id, bedrijf_id, tijdstip, locatie, status)
           VALUES (?, ?, ?, ?, ?)
@@ -230,7 +227,18 @@ app.post('/api/speeddate', (req, res) => {
         db.query(insertSql, [student_id, bedrijf_id, tijdstip, locatie, status], (err, result) => {
           if (err) return res.status(500).json({ error: err.message });
 
-          res.status(201).json({ message: 'Afspraak succesvol opgeslagen.' });
+          // ✅ INSERT melding (naar bedrijf)
+          const boodschap = `📅 Een student heeft een speeddate ingepland op ${tijdstip} te ${locatie || 'onbekende locatie'}.`;
+          const insertMeldingSql = `
+            INSERT INTO melding (gebruiker_id, boodschap)
+            VALUES (?, ?)
+          `;
+
+          db.query(insertMeldingSql, [bedrijf_id, boodschap], (err2) => {
+            if (err2) return res.status(500).json({ error: err2.message });
+
+            res.status(201).json({ message: 'Afspraak en melding succesvol opgeslagen.' });
+          });
         });
       });
     });
