@@ -1,7 +1,7 @@
 import React from 'react';
 import '../Components/VacaturePage.css';
 
-export default function VacaturePage() {
+export default function AdminVacatureAanpassen() {
   return (
     <div className="pagina">
 

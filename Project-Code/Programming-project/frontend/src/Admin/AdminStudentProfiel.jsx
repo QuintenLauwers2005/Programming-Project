@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import Navbar from '../Components/Navbar'
+import Navbar from '../Components/AdminNavBar'
 
-function StudentProfilePage() {
+function AdminStudentProfiel() {
 
 const [studentData, setStudentData] = useState(null);
   const studentId = "1"; // kan dynamisch uit route params komen bijvoorbeeld
@@ -77,4 +77,4 @@ const [studentData, setStudentData] = useState(null);
   );
 }
 
-export default StudentProfilePage;
+export default AdminStudentProfiel;
