@@ -20,6 +20,7 @@ import AdminAgenda from './Admin/AdminAgenda';
 import AdminBedrijfProfiel from './Admin/AdminBedrijfProfiel';
 import AdminStudentProfiel from './Admin/AdminStudentProfiel';
 import AdminStudentInstellingen from './Admin/AdminStudentInstellingen'
+import RegistratieStudentPage from './studenten/RegistratieStudenten';
 
 
 function App() {
@@ -46,6 +47,8 @@ function App() {
         <Route path="/AdminBedrijfProfiel" element={<AdminBedrijfProfiel/>} />
         <Route path="/AdminStudentProfiel" element={<AdminStudentProfiel/>} />
         <Route path="/AdminStudentInstellingen" element={<AdminStudentInstellingen/>} />
+        <Route path="/register/student" element={<RegistratieStudentPage />} />
+
 
 
       
