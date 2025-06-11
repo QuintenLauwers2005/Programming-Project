@@ -1,54 +1,98 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Components/Navbar';
+import axios from 'axios';
 
 export default function LoginPage() {
   const navigate = useNavigate();
 
-  return (
-    <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
-      {/* Navigatie */}
-      <header>
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-      
-          <Navbar/>
-        
-      
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!email || !password) {
+      alert('Vul zowel e-mailadres als wachtwoord in.');
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/login', {
+        email,
+        password
+      });
+
+      const { gebruiker_id, rol, message } = response.data;
+
+      console.log('Login response:', response.data);
+
+      localStorage.setItem('gebruiker_id', gebruiker_id);
+      localStorage.setItem('rol', rol);
+
+      alert(message || 'Succesvol ingelogd!');
+
+      setTimeout(() => {
+        navigate('/');  // ga naar home na login
+      }, 100);
+
+    } catch (err) {
+      const foutmelding = err.response?.data?.error || 'Login mislukt. Controleer je gegevens.';
+      alert(foutmelding);
+      console.error('Login fout:', err);
+    }
+  };
+
+  return (
+    <div style={{ fontFamily: 'Arial, sans-serif', padding: '40px' }}>
+      {/* Navbar */}
+      <header>
+        <Navbar />
       </header>
 
       <section style={{ margin: '30px 0', textAlign: 'center' }}>
         <h2>Login</h2>
-        <p>
-          Log in om toegang te krijgen tot je profiel en vacatures.
-        </p>
+        <p>Log in om toegang te krijgen tot je profiel en vacatures.</p>
       </section>
 
       <section style={{ maxWidth: '400px', margin: '0 auto', padding: '20px' }}>
-        <form>
-          <input
-            type="email"
-            placeholder="Email"
-            style={{
-              width: '100%',
-              padding: '10px',
-              marginBottom: '15px',
-              border: '1px solid #ccc',
-              borderRadius: '4px'
-            }}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Wachtwoord"
-            style={{
-              width: '100%',
-              padding: '10px',
-              marginBottom: '15px',
-              border: '1px solid #ccc',
-              borderRadius: '4px'
-            }}
-            required
-          />
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Email:</label><br />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              style={{
+                width: '100%',
+                padding: '10px',
+                marginBottom: '15px',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+              }}
+              placeholder="Email"
+            />
+          </div>
+
+          <div>
+            <label>Wachtwoord:</label><br />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={{
+                width: '100%',
+                padding: '10px',
+                marginBottom: '15px',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+              }}
+              placeholder="Wachtwoord"
+            />
+          </div>
+
           <button
             type="submit"
             style={{
@@ -58,12 +102,14 @@ export default function LoginPage() {
               color: 'white',
               border: 'none',
               borderRadius: '4px',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              fontWeight: 'bold',
             }}
           >
             Inloggen
           </button>
         </form>
+
         <p style={{ marginTop: '15px', textAlign: 'center' }}>
           Nog geen account?{' '}
           <button
@@ -73,7 +119,7 @@ export default function LoginPage() {
               background: 'none',
               border: 'none',
               cursor: 'pointer',
-              fontWeight: 'bold'
+              fontWeight: 'bold',
             }}
           >
             Registreer hier
@@ -81,7 +127,15 @@ export default function LoginPage() {
         </p>
       </section>
 
-      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px' }}>
+      <footer
+        style={{
+          backgroundColor: '#333',
+          color: '#fff',
+          padding: '20px',
+          marginTop: '40px',
+          textAlign: 'center',
+        }}
+      >
         <h5>Contact</h5>
         <p>info@careerlaunch.be</p>
         <p>EhB - Erasmushogeschool Brussel</p>
