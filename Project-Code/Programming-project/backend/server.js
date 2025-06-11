@@ -37,9 +37,16 @@ app.post('/api/login', (req, res) => {
   const { email, password } = req.body;
 
   const sql = `
-    SELECT gebruiker_id, rol, wachtwoord 
-    FROM gebruiker 
-    WHERE email = ?
+    SELECT 
+      g.gebruiker_id, 
+      g.rol, 
+      g.wachtwoord,
+      CONCAT(s.voornaam, ' ', s.naam) AS student_naam,
+      b.logo_link AS bedrijf_logo
+    FROM gebruiker g
+    LEFT JOIN student s ON g.gebruiker_id = s.student_id AND g.rol = 'student'
+    LEFT JOIN bedrijf b ON g.gebruiker_id = b.bedrijf_id AND g.rol = 'bedrijf'
+    WHERE g.email = ?
   `;
 
   db.query(sql, [email], (err, results) => {
@@ -51,21 +58,20 @@ app.post('/api/login', (req, res) => {
 
     const gebruiker = results[0];
 
-    // 🔐 Simpele wachtwoordvergelijking
+    // Hier kun je wachtwoord hashing toevoegen als je dat gebruikt
     if (gebruiker.wachtwoord !== password) {
       return res.status(401).json({ error: 'Wachtwoord is incorrect' });
     }
 
-    // ✅ Succesvol ingelogd
     res.json({
       message: 'Login succesvol',
       gebruiker_id: gebruiker.gebruiker_id,
-      rol: gebruiker.rol
+      rol: gebruiker.rol,
+      naam: gebruiker.rol === 'student' ? gebruiker.student_naam : null,
+      logo_link: gebruiker.rol === 'bedrijf' ? gebruiker.bedrijf_logo : null
     });
   });
 });
-
-
 
 
 //vacatures ophalen
