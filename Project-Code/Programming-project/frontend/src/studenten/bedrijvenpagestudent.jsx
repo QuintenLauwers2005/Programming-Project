@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Logo from './Components/Logo';
-import Navbar from './Components/Navbar';
+import Navbar from './Components/StudentNavbar';
 import Footer from './Components/Footer';
 
 export default function BedrijvenLijst() {

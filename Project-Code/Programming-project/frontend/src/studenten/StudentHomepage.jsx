@@ -1,6 +1,6 @@
 import React from 'react'
 import Kaart from './Components/Kaart'
-import Navbar from './Components/Navbar'
+import Navbar from './Components/StudentNavbar'
 import Footer from './Components/Footer';
 
 function HomePage() {
