@@ -104,6 +104,11 @@ export default function VacatureLijst() {
     }
     return options;
   };
+  const handleOpenModal = (vacature) => {
+    setSelectedVacature(vacature);
+    setSelectedTime('');
+    setShowModal(true);
+  };
 
   return (
     <div className="pagina">
@@ -155,12 +160,20 @@ export default function VacatureLijst() {
                   Functie: {vacature.functie}<br />
                   Contract: {vacature.contract_type}
                 </p>
-                <button 
-                  className="reserveer-btn" 
-                  onClick={() => handleSelectVacature(vacature)}
-                >
-                  Reserveer gesprek
-                </button>
+                <button
+                    onClick={() => handleOpenModal(vacature)}
+                    style={{
+                      padding: '6px 12px',
+                      backgroundColor: '#007bff',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '5px',
+                      cursor: 'pointer',
+                      fontSize: '0.9em'
+                    }}
+                  >
+                    Reserveer gesprek
+                  </button>
               </div>
             </div>
           ))}
