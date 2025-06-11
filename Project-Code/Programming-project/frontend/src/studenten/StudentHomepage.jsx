@@ -1,9 +1,10 @@
 import React from 'react'
-import Kaart from './Components/Kaart'
-import Navbar from './Components/StudentNavbar'
-import Footer from './Components/Footer';
+import Navbar from '../Components/StudentNavbar'
+import Footer from '../Components/Footer';
 
 function HomePage() {
+
+  
 
   return ( 
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
@@ -43,7 +44,7 @@ function HomePage() {
       <section style={{ marginBottom: '30px', textAlign: 'center' }}>
         <p><strong>05/06/2025</strong></p>
         <p>Quai de l’Industrie 170, 1070 Anderlecht</p>
-        <Kaart />
+     
       </section>
 
       {/* Waarom deelnemen */}

@@ -21,6 +21,7 @@ import AdminBedrijfProfiel from './Admin/AdminBedrijfProfiel';
 import AdminStudentProfiel from './Admin/AdminStudentProfiel';
 import AdminStudentInstellingen from './Admin/AdminStudentInstellingen'
 import RegistratieStudentPage from './studenten/RegistratieStudenten';
+import StudentHomepage from './studenten/StudentHomepage';
 
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
         <Route path="/AdminStudentProfiel" element={<AdminStudentProfiel/>} />
         <Route path="/AdminStudentInstellingen" element={<AdminStudentInstellingen/>} />
         <Route path="/register/student" element={<RegistratieStudentPage />} />
+        <Route path="/HomePageStudent" element={<StudentHomepage />} />
 
 
 
