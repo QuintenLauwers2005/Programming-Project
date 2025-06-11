@@ -122,23 +122,36 @@ main {
   font-style: italic;
 }
 
-.testimonial blockquote {
+.studentenverklaring {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin: 1rem auto;
   max-width: 800px;
-  margin: auto;
-  font-size: 1.1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  text-align: left;
+  font-style: italic;
   position: relative;
 }
 
-.testimonial blockquote::before {
+.studentenverklaring blockquote {
+  margin: 0;
+  padding-left: 2rem;
+  position: relative;
+  font-size: 1.1rem;
+}
+
+.studentenverklaring blockquote::before {
   content: "“";
   font-size: 3rem;
   position: absolute;
-  left: -20px;
-  top: -20px;
+  left: 0;
+  top: 0;
   color: #ccc;
+  font-style: normal;
 }
 
-.testimonial footer {
+.studentenverklaring footer {
   font-style: normal;
   margin-top: 1rem;
   font-size: 0.9rem;

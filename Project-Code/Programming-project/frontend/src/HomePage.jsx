@@ -85,7 +85,7 @@ function HomePage() {
               <div className="whycirkel">🚀</div>
               <p>Start je carrière</p>
           </div>
-          
+
       </div>
 
         </section>
@@ -93,12 +93,34 @@ function HomePage() {
         {/* Testimonial */}
         <section className="testimonial enhanced-box">
           <h2>Ervaringen van studenten</h2>
+
+        <div className="studentenverklaring">
+          <blockquote>
+          <p>
+            “De Career Launch was een gamechanger. Dankzij dit event vond ik niet alleen een stage, maar ontdekte ik ook wat écht bij me past.”
+          </p>
+          <footer>— Sarah, student Toegepaste Informatica</footer>
+          </blockquote>
+        </div>
+
+        <div className="studentenverklaring">
           <blockquote>
             <p>
-              “De Career Launch was een gamechanger. Dankzij dit event vond ik niet alleen een stage, maar ontdekte ik ook wat écht bij me past.”
+              “Ik vond het super waardevol om met bedrijven te praten zonder druk. Hierdoor heb ik echt mijn richting gevonden.”
             </p>
-            <footer>— Sarah, student Toegepaste Informatica</footer>
+            <footer>— Yassin, student Multimedia</footer>
           </blockquote>
+        </div>
+
+        <div className="studentenverklaring">
+          <blockquote>
+            <p>
+              “Toffe sfeer, goede voorbereiding en veel interessante connecties opgedaan.”
+            </p>
+            <footer>— Anke, student Marketing</footer>
+          </blockquote>
+        </div>
+        
         </section>
 
         {/* Veelgestelde vragen */}
