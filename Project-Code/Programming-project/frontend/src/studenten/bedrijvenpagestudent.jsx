@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Logo from './Components/Logo';
 import Navbar from './Components/Navbar';
+import Footer from './Components/Footer';
 
 export default function BedrijvenLijst() {
   const navigate = useNavigate();
@@ -122,10 +123,8 @@ export default function BedrijvenLijst() {
         Toon meer
       </button>
 
-      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px' }}>
-        <h5 style={{ marginBottom: '10px' }}>Contact</h5>
-        <p>info@careerlaunch.be</p>
-        <p>EhB - Erasmushogeschool Brussel</p>
+      <footer>
+       <Footer />
       </footer>
     </div>
   );

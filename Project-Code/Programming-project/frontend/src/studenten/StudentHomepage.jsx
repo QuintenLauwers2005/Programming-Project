@@ -1,6 +1,7 @@
 import React from 'react'
 import Kaart from './Components/Kaart'
 import Navbar from './Components/Navbar'
+import Footer from './Components/Footer';
 
 function HomePage() {
 
@@ -70,11 +71,8 @@ function HomePage() {
         <p><strong>Info?</strong><br />Stuur een e-mail of neem contact op met je studentenbegeleider.</p>
       </section>
 
-      {/* Footer */}
-      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px' }}>
-        <h5>Contact</h5>
-        <p>info@careerlaunch.be</p>
-        <p>EhB - Erasmushogeschool Brussel</p>
+      <footer>
+       <Footer />
       </footer>
     </div>
   );

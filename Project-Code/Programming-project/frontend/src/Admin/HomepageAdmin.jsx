@@ -1,7 +1,8 @@
 // HomePage.jsx
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../Components/AdminNavBar'
+import Navbar from '../Components/AdminNavBar';
+import Footer from './Components/Footer';
 
 function HomePageAdmin() {
     const navigate = useNavigate()
@@ -35,6 +36,10 @@ function HomePageAdmin() {
                 <button style={{ marginTop: '10%'}}>Bekijk</button>
             </div>
       </div>
+
+      <footer>
+       <Footer />
+      </footer>
    </div>
   );
 }

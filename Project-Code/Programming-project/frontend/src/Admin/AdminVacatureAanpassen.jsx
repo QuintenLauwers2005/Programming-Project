@@ -1,5 +1,6 @@
 import React from 'react';
 import '../Components/VacaturePage.css';
+import Footer from './Components/Footer';
 
 export default function AdminVacatureAanpassen() {
   return (
@@ -39,12 +40,8 @@ export default function AdminVacatureAanpassen() {
         <button className="post-knop">Post</button>
       </main>
 
-      {/* Footer */}
-      <footer className="footer">
-        <h3>Contact</h3>
-        <p>info.erasmus@ehb.be</p>
-        <p>+32 450 87 36 42</p>
-        <p>Nijverheidskaai 170,<br />1070 Anderlecht</p>
+      <footer>
+       <Footer />
       </footer>
 
     </div>

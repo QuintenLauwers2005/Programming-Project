@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Assets/VacatureLijst.css';
 import Navbar from './Components/Navbar';
+import Footer from './Components/Footer';
 
 export default function VacatureLijst() {
   const [vacatures, setVacatures] = useState([]);
@@ -187,10 +188,8 @@ export default function VacatureLijst() {
           </div>
         </div>
       )}
-      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px' }}>
-        <h5 style={{ marginBottom: '10px' }}>Contact</h5>
-        <p>info@careerlaunch.be</p>
-        <p>EhB - Erasmushogeschool Brussel</p>
+      <footer>
+       <Footer />
       </footer>
     </div>
   );

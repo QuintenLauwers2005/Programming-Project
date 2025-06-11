@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Navbar from '../Components/AdminNavBar'
+import Footer from './Components/Footer';
 
 function AdminStudentProfiel() {
 
@@ -67,11 +68,8 @@ const [studentData, setStudentData] = useState(null);
         </ul>
       </section>
 
-      {/* Footer */}
-      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px' }}>
-        <h5>Contact</h5>
-        <p>info@careerlaunch.be</p>
-        <p>EhB - Erasmushogeschool Brussel</p>
+      <footer>
+       <Footer />
       </footer>
     </div>
   );

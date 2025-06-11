@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Assets/Agenda.css';
 import Navbar from './Components/Navbar';
 import { useLocation } from 'react-router-dom';
+import Footer from './Components/Footer';
 
 export default function Agenda() {
   const location = useLocation();
@@ -99,6 +100,10 @@ export default function Agenda() {
           </div>
         </div>
       )}
+
+      <footer>
+       <Footer />
+      </footer>
     </div>
   );
 }

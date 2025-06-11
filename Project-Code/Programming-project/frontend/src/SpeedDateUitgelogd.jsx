@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import Footer from './Components/Footer';
 
 return (
     <div className="container">
@@ -22,9 +23,9 @@ return (
 
         </body>
 
-        {/* Footer  */}
-      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px', textAlign: 'center' }}>
-        <p>&copy; {new Date().getFullYear()} Career Launch - Erasmushogeschool Brussel</p>
+      <footer>
+       <Footer />
       </footer>
+       
       </div>
       );

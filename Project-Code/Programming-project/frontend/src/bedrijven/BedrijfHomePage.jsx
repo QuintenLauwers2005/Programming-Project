@@ -1,6 +1,7 @@
 // HomePage.jsx
 import React from 'react'
 import Navbar from '../Components/BedrijfNavBar'
+import Footer from './Components/Footer';
 
 function BedrijfHomePage() {
 
@@ -83,11 +84,8 @@ function BedrijfHomePage() {
         <p><strong>Info?</strong><br />Stuur een e-mail of neem contact op met je studentenbegeleider.</p>
       </section>
 
-      {/* Footer */}
-      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px' }}>
-        <h5>Contact</h5>
-        <p>info@careerlaunch.be</p>
-        <p>EhB - Erasmushogeschool Brussel</p>
+      <footer>
+        <Footer />
       </footer>
     </div>
   );

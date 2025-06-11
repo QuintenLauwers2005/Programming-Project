@@ -2,6 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from "./Components/Navbar";
+import Footer from './Components/Footer';
 
 export default function BedrijfProfilePage() {
   const { id } = useParams();
@@ -221,10 +222,8 @@ export default function BedrijfProfilePage() {
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Telefoon:</strong> {companyData.telefoon}</p>
       </section>
 
-      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px' }}>
-        <h5>Contact</h5>
-        <p>info@careerlaunch.be</p>
-        <p>EhB - Erasmushogeschool Brussel</p>
+      <footer>
+        <Footer />
       </footer>
     </div>
   );

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Navbar from './Components/Navbar';
 import './HomePage.css';
 import axios from 'axios'
+import Footer from './Components/Footer';
 
 function HomePage() {
 
@@ -102,11 +103,8 @@ function HomePage() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="footer">
-        <h5>Contact</h5>
-        <p>info@careerlaunch.be</p>
-        <p>EhB - Erasmushogeschool Brussel</p>
+      <footer>
+       <Footer />
       </footer>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../Assets/Agenda.css';
 import Navbar from '../Components/AdminNavBar';
+import Footer from './Components/Footer';
 
 export default function AdminAgenda() {
   const [afspraken, setAfspraken] = useState([]);
@@ -96,6 +97,9 @@ export default function AdminAgenda() {
           </div>
         </div>
       )}
+      <footer>
+       <Footer />
+      </footer>
     </div>
   );
 }
