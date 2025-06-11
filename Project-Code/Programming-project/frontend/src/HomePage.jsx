@@ -9,6 +9,7 @@ function HomePage() {
   const [stats, setStats] = useState(null) // for your numbers from SQL
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
+  const [activeFaqIndex, setActiveFaqIndex] = useState(null);
 
   useEffect(() => {
     // Replace this URL with your actual backend API endpoint that returns your stats
@@ -67,7 +68,7 @@ function HomePage() {
             <p className="date"><strong>05/06/2025</strong></p>
             </div>
           </div>
-          
+
         </section>
 
         {/* Waarom deelnemen */}
@@ -146,12 +147,14 @@ function HomePage() {
           </div>
         </section>
       </main>
-
+        
       <footer>
        <Footer />
       </footer>
     </div>
   );
+
+  
 }
 
 export default HomePage;

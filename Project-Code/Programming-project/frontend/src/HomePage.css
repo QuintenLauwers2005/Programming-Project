@@ -199,7 +199,8 @@ main {
 }
 
 .faq-blok {
-  background-color: aliceblue;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
   height: 150px;
   flex: 1;
   min-width: 250px;
