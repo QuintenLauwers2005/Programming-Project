@@ -40,6 +40,40 @@ app.get('/api/vacatures', (req, res) => {
   })
 })
 
+// alle studenten ophalen
+app.get('/api/studenten', (req, res) => {
+  const sql = `
+    SELECT 
+      student_id,
+      voornaam,
+      naam,
+      email,
+      opleiding,
+      opleidingsjaar,
+      profiel_foto_url
+    FROM student
+  `;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Databasefout:', err);
+      return res.status(500).json({ error: 'Interne serverfout' });
+    }
+
+    const studenten = results.map(row => ({
+      id: row.student_id.toString(),
+      naam: `${row.voornaam} ${row.naam}`,
+      email: row.email,
+      opleiding: row.opleiding,
+      afstudeerjaar: row.opleidingsjaar,
+      profielFotoUrl: row.profiel_foto_url
+    }));
+
+    res.json(studenten);
+  });
+});
+
+
 //studenten ophalen
 app.get('/api/student/:id', (req, res) => {
   const studentId = req.params.id;
