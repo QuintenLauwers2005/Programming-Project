@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './Assets/VacatureLijst.css';
-import Navbar from './Components/Navbar';
+import '../Assets/VacatureLijst.css';
+import Navbar from '../Components/AdminNavBar';
 
-export default function VacatureLijst() {
+export default function AdminVacatureLijst() {
   const [vacatures, setVacatures] = useState([]);
   const [filteredVacatures, setFilteredVacatures] = useState([]);
   const [selectedVacature, setSelectedVacature] = useState(null);
