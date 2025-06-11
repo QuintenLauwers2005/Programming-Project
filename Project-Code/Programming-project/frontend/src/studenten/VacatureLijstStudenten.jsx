@@ -159,19 +159,58 @@ export default function VacatureLijst() {
 
       {/* Modal for selecting time */}
       {showModal && (
-        <div className="modal-overlay">
-          <div className="modal">
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex', justifyContent: 'center', alignItems: 'center',
+          zIndex: 1000,
+        }}>
+          <div style={{
+            backgroundColor: 'white',
+            padding: '20px',
+            borderRadius: '8px',
+            width: '300px',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.3)'
+          }}>
             <h3>Kies een tijdstip</h3>
-            <label>Tijdstip:</label>
-<select
-  value={selectedTime}
-  onChange={(e) => setSelectedTime(e.target.value)}
->
-  {generateTimeOptions()}
-</select>
-            <div className="modal-buttons">
-              <button onClick={handleConfirm}>Bevestigen</button>
-              <button onClick={() => setShowModal(false)}>Annuleren</button>
+            <label style={{ display: 'block', margin: '10px 0 5px' }}>Tijdstip:</label>
+            <select
+              value={selectedTime}
+              onChange={e => setSelectedTime(e.target.value)}
+              style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
+            >
+              <option value="">Selecteer tijd</option>
+              {generateTimeOptions()}
+            </select>
+
+            <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+              <button
+                onClick={handleConfirm}
+                style={{
+                  backgroundColor: '#28a745',
+                  color: 'white',
+                  border: 'none',
+                  padding: '8px 16px',
+                  borderRadius: '5px',
+                  cursor: 'pointer'
+                }}
+              >
+                Bevestigen
+              </button>
+              <button
+                onClick={() => setShowModal(false)}
+                style={{
+                  backgroundColor: '#dc3545',
+                  color: 'white',
+                  border: 'none',
+                  padding: '8px 16px',
+                  borderRadius: '5px',
+                  cursor: 'pointer'
+                }}
+              >
+                Annuleren
+              </button>
             </div>
           </div>
         </div>
