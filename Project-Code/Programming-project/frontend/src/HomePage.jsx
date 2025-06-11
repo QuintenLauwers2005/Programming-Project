@@ -49,18 +49,25 @@ function HomePage() {
 
         {/* Praktisch */}
         <section className="location enhanced-box">
-          <h2>Onze Locatie</h2>
-          <p className="date"><strong>05/06/2025</strong></p>
-          <p>Quai de l’Industrie 170, 1070 Anderlecht</p>
-          <div className="map">
-            <iframe
+          <h2>Locatie & Datum</h2>
+
+          <div className="map-card">
+            <div className="map">
+              <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2519.402036354639!2d4.322808000000001!3d50.842239!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c3c40f19faf0f9%3A0x4ef5b683135ecb1e!2sErasmushogeschool%20Brussel!5e0!3m2!1snl!2sbe!4v1749561581428!5m2!1snl!2sbe"
               allowFullScreen=""
               loading="lazy"
               title="Google Maps"
               referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
+              ></iframe>
+            </div>
+
+            <div className="map-info">
+            <p>Nijverheidskaai 170, 1070 Anderlecht</p>
+            <p className="date"><strong>05/06/2025</strong></p>
+            </div>
           </div>
+          
         </section>
 
         {/* Waarom deelnemen */}
