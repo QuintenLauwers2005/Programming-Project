@@ -56,11 +56,6 @@ export default function VacatureLijst() {
     setFilteredVacatures(filtered);
   }, [filters, vacatures]);
 
-  // Handle selecting a vacature and showing the modal
-  const handleSelectVacature = (vacature) => {
-    setSelectedVacature(vacature);
-    setShowModal(true);
-  };
 
   // Handle form submission
   const handleConfirm = () => {
@@ -68,12 +63,6 @@ export default function VacatureLijst() {
       alert('Kies een tijdstip');
       return;
     }
-
-    // Store the selected date and time
-    const selectedData = {
-      vacatureId: selectedVacature.vacature_id,
-      time: selectedTime
-    };
 
     // Save to localStorage or send to backend
     // For now, just redirect to Agenda with query params
@@ -151,6 +140,7 @@ export default function VacatureLijst() {
               <div className="logo-blok" >
                 <img 
           src={`/${vacature.logo_link}`} 
+          alt={`logo van ${vacature.bedrijf}`}
           style={{ width: '80px', height: '80px', borderRadius: '8px', objectFit: 'cover' }} 
         /></div>
               <div className="vacature-info">
