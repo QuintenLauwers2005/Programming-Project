@@ -32,6 +32,10 @@ db.connect(err => {
   console.log('MySQL connected.')
 })
 
+
+app.listen(port, () => {
+  console.log(`Server draait op http://localhost:${port}`)
+})
 // login gegevens checken
 app.post('/api/login', (req, res) => {
   const { email, password } = req.body;
@@ -439,6 +443,54 @@ app.get('/api/meldingen/:gebruikerId', (req, res) => {
 });
 
 
-app.listen(port, () => {
-  console.log(`Server draait op http://localhost:${port}`)
-})
+app.post('/api/studentenToevoegen', (req, res) => {
+  const {
+    voornaam,
+    naam,
+    email,
+    wachtwoord,
+    opleiding,
+    specialisatie,
+    opleidingsjaar,
+    adres
+  } = req.body;
+
+  // Voeg eerst toe aan gebruiker
+  const insertGebruikerSql = `
+    INSERT INTO gebruiker (email, wachtwoord, rol)
+    VALUES (?, ?, 'student')
+  `;
+
+  db.query(insertGebruikerSql, [email, wachtwoord], (err, result) => {
+    if (err) return res.status(500).json({ error: 'Fout bij toevoegen gebruiker: ' + err.message });
+
+    const gebruikerId = result.insertId;
+
+    // Voeg toe aan student
+    const insertStudentSql = `
+      INSERT INTO student (
+        student_id, voornaam, naam, opleiding, specialisatie, opleidingsjaar, adres, email
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    const values = [
+      gebruikerId,
+      voornaam,
+      naam,
+      opleiding,
+      specialisatie,
+      opleidingsjaar,
+      adres,
+      email
+    ];
+
+    db.query(insertStudentSql, values, (err2) => {
+      if (err2) return res.status(500).json({ error: 'Fout bij toevoegen student: ' + err2.message });
+
+      res.status(201).json({ message: 'Student en gebruiker succesvol toegevoegd.', gebruiker_id: gebruikerId });
+    });
+  });
+});
+
+
