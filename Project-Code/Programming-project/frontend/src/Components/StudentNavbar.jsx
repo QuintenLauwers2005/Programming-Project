@@ -22,7 +22,7 @@ const toggleNotifications = () => {
     const next = !prev;
 
     if (next) {
-      setMeldingen(prevMeldingen =>
+      setMeldingen(prevMeldingen =>   
         prevMeldingen.map(melding => ({ ...melding, gelezen: true }))
       );
     }
