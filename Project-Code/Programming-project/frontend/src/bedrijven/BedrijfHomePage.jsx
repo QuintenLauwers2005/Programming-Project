@@ -1,7 +1,7 @@
 // HomePage.jsx
 import React from 'react'
 import Navbar from '../Components/BedrijfNavBar'
-import Footer from './Components/Footer';
+import Footer from '../Components/Footer';
 
 function BedrijfHomePage() {
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Assets/Agenda.css';
 import Navbar from './Components/Navbar';
-import Footer from './Components/Footer';
+import Footer from '../Components/Footer';
 
 export default function Agenda() {
   const [afspraken, setAfspraken] = useState([]);

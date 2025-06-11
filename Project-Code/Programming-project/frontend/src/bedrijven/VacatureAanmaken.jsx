@@ -1,6 +1,6 @@
 import React from 'react';
 import '../Components/VacaturePage.css';
-import Footer from './Components/Footer';
+import Footer from '../Components/Footer';
 
 export default function VacaturePage() {
   return (
