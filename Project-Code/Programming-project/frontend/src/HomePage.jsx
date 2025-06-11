@@ -5,9 +5,9 @@ import axios from 'axios'
 
 function HomePage() {
 
-  const [stats, setStats] = useState(null)  // for your numbers from SQL
+  const [stats, setStats] = useState(null) // for your numbers from SQL
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(true)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     // Replace this URL with your actual backend API endpoint that returns your stats
@@ -45,9 +45,9 @@ function HomePage() {
 
         {/* Statistieken */}
         <section className="stats">
-          <div className="stat"><strong>{stats[0].bedrijf_aantal}</strong><br />Bedrijven</div>
-          <div className="stat"><strong>{stats[1].bedrijf_aantal}</strong><br />Vacatures</div>
-          <div className="stat"><strong>{stats[2].bedrijf_aantal}</strong><br />Studenten</div>
+          <div className="stat"><strong>{loading ? '...' : error ? '✖' : stats[0].bedrijf_aantal}</strong><br />Bedrijven</div>
+          <div className="stat"><strong>{loading ? '...' : error ? '✖' : stats[1].bedrijf_aantal}</strong><br />Vacatures</div>
+          <div className="stat"><strong>{loading ? '...' : error ? '✖' : stats[2].bedrijf_aantal}</strong><br />Studenten</div>
         </section>
 
         {/* Praktisch */}
