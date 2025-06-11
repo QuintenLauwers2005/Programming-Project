@@ -24,10 +24,6 @@ function HomePage() {
       })
   }, [])
 
-
-
-
-
   return (
     <div className="home-layout">
       {/* Navigatie */}
@@ -73,6 +69,25 @@ function HomePage() {
           <p>
             Tijdens de Career Launch krijg je de unieke kans om in contact te komen met topbedrijven uit jouw sector. Netwerk, ontdek en zet de eerste stap naar jouw droomjob.
           </p>
+
+        <div className="why-circles-container">
+            <div className="why-circle-block">
+              <div className="whycirkel">🎯</div>
+              <p>Gerichte matches</p>
+          </div>
+
+          <div className="why-circle-block">
+              <div className="whycirkel">🤝</div>
+              <p>Netwerken</p>
+          </div>
+
+          <div className="why-circle-block">
+              <div className="whycirkel">🚀</div>
+              <p>Start je carrière</p>
+          </div>
+          
+      </div>
+
         </section>
 
         {/* Testimonial */}
