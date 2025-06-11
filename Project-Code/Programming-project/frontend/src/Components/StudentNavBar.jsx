@@ -80,7 +80,7 @@ useEffect(() => {
         <Link to={homepagePath}>
           <Logo className="logo" />
         </Link>
-        <button className="login-btn" onClick={() => navigate('/login')}>Login</button>
+        <button className="login-btn" onClick={() => navigate('/login')}>{localStorage.getItem('gebruiker_id')}</button>
         <div className="navigatie-button-popout">
           <button className="notificatie-btn" ref={buttonRef} onClick={toggleNotifications} style={{ position: 'relative' }}>
   🔔{meldingen.some(m => !m.gelezen) && (
