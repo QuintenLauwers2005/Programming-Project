@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Logo from './Components/Logo';
-import Navbar from './Components/Navbar';
+import Logo from '../Components/Logo';
+import Navbar from '../Components/AdminNavBar';
 
-export default function BedrijvenLijst() {
+export default function AdminBedrijvenLijst() {
   const navigate = useNavigate();
   const [bedrijven, setBedrijven] = useState([]);
   const [loading, setLoading] = useState(true);

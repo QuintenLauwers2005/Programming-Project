@@ -13,7 +13,13 @@ import VacaturePage from './bedrijven/VacatureAanmaken';
 import HomePageAdmin from './Admin/HomepageAdmin'
 import BedrijfHomePage from './bedrijven/BedrijfHomePage'
 import ScrollToTopButton from './Components/ScrollToTopButton';
-
+import AdminBedrijvenLijst from './Admin/AdminBedrijvenLijst';
+import AdminStudentenLijst from './Admin/AdminStudentenLijst';
+import AdminVacatureLijst from './Admin/AdminVacatureLijst';
+import AdminAgenda from './Admin/AdminAgenda';
+import AdminBedrijfProfiel from './Admin/AdminBedrijfProfiel';
+import AdminStudentProfiel from './Admin/AdminStudentProfiel';
+import AdminStudentInstellingen from './Admin/AdminStudentInstellingen'
 
 
 function App() {
@@ -33,6 +39,15 @@ function App() {
         <Route path="/bedrijf/:id" element={<BedrijfProfilePage />} />
         <Route path="/BedrijfHomePage" element={<BedrijfHomePage/>} />
         <Route path="/HomePageAdmin" element={<HomePageAdmin/>} />
+        <Route path="/AdminBedrijvenLijst" element={<AdminBedrijvenLijst/>} />
+        <Route path="/AdminStudentenLijst" element={<AdminStudentenLijst/>} />
+        <Route path="/AdminVacatureLijst" element={<AdminVacatureLijst/>} />
+        <Route path="/AdminAgenda" element={<AdminAgenda/>} />
+        <Route path="/AdminBedrijfProfiel" element={<AdminBedrijfProfiel/>} />
+        <Route path="/AdminStudentProfiel" element={<AdminStudentProfiel/>} />
+        <Route path="/AdminStudentInstellingen" element={<AdminStudentInstellingen/>} />
+
+
       
       </Routes>
       <ScrollToTopButton />
