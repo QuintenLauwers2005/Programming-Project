@@ -49,13 +49,22 @@ main {
   font-size: 1.1rem;
 }
 
-.location {
-  text-align: center;
+.enhanced-box {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 1rem;
+  padding: 2rem;
   margin-bottom: 3rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
-.location h2 {
-  margin-bottom: 1rem;
+.location {
+  text-align: center;
+}
+
+.date {
+  font-size: 1.1rem;
+  color: #003366;
 }
 
 .map iframe {
@@ -69,20 +78,40 @@ main {
 
 .why {
   text-align: center;
-  margin: 3rem 0;
+}
+
+.why p {
+  max-width: 800px;
+  margin: auto;
+  font-size: 1.1rem;
 }
 
 .testimonial {
-  background-color: #f0f0f0;
-  padding: 2rem;
-  margin: 2rem 0;
   text-align: center;
+  font-style: italic;
 }
 
 .testimonial blockquote {
-  font-style: italic;
   max-width: 800px;
   margin: auto;
+  font-size: 1.1rem;
+  position: relative;
+}
+
+.testimonial blockquote::before {
+  content: "“";
+  font-size: 3rem;
+  position: absolute;
+  left: -20px;
+  top: -20px;
+  color: #ccc;
+}
+
+.testimonial footer {
+  font-style: normal;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #555;
 }
 
 .faq {

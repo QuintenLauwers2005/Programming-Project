@@ -4,7 +4,7 @@ import './HomePage.css';
 
 function HomePage() {
   return (
-    <div className="home-container">
+    <div className="home-layout">
       {/* Navigatie */}
       <header>
         <Navbar />
@@ -27,9 +27,9 @@ function HomePage() {
         </section>
 
         {/* Praktisch */}
-        <section className="location">
+        <section className="location enhanced-box">
           <h2>Onze Locatie</h2>
-          <p><strong>05/06/2025</strong></p>
+          <p className="date"><strong>05/06/2025</strong></p>
           <p>Quai de l’Industrie 170, 1070 Anderlecht</p>
           <div className="map">
             <iframe
@@ -43,22 +43,27 @@ function HomePage() {
         </section>
 
         {/* Waarom deelnemen */}
-        <section className="why">
-          <h3>Waarom je dit niet mag missen?</h3>
-          <p>De Career Launch biedt een unieke kans om direct in contact te komen met bedrijven die bij jou passen.</p>
+        <section className="why enhanced-box">
+          <h2>Waarom je dit niet mag missen</h2>
+          <p>
+            Tijdens de Career Launch krijg je de unieke kans om in contact te komen met topbedrijven uit jouw sector. Netwerk, ontdek en zet de eerste stap naar jouw droomjob.
+          </p>
         </section>
 
         {/* Testimonial */}
-        <section className="testimonial">
-          <h4>Testimonial</h4>
+        <section className="testimonial enhanced-box">
+          <h2>Ervaringen van studenten</h2>
           <blockquote>
-            "De Career Launch was een geweldige ervaring! Ik ontmoette mijn huidige werkgever tijdens het event, en kreeg direct waardevolle tips."
+            <p>
+              “De Career Launch was een gamechanger. Dankzij dit event vond ik niet alleen een stage, maar ontdekte ik ook wat écht bij me past.”
+            </p>
+            <footer>— Sarah, student Toegepaste Informatica</footer>
           </blockquote>
         </section>
 
         {/* Veelgestelde vragen */}
         <section className="faq">
-          <h3>Veelgestelde vragen</h3>
+          <h2>Veelgestelde vragen</h2>
           <div className="faq-container">
             <div className="faq-blok">
               <p><strong>Hoe meld ik me aan?</strong><br />Klik op 'Registreren' en volg de stappen.</p>
