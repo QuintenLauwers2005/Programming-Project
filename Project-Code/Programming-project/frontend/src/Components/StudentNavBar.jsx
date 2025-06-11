@@ -17,8 +17,18 @@ function Navbar(){
   // ⚠️ Pas deze aan op basis van je auth/opslagmethode
   const gebruikerId = localStorage.getItem("gebruiker_id") || 2; // test: bedrijf 2 (SAP)
 
-  const toggleNotifications = () => {
-    setShowNotifications((prev) => !prev);
+const toggleNotifications = () => {
+  setShowNotifications((prev) => {
+    const next = !prev;
+
+    if (next) {
+      setMeldingen(prevMeldingen =>
+        prevMeldingen.map(melding => ({ ...melding, gelezen: true }))
+      );
+    }
+
+    return next;
+  });
   };
 
   const handleClickOutside = (event) => {
