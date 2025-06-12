@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import './Assets/Agenda.css';
-import Navbar from './Components/Navbar';
+import '../Assets/Agenda.css';
+import Navbar from '../Components/BedrijfNavBar';
 import Footer from '../Components/Footer';
 import axios from 'axios';  // axios import toevoegen
 

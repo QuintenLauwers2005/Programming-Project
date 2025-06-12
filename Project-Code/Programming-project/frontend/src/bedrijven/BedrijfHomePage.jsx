@@ -44,9 +44,9 @@ function BedrijfHomePage() {
 
         {/* Statistieken */}
         <section className="stats">
-          <div className="stat"><strong>{loading ? '...' : error ? '✖' : stats[0].bedrijf_aantal}</strong><br />Bedrijven</div>
-          <div className="stat"><strong>{loading ? '...' : error ? '✖' : stats[1].bedrijf_aantal}</strong><br />Vacatures</div>
-          <div className="stat"><strong>{loading ? '...' : error ? '✖' : stats[2].bedrijf_aantal}</strong><br />Studenten</div>
+          <div className="stat"><strong>{loading ? '...' : error ? '✖' : stats?.bedrijf_aantal}</strong><br />Bedrijven</div>
+          <div className="stat"><strong>{loading ? '...' : error ? '✖' : stats?.vacature_aantal}</strong><br />Vacatures</div>
+          <div className="stat"><strong>{loading ? '...' : error ? '✖' : stats?.student_aantal}</strong><br />Studenten</div>
         </section>
 
         {/* Praktisch */}

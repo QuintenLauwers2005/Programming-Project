@@ -25,8 +25,9 @@ import StudentHomepage from './studenten/StudentHomepage';
 import AdminBedrijfInstellingen from './Admin/AdminBedrijfInstellingen'
 import AgendaStudenten from './studenten/AgendaStudenten';
 import BedrijfProfileStudent from './studenten/bedrijfProfielStudent';
-import StudentBedrijvenLijst from './studenten/bedrijvenpagestudent'
-import StudentVacatureLijst from './studenten/VacatureLijstStudenten'
+import StudentBedrijvenLijst from './studenten/bedrijvenpagestudent';
+import StudentVacatureLijst from './studenten/VacatureLijstStudenten';
+import Bedrijfsagenda from './bedrijven/BedrijfsAgenda';
 
 
 
@@ -63,6 +64,7 @@ function App() {
         <Route path="/BedrijfProfileStudent" element={<BedrijfProfileStudent />} />
         <Route path="/StudentBedrijvenLijst" element={<StudentBedrijvenLijst />} />
         <Route path="/StudentVacatureLijst" element={<StudentVacatureLijst />} />
+        <Route path="/BedrijfAgenda" element={<Bedrijfsagenda />} />
 
 
 

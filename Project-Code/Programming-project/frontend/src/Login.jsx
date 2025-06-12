@@ -47,7 +47,9 @@ export default function LoginPage() {
 
       setTimeout(() => {
         if(localStorage.getItem('rol') === 'student')
-        navigate('/HomePageStudent');  // ga naar home na logins
+        navigate('/HomePageStudent');
+          if(localStorage.getItem('rol') === 'bedrijf')
+        navigate('/BedrijfHomePage');// ga naar home na logins
       }, 100);
 
     } catch (err) {
