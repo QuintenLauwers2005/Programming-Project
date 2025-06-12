@@ -110,17 +110,7 @@ export default function BedrijvenLijst() {
         </div>
       )}
 
-      <button style={{
-        width: '100%',
-        padding: '16px',
-        border: '1px solid black',
-        backgroundColor: 'white',
-        marginTop: '30px',
-        fontWeight: 'bold',
-        fontSize: '16px'
-      }}>
-        Toon meer
-      </button>
+      <button className="toonmeer-btn" onClick={() => alert('Toon meer geklikt!')}>Toon meer</button>
 
       <footer>
         <Footer />
