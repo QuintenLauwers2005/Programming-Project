@@ -5,17 +5,14 @@ import Footer from '../Components/Footer';
 import '../HomePage.css';
 
 function StudentHomePage() {
-
-  const [stats, setStats] = useState(null) // for your numbers from SQL
+  const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
-  const [activeFaqIndex, setActiveFaqIndex] = useState(null);
 
   useEffect(() => {
-    // Replace this URL with your actual backend API endpoint that returns your stats
-    axios.get('http://localhost:5000/api/HomePageAantalen') 
+    axios.get('http://localhost:5000/api/HomePageAantalen')
       .then(response => {
-        setStats(response.data)  // assume response.data is { bedrijven: 30, vacatures: 150, studenten: 200 }
+        setStats(response.data)  // verwacht { bedrijf_aantal, vacature_aantal, student_aantal }
         setLoading(false)
       })
       .catch(err => {
@@ -43,9 +40,18 @@ function StudentHomePage() {
 
         {/* Statistieken */}
         <section className="stats">
-          <div className="stat"><strong>{loading ? '...' : error ? '✖' : stats[0].bedrijf_aantal}</strong><br />Bedrijven</div>
-          <div className="stat"><strong>{loading ? '...' : error ? '✖' : stats[1].bedrijf_aantal}</strong><br />Vacatures</div>
-          <div className="stat"><strong>{loading ? '...' : error ? '✖' : stats[2].bedrijf_aantal}</strong><br />Studenten</div>
+          <div className="stat">
+            <strong>{loading ? '...' : error ? '✖' : stats?.bedrijf_aantal}</strong><br />
+            Bedrijven
+          </div>
+          <div className="stat">
+            <strong>{loading ? '...' : error ? '✖' : stats?.vacature_aantal}</strong><br />
+            Vacatures
+          </div>
+          <div className="stat">
+            <strong>{loading ? '...' : error ? '✖' : stats?.student_aantal}</strong><br />
+            Studenten
+          </div>
         </section>
 
         {/* Praktisch */}

@@ -22,11 +22,13 @@ import AdminStudentProfiel from './Admin/AdminStudentProfiel';
 import AdminStudentInstellingen from './Admin/AdminStudentInstellingen'
 import RegistratieStudentPage from './studenten/RegistratieStudenten';
 import StudentHomepage from './studenten/StudentHomepage';
+import AdminBedrijfInstellingen from './Admin/AdminBedrijfInstellingen'
 import AgendaStudenten from './studenten/AgendaStudenten';
 import BedrijfProfileStudent from './studenten/bedrijfProfielStudent';
 import StudentBedrijvenLijst from './studenten/bedrijvenpagestudent';
 import StudentVacatureLijst from './studenten/VacatureLijstStudenten';
 import Bedrijfsagenda from './bedrijven/BedrijfsAgenda';
+
 
 
 function App() {
@@ -52,15 +54,17 @@ function App() {
         <Route path="/AdminAgenda" element={<AdminAgenda/>} />
         <Route path="/AdminBedrijfProfiel" element={<AdminBedrijfProfiel/>} />
         <Route path="/AdminStudentProfiel" element={<AdminStudentProfiel/>} />
-        <Route path="/AdminStudentInstellingen" element={<AdminStudentInstellingen/>} />
+        <Route path="/admin/student/:id/instellingen" element={<AdminStudentInstellingen />} />
+        <Route path="/admin/student/:id/profiel" element={<AdminStudentProfiel />} />
         <Route path="/register/student" element={<RegistratieStudentPage />} />
         <Route path="/HomePageStudent" element={<StudentHomepage />} />
+        <Route path="/admin/bedrijf/:id/profiel" element={<AdminBedrijfProfiel/>} />
+        <Route path="/admin/bedrijf/:id/instellingen" element={<AdminBedrijfInstellingen />} />
         <Route path="/AgendaStudenten" element={<AgendaStudenten />} />
         <Route path="/BedrijfProfileStudent" element={<BedrijfProfileStudent />} />
         <Route path="/StudentBedrijvenLijst" element={<StudentBedrijvenLijst />} />
         <Route path="/StudentVacatureLijst" element={<StudentVacatureLijst />} />
         <Route path="/BedrijfAgenda" element={<Bedrijfsagenda />} />
-
 
 
 

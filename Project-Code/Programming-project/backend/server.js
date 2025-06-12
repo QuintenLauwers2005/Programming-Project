@@ -80,7 +80,7 @@ app.post('/api/login', (req, res) => {
 
 //vacatures ophalen
 app.get('/api/vacatures', (req, res) => {
-  db.query(' SELECT  v.vacature_id, b.naam AS bedrijf, v.functie, v.contract_type, v.synopsis, v.open, b.kleur, b.logo_link, b.bedrijf_id FROM vacature v JOIN bedrijf b ON v.bedrijf_id = b.bedrijf_id', (err, results) => {
+  db.query(' SELECT  v.vacature_id, b.naam AS bedrijf, v.functie, v.contract_type, v.synopsis, v.open, b.logo_link, b.bedrijf_id FROM vacature v JOIN bedrijf b ON v.bedrijf_id = b.bedrijf_id', (err, results) => {
     if (err) return res.status(500).json({ error: err.message })
     res.json(results)
   })
@@ -132,7 +132,6 @@ app.get('/api/student/:id', (req, res) => {
       s.email,
       s.opleiding,
       s.opleidingsjaar,
-      s.bio,
       s.profiel_foto_url,
       v.id AS vaardigheid_id,
       v.naam AS vaardigheid_naam
@@ -370,6 +369,12 @@ app.get('/api/afspraken/bedrijf/:bedrijfId', (req, res) => {
 });
 
 app.get('/api/afspraken', (req, res) => {
+  const gebruikerId = req.query.gebruiker_id;  // gebruiker_id vanuit query
+
+  if (!gebruikerId) {
+    return res.status(400).json({ error: 'gebruiker_id is verplicht' });
+  }
+
   const sql = `
     SELECT 
       s.speeddate_id AS id, 
@@ -377,13 +382,15 @@ app.get('/api/afspraken', (req, res) => {
       st.voornaam, 
       st.naam, 
       s.locatie, 
-      b.naam AS bedrijf_naam
+      b.naam AS bedrijf_naam,
+      s.status
     FROM speeddate s
     JOIN student st ON s.student_id = st.student_id
     JOIN bedrijf b ON s.bedrijf_id = b.bedrijf_id
+    WHERE s.student_id = ? OR s.bedrijf_id = ?
   `;
 
-  db.query(sql, (err, results) => {
+  db.query(sql, [gebruikerId, gebruikerId], (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(results);
   });
@@ -429,6 +436,23 @@ app.delete('/api/speeddate/:id', (req, res) => {
         res.json({ message: 'Afspraak verwijderd en melding verzonden' });
       });
     });
+  });
+});
+
+app.put('/api/speeddate/:id/status', (req, res) => {
+  const speeddateId = req.params.id;
+  const { status } = req.body;
+
+  const sql = `UPDATE speeddate SET status = ? WHERE speeddate_id = ?`;
+
+  db.query(sql, [status, speeddateId], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Speeddate niet gevonden' });
+    }
+
+    res.json({ message: 'Status succesvol bijgewerkt' });
   });
 });
 

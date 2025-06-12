@@ -4,37 +4,33 @@ import axios from 'axios';
 import Navbar from '../Components/AdminNavBar';
 import Footer from '../Components/Footer';
 
-export default function AdminStudentInstellingen() {
-  const { id } = useParams(); // haalt student-id uit de URL
-  const [student, setStudent] = useState(null);
+export default function AdminBedrijfInstellingen() {
+  const { id } = useParams(); // haalt bedrijf-id uit de URL
+  const [bedrijf, setBedrijf] = useState(null);
   const [form, setForm] = useState({
-    voornaam: '',
     naam: '',
-    email: '',
-    adres: '',
-    specialisatie: '',
-    linkedin: ''
+    url: '',
+    locatie: '',
+    vertegenwoordiger: '',
+    telefoon: ''
   });
 
   
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/student/${id}`)
+    axios.get(`http://localhost:5000/api/bedrijf/${id}`)
       .then((res) => {
-        setStudent(res.data);
-        const [firstName, ...lastNameParts] = res.data.name.split(' ');
-        const lastName = lastNameParts.join(' ');
+        setBedrijf(res.data);
         setForm({
-          voornaam: firstName || '',
-          naam: lastName || '',
-          email: res.data.email || '',
-          adres: res.data.adres || '',
-          specialisatie: res.data.specialisatie || '',
-          linkedin: res.data.linkedin || ''
+          naam: res.data.naam || '',
+          url: res.data.url || '',
+          locatie: res.data.locatie || '',
+          vertegenwoordiger: res.data.vertegenwoordiger || '',
+          telefoon: res.data.telefoon || ''
         });
       })
       .catch((err) => {
-        console.error("Fout bij ophalen studentgegevens:", err);
+        console.error("Fout bij ophalen bedrijfgegevens:", err);
       });
   }, [id]);
 
@@ -44,35 +40,27 @@ export default function AdminStudentInstellingen() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.put(`http://localhost:5000/api/student/${id}`, form)
+    axios.put(`http://localhost:5000/api/bedrijf/${id}`, form)
       .then(() => {
         alert("Gegevens succesvol bijgewerkt!");
       })
       .catch((err) => {
-        console.error("Fout bij updaten student:", err);
+        console.error("Fout bij updaten bedrijf:", err);
       });
   };
 
-  if (!student) return <p>Studentgegevens laden...</p>;
+  if (!bedrijf) return <p>Bedrijfgegevens laden...</p>;
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
       <Navbar />
 
       <section style={{ margin: '30px 0', textAlign: 'center' }}>
-        <h2>Studentgegevens aanpassen</h2>
-        <p>Je kan hier de gegevens van <strong>{form.voornaam} {form.naam}</strong> aanpassen.</p>
+        <h2>Bedrijfgegevens aanpassen</h2>
+        <p>Je kan hier de gegevens van <strong>{form.naam}</strong> aanpassen.</p>
       </section>
 
       <form onSubmit={handleSubmit} style={{ maxWidth: '500px', margin: '0 auto' }}>
-        <input 
-          name="voornaam"
-          type="text"
-          placeholder="voornaam"
-          value={form.voornaam}
-          onChange={handleChange}
-          style={inputStyle}
-           />
           <input 
           name="naam"
           type="text"
@@ -82,31 +70,32 @@ export default function AdminStudentInstellingen() {
           style={inputStyle}
            />
         <input
-          name="email"
-          type="email"
-          placeholder="Email"
-          value={form.email}
+          name="url"
+          type="url"
+          placeholder="Url"
+          value={form.url}
           onChange={handleChange}
           style={inputStyle}
         />
         <input
-          name="adres"
-          placeholder="Adres"
-          value={form.adres}
+          name="locatie"
+          placeholder="Locatie"
+          value={form.locatie}
           onChange={handleChange}
           style={inputStyle}
         />
         <input
-          name="specialisatie"
-          placeholder="Specialisatie"
-          value={form.specialisatie}
+          name="vertegenwoordiger"
+          placeholder="Vertegenwoordiger"
+          value={form.vertegenwoordiger}
           onChange={handleChange}
           style={inputStyle}
         />
         <input
-          name="linkedin"
-          placeholder="LinkedIn"
-          value={form.linkedin}
+          name="telefoon"
+          type="number"
+          placeholder="Telefoon"
+          value={form.telefoon}
           onChange={handleChange}
           style={inputStyle}
         />
