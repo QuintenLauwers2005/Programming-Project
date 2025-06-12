@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Components/Navbar';
 
+const Requirement = ({ label, met }) => (
+  <p style={{ margin: '2px 0', fontSize: '0.8em', color: met ? 'green' : 'red' }}>
+    {met ? '✓' : '✗'} {label}
+  </p>
+);
+
 export default function RegistratieBedrijfPage() {
   const [bedrijfsnaam, setBedrijfsnaam] = useState('');
   const [wachtwoord, setWachtwoord] = useState('');
@@ -11,32 +17,56 @@ export default function RegistratieBedrijfPage() {
   const [telefoonnummer, setTelefoonnummer] = useState('');
 
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
+  const [success] = useState(false);
+
+  const [wachtwoordValidatie, setWachtwoordValidatie] = useState({
+    lengte: false,
+    hoofdletter: false,
+    kleineletter: false,
+    cijfer: false,
+    speciaalteken: false,
+  });
+  const [showValidation, setShowValidation] = useState(false);
 
   const navigate = useNavigate();
+
+  const valideerWachtwoord = (pw) => {
+    setWachtwoordValidatie({
+      lengte: pw.length >= 5,
+      hoofdletter: /[A-Z]/.test(pw),
+      kleineletter: /[a-z]/.test(pw),
+      cijfer: /[0-9]/.test(pw),
+      speciaalteken: /[!@#$%^&*(),.?":{}|<>]/.test(pw),
+    });
+  };
+
+  const handleWachtwoordChange = (e) => {
+    const nieuwWachtwoord = e.target.value;
+    setWachtwoord(nieuwWachtwoord);
+    valideerWachtwoord(nieuwWachtwoord);
+  };
 
   const handleLogin = () => {
     navigate('/login');
   };
 
-  const handleSubmit = () => {
-    if (!bedrijfsnaam || !locatie || !wachtwoord || !mail || !vertegenwoordiger || !telefoonnummer) {
-      setError('Vul alle gegevens in');
-      return;
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-    if (wachtwoord.length > 9) {
-      setSuccess(true);
-      setError('');
-      setTimeout(() => {
-      navigate('/login');
-      }, 1500);
-    } else {
-      setSuccess(false);
-      setError('Gebruik een langere wachtwoord');
+    const isWachtwoordGeldig = Object.values(wachtwoordValidatie).every(Boolean);
+
+    if (!bedrijfsnaam || !locatie || !wachtwoord || !mail || !vertegenwoordiger || !telefoonnummer) {
+      setError('Vul alle verplichte velden in');
+      return;
+    }
+    if (!isWachtwoordGeldig) {
+      setError("Je wachtwoord voldoet niet aan alle eisen.");
       return;
     }
-  };
+    setError('');
+    
+    alert('Bedrijfsregistratie verzonden!');
+  };
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
@@ -124,20 +154,24 @@ export default function RegistratieBedrijfPage() {
             }}
             required
           />
-          <input
-            type="password"
-            placeholder="Wachtwoord"
-            value={wachtwoord}
-            onChange={(e) => setWachtwoord(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px',
-              marginBottom: '15px',
-              border: '1px solid #ccc',
-              borderRadius: '4px'
-            }}
-            required
-          />
+          <input
+            type="password"
+            placeholder="Wachtwoord"
+            value={wachtwoord}
+            onChange={handleWachtwoordChange}
+            onFocus={() => setShowValidation(true)}
+            required
+            style={{ width: '100%', padding: '10px', marginBottom: '5px', border: '1px solid #ccc', borderRadius: '4px' }}
+          />
+          {showValidation && (
+            <div style={{ marginBottom: '15px', textAlign: 'left' }}>
+              <Requirement label="Minstens 5 tekens" met={wachtwoordValidatie.lengte} />
+              <Requirement label="Minstens één hoofdletter" met={wachtwoordValidatie.hoofdletter} />
+              <Requirement label="Minstens één kleine letter" met={wachtwoordValidatie.kleineletter} />
+              <Requirement label="Minstens één cijfer" met={wachtwoordValidatie.cijfer} />
+              <Requirement label="Minstens één speciaal teken" met={wachtwoordValidatie.speciaalteken} />
+            </div>
+          )}
           <button
             type="submit"
             onClick={handleSubmit}

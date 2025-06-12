@@ -53,12 +53,15 @@ export default function RegistratieStudentPage() {
     navigate('/login');
   };
 
-  const handleSubmit = async () => {    
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
     const isWachtwoordGeldig = Object.values(wachtwoordValidatie).every(Boolean);
     if (!isWachtwoordGeldig) {
       setError("Je wachtwoord voldoet niet aan alle eisen.");
       return;
     }
+    
     if (
       !Voornaam ||
       !naamAchternaam ||
