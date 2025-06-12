@@ -28,18 +28,21 @@
 
 .vacature-card {
   display: flex;
-  gap: 15px;
-  background-color: #ddd;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-    display: flex;
-    gap: 20px;
-    background-color: #ddd;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    align-items: center;
+  flex-direction: row;
+  gap: 20px;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  padding: 20px;
+  margin-bottom: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  align-items: center;
+}
+
+.vacature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
 .vacature-info {

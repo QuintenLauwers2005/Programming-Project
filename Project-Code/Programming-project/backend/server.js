@@ -80,7 +80,7 @@ app.post('/api/login', (req, res) => {
 
 //vacatures ophalen
 app.get('/api/vacatures', (req, res) => {
-  db.query(' SELECT  v.vacature_id, b.naam AS bedrijf, v.functie, v.contract_type, v.synopsis, v.open, b.kleur, b.logo_link, b.bedrijf_id FROM vacature v JOIN bedrijf b ON v.bedrijf_id = b.bedrijf_id', (err, results) => {
+  db.query(' SELECT  v.vacature_id, b.naam AS bedrijf, v.functie, v.contract_type, v.synopsis, v.open, b.logo_link, b.bedrijf_id FROM vacature v JOIN bedrijf b ON v.bedrijf_id = b.bedrijf_id', (err, results) => {
     if (err) return res.status(500).json({ error: err.message })
     res.json(results)
   })
@@ -495,6 +495,59 @@ app.post('/api/studentenToevoegen', (req, res) => {
       if (err2) return res.status(500).json({ error: 'Fout bij toevoegen student: ' + err2.message });
 
       res.status(201).json({ message: 'Student en gebruiker succesvol toegevoegd.', gebruiker_id: gebruikerId });
+    });
+  });
+});
+
+app.post('/api/bedrijvenToevoegen', (req, res) => {
+  const {
+    naam,
+    locatie,
+    vertegenwoordiger,
+    telefoon,
+    email,
+    wachtwoord
+  } = req.body;
+
+  // 1. Voeg gebruiker toe met rol 'bedrijf'
+  const insertGebruikerSql = `
+    INSERT INTO gebruiker (email, wachtwoord, rol)
+    VALUES (?, ?, 'bedrijf')
+  `;
+
+  db.query(insertGebruikerSql, [email, wachtwoord], (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: 'Fout bij toevoegen gebruiker: ' + err.message });
+    }
+
+    const gebruikerId = result.insertId;
+
+    // 2. Voeg bedrijf toe
+    const insertBedrijfSql = `
+      INSERT INTO bedrijf (
+        bedrijf_id, naam, locatie, vertegenwoordiger, telefoon, logo_link
+      )
+      VALUES (?, ?, ?, ?, ?, ?)
+    `;
+
+    const values = [
+      gebruikerId,   // bedrijf_id = zelfde als gebruiker_id
+      naam,
+      locatie,
+      vertegenwoordiger,
+      telefoon,
+      'logo_'+naam
+    ];
+
+    db.query(insertBedrijfSql, values, (err2) => {
+      if (err2) {
+        return res.status(500).json({ error: 'Fout bij toevoegen bedrijf: ' + err2.message });
+      }
+
+      res.status(201).json({
+        message: 'Bedrijf en gebruiker succesvol toegevoegd.',
+        gebruiker_id: gebruikerId
+      });
     });
   });
 });
