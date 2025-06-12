@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../Assets/VacatureLijst.css';
+import '../Components/VacatureLijst.css';
 import Navbar from '../Components/StudentNavbar';
 import Footer from '../Components/Footer';
 
