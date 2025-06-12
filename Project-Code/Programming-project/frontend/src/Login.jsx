@@ -49,7 +49,9 @@ export default function LoginPage() {
         if(localStorage.getItem('rol') === 'student')
         navigate('/HomePageStudent');
           if(localStorage.getItem('rol') === 'bedrijf')
-        navigate('/BedrijfHomePage');// ga naar home na logins
+        navigate('/BedrijfHomePage');
+      if(localStorage.getItem('rol') === 'admin')
+        navigate('/HomePageAdmin');// ga naar home na logins
       }, 100);
 
     } catch (err) {
