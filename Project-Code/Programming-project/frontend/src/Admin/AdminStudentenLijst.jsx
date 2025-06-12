@@ -69,7 +69,7 @@ function AdminStudentenLijst() {
           {filteredStudenten.map((student) => (
             <div
               key={student.id}
-                onClick={() => navigate(`/student/${student.id}`)}
+                onClick={() => navigate(`/admin/student/${student.id}/profiel`)}
               style={{
                 cursor: 'pointer',
                 width: '200px',

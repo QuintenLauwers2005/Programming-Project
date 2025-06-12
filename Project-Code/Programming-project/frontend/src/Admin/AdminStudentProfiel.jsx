@@ -1,22 +1,25 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Navbar from '../Components/AdminNavBar'
 import Footer from '../Components/Footer';
 
 function AdminStudentProfiel() {
-
+const navigate = useNavigate();
 const [studentData, setStudentData] = useState(null);
-  const studentId = "1"; // kan dynamisch uit route params komen bijvoorbeeld
+const { id } = useParams(); // inplaats van 1, gebruiken we dit, anders altijd zelfde student te zien
+
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/student/${studentId}`)
+    axios.get(`http://localhost:5000/api/student/${id}`)
       .then(res => { 
         setStudentData(res.data);
       })
       .catch(err => {
         console.error('Fout bij ophalen student:', err.message);
       });
-  }, [studentId]);
+  }, [id]);
 
   if (!studentData) return <p>Studentgegevens laden...</p>;
 
@@ -28,11 +31,18 @@ const [studentData, setStudentData] = useState(null);
       {/* Profiel Hoofding */}
       <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>
         <img 
-          src={studentData.profielFotoUrl} 
-          alt={`Profiel van ${studentData.name}`}
+          src={studentData.profielFotoUrl || '/default-avatar.png'} 
+          alt={`Profiel van ${studentData.name || ''}`}
           style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', marginRight: '30px' }} 
         />
         <div>
+          <button onClick={() => navigate(`/admin/student/${studentData.id}/instellingen`)}
+            style={{
+              marginBottom:'10px',
+              border: '2px solid black',
+              padding: '7px'
+            }}>aanpassen
+            </button>
           <h2 style={{ margin: '0 0 10px 0', fontSize: '2em' }}>{studentData.name}</h2>
           <p style={{ margin: '0 0 5px 0', color: '#333', fontSize: '1.1em' }}>{studentData.opleiding}</p>
           <p style={{ margin: '0', color: '#555' }}>{studentData.email}</p>

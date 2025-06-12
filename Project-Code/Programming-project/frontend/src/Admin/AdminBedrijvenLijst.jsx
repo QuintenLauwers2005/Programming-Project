@@ -72,7 +72,7 @@ export default function AdminBedrijvenLijst() {
           {filteredBedrijven.map((bedrijf) => (
             <div
               key={bedrijf.id}
-              onClick={() => navigate(`/bedrijf/${bedrijf.id}`)}
+              onClick={() => navigate(`/admin/bedrijf/${bedrijf.id}/profiel`)}
               style={{
                 cursor: 'pointer',
                 width: '200px',

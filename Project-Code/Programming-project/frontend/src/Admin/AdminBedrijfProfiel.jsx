@@ -95,6 +95,15 @@ export default function AdminBedrijfProfiel() {
       <Navbar />
 
       <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee', marginTop:'70px' }}>
+        
+        <button onClick={() => navigate(`/admin/bedrijf/${companyData.id}/instellingen`)}
+            style={{
+              marginBottom:'10px',
+              marginRight: '5px',
+              border: '2px solid black',
+              padding: '7px'
+            }}>aanpassen
+            </button>
         <img 
           src={`/${companyData.logo_link}`}       
           alt={`Logo van ${companyData.naam}`}
