@@ -7,9 +7,10 @@ import Footer from '../Components/Footer';
 function StudentProfilePage() {
 
 const [studentData, setStudentData] = useState(null);
-  const studentId = "1"; // kan dynamisch uit route params komen bijvoorbeeld
+const studentId = localStorage.getItem('gebruiker_id');
 
   useEffect(() => {
+    
     axios.get(`http://localhost:5000/api/student/${studentId}`)
       .then(res => { 
         setStudentData(res.data);
@@ -24,7 +25,7 @@ const [studentData, setStudentData] = useState(null);
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
     <header style={{marginBottom: '50px'}}>
-      <Navbar/>
+    <Navbar/>
     </header>
       {/* Profiel Hoofding */}
       <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>
