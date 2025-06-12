@@ -134,40 +134,52 @@ export default function VacatureLijst() {
           />
         </div>
 
-        <div className="vacature-list">
-          {filteredVacatures.map((vacature) => (
-            <div key={vacature.vacature_id} className="vacature-card">
-              <div className="logo-blok" >
-                <img 
-          src={`/${vacature.logo_link}`} 
-          alt={`logo van ${vacature.bedrijf}`}
-          style={{ width: '80px', height: '80px', borderRadius: '8px', objectFit: 'cover' }} 
-        /></div>
-              <div className="vacature-info">
-                <p className="bedrijf">{vacature.bedrijf}</p>
-                <p className="beschrijving">{vacature.synopsis}</p>
-                <p className="functie">
-                  Functie: {vacature.functie}<br />
-                  Contract: {vacature.contract_type}
-                </p>
-                <button
-                    onClick={() => handleOpenModal(vacature)}
-                    style={{
-                      padding: '6px 12px',
-                      backgroundColor: '#007bff',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '5px',
-                      cursor: 'pointer',
-                      fontSize: '0.9em'
-                    }}
-                  >
-                    Reserveer gesprek
-                  </button>
-              </div>
-            </div>
-          ))}
+        <section className="enhanced-box">
+  <div className="vacature-wrapper">
+    <div className="vacature-list">
+      {filteredVacatures.map((vacature) => (
+        <div key={vacature.vacature_id} className="vacature-card">
+          <div className="logo-blok">
+            <img
+              src={`/${vacature.logo_link}`}
+              alt={`logo van ${vacature.bedrijf}`}
+              style={{
+                width: '80px',
+                height: '80px',
+                borderRadius: '8px',
+                objectFit: 'cover'
+              }}
+            />
+          </div>
+          <div className="vacature-info">
+            <p className="bedrijf">{vacature.bedrijf}</p>
+            <p className="beschrijving">{vacature.synopsis}</p>
+            <p className="functie">
+              Functie: {vacature.functie}
+              <br />
+              Contract: {vacature.contract_type}
+            </p>
+            <button
+              onClick={() => handleOpenModal(vacature)}
+              style={{
+                padding: '6px 12px',
+                backgroundColor: '#007bff',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                fontSize: '0.9em'
+              }}
+            >
+              Reserveer gesprek
+            </button>
+          </div>
         </div>
+      ))}
+    </div>
+  </div>
+</section>
+
 
         <button className="toonmeer-btn" onClick={() => alert('Toon meer geklikt!')}>Toon meer</button>
       </main>
