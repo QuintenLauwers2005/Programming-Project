@@ -3,6 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../Components/Navbar';
 import axios from 'axios';
 
+const Requirement = ({ label, met }) => (
+  <p style={{ margin: '2px 0', fontSize: '0.8em', color: met ? 'green' : 'red' }}>
+    {met ? '✓' : '✗'} {label}
+  </p>
+);
+
 export default function RegistratieStudentPage() {
   const [Voornaam, setVoornaam] = useState('');
   const [naamAchternaam, setNaamAchternaam] = useState('');
@@ -16,14 +22,43 @@ export default function RegistratieStudentPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
+  const [wachtwoordValidatie, setWachtwoordValidatie] = useState({
+    lengte: false,
+    hoofdletter: false,
+    kleineletter: false,
+    cijfer: false,
+    speciaalteken: false,
+  });
+  const [showValidation, setShowValidation] = useState(false);
+
   const navigate = useNavigate();
+
+  const valideerWachtwoord = (pw) => {
+    setWachtwoordValidatie({
+      lengte: pw.length >= 5,
+      hoofdletter: /[A-Z]/.test(pw),
+      kleineletter: /[a-z]/.test(pw),
+      cijfer: /[0-9]/.test(pw),
+      speciaalteken: /[!@#$%^&*(),.?":{}|<>]/.test(pw),
+    });
+  };
+
+  const handleWachtwoordChange = (e) => {
+    const nieuwWachtwoord = e.target.value;
+    setWachtwoord(nieuwWachtwoord);
+    valideerWachtwoord(nieuwWachtwoord);
+  };
 
   const handleLogin = () => {
     navigate('/login');
   };
 
-  const handleSubmit = async () => {
-    // Validatie
+  const handleSubmit = async () => {    
+    const isWachtwoordGeldig = Object.values(wachtwoordValidatie).every(Boolean);
+    if (!isWachtwoordGeldig) {
+      setError("Je wachtwoord voldoet niet aan alle eisen.");
+      return;
+    }
     if (
       !Voornaam ||
       !naamAchternaam ||
@@ -39,7 +74,7 @@ export default function RegistratieStudentPage() {
       return;
     }
 
-    if (wachtwoord.length <= 9) {
+    if (wachtwoord.length <= 5) {
       setError('Gebruik een langere wachtwoord');
       setSuccess(false);
       return;
@@ -184,20 +219,24 @@ export default function RegistratieStudentPage() {
           }}
           required
         />
-        <input
-          type="password"
-          placeholder="Wachtwoord"
-          value={wachtwoord}
-          onChange={(e) => setWachtwoord(e.target.value)}
-          style={{
-            width: '100%',
-            padding: '10px',
-            marginBottom: '15px',
-            border: '1px solid #ccc',
-            borderRadius: '4px'
-          }}
-          required
-        />
+          <input
+            type="password"
+            placeholder="Wachtwoord"
+            value={wachtwoord}
+            onChange={handleWachtwoordChange}
+            onFocus={() => setShowValidation(true)}
+            required
+            style={{ width: '100%', padding: '10px', marginBottom: '5px', border: '1px solid #ccc', borderRadius: '4px' }}
+          />
+          {showValidation && (
+            <div style={{ marginBottom: '15px' }}>
+              <Requirement label="Minstens 5 tekens" met={wachtwoordValidatie.lengte} />
+              <Requirement label="Minstens één hoofdletter" met={wachtwoordValidatie.hoofdletter} />
+              <Requirement label="Minstens één kleine letter" met={wachtwoordValidatie.kleineletter} />
+              <Requirement label="Minstens één cijfer" met={wachtwoordValidatie.cijfer} />
+              <Requirement label="Minstens één speciaal teken" met={wachtwoordValidatie.speciaalteken} />
+            </div>
+          )}
         <button
           type="button"
           onClick={handleSubmit}
