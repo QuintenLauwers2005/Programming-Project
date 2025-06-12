@@ -4,6 +4,7 @@ import axios from 'axios';
 import Logo from '../Components/Logo';
 import Navbar from '../Components/StudentNavbar';
 import Footer from '../Components/Footer';
+import '../Components/BedrijfPage.css';
 
 export default function StudentBedrijvenLijst() {
   const navigate = useNavigate();
@@ -111,15 +112,7 @@ export default function StudentBedrijvenLijst() {
         </div>
       )}
 
-      <button style={{
-        width: '100%',
-        padding: '16px',
-        border: '1px solid black',
-        backgroundColor: 'white',
-        marginTop: '30px',
-        fontWeight: 'bold',
-        fontSize: '16px'
-      }}>
+      <button className='toonmeer-btn'>
         Toon meer
       </button>
 
