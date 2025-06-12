@@ -58,6 +58,7 @@ export default function Bedrijfsagenda() {
       );
       setNotificatie(`Status gewijzigd naar "${nieuweStatus}" ✅`);
       setTimeout(() => setNotificatie(null), 3000);
+      window.location.reload()
     } catch (err) {
       console.error('Fout bij bijwerken status:', err);
       setNotificatie('❌ Fout bij wijzigen status');
@@ -90,12 +91,14 @@ export default function Bedrijfsagenda() {
                 {afspraak.status === 'bevestigd' ? '❌ Weigeren' : '✅ Bevestigen'}
               </button>
 
+              {/* 
               <button
                 className="cancel-button"
                 onClick={() => handleCancelConfirm(afspraak.id)}
               >
                 Annuleren
               </button>
+              */}
             </div>
           ))
         ) : (

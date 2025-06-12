@@ -112,8 +112,8 @@ useRequireLogin("bedrijf");
       <div className="nav-bar">
         <button className='NavBar-kleur' onClick={() => navigate('/BedrijfHomePage')}>Home</button>
         <button className='NavBar-kleur' onClick={() => navigate('/BedrijfAgenda')}>Speeddates</button>
-        <button className='NavBar-kleur' onClick={() => navigate('/StudentBedrijvenLijst')}>Bedrijven</button>
-        <button className='NavBar-kleur' onClick={() => navigate('/StudentVacatureLijst')}>Vacatures</button>
+        
+        <button className='NavBar-kleur' onClick={() => navigate('/BedrijfVacaturelijst')}>Vacatures</button>
       </div>
     </div>
   );

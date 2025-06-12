@@ -29,6 +29,7 @@ import StudentBedrijvenLijst from './studenten/bedrijvenpagestudent';
 import StudentVacatureLijst from './studenten/VacatureLijstStudenten';
 import Bedrijfsagenda from './bedrijven/BedrijfsAgenda';
 import BedrijfBedrijfProfilePage from './bedrijven/BedrijfBedrijfprofiel';
+import BedrijfVacatureLijst from './bedrijven/BedrijfVacatures';
 
 
 
@@ -67,6 +68,8 @@ function App() {
         <Route path="/StudentVacatureLijst" element={<StudentVacatureLijst />} />
         <Route path="/BedrijfAgenda" element={<Bedrijfsagenda />} />
         <Route path="/BedrijfBedrijfProfilePage" element={<BedrijfBedrijfProfilePage />} />
+        <Route path="/BedrijfVacaturelijst" element={<BedrijfVacatureLijst />} />
+        
 
 
 
