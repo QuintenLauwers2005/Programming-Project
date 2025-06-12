@@ -5,11 +5,10 @@ import Navbar from '../Components/StudentNavbar';
 import Footer from '../Components/Footer';
 
 export default function StudentVacatureLijst() {
-  const [vacatures, setVacatures] = useState([]);
+const [vacatures, setVacatures] = useState([]);
   const [filteredVacatures, setFilteredVacatures] = useState([]);
   const [selectedVacature, setSelectedVacature] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [filters, setFilters] = useState({
     bedrijf: '',
@@ -57,30 +56,32 @@ export default function StudentVacatureLijst() {
     setFilteredVacatures(filtered);
   }, [filters, vacatures]);
 
-  // Handle selecting a vacature and showing the modal
-  const handleSelectVacature = (vacature) => {
-    setSelectedVacature(vacature);
-    setShowModal(true);
-  };
 
   // Handle form submission
   const handleConfirm = () => {
-    if (!selectedDate || !selectedTime) {
-      alert('Kies een datum en tijdstip');
+    if (!selectedTime) {
+      alert('Kies een tijdstip');
       return;
     }
 
-    // Store the selected date and time
-    const selectedData = {
-      vacatureId: selectedVacature.vacature_id,
-      date: selectedDate,
-      time: selectedTime
-    };
-
     // Save to localStorage or send to backend
     // For now, just redirect to Agenda with query params
-    window.location.href = `/Agenda?vacatureId=${selectedVacature.vacature_id}&date=${selectedDate}&time=${selectedTime}`;
-    setShowModal(false);
+    axios.post('http://localhost:5000/api/speeddate', {
+    student_id: localStorage.getItem("gebruiker_id"),
+    bedrijf_id: selectedVacature.bedrijf_id,
+    tijdstip: selectedTime + ':00',
+    locatie: 'Aula 1', 
+    status: 'bevestigd'
+    })
+    .then(() => {
+      alert('Afspraak succesvol vastgelegd!');
+      setShowModal(false);
+      })
+      .catch(err => {
+      alert(err.response?.data?.error || 'Er ging iets mis bij het reserveren.');
+      });
+
+    
   };
   const generateTimeOptions = () => {
     const options = [];
@@ -91,6 +92,11 @@ export default function StudentVacatureLijst() {
       }
     }
     return options;
+  };
+  const handleOpenModal = (vacature) => {
+    setSelectedVacature(vacature);
+    setSelectedTime('');
+    setShowModal(true);
   };
 
   return (
@@ -134,6 +140,7 @@ export default function StudentVacatureLijst() {
               <div className="logo-blok" >
                 <img 
           src={`/${vacature.logo_link}`} 
+          alt={`logo van ${vacature.bedrijf}`}
           style={{ width: '80px', height: '80px', borderRadius: '8px', objectFit: 'cover' }} 
         /></div>
               <div className="vacature-info">
@@ -143,12 +150,20 @@ export default function StudentVacatureLijst() {
                   Functie: {vacature.functie}<br />
                   Contract: {vacature.contract_type}
                 </p>
-                <button 
-                  className="reserveer-btn" 
-                  onClick={() => handleSelectVacature(vacature)}
-                >
-                  Reserveer gesprek
-                </button>
+                <button
+                    onClick={() => handleOpenModal(vacature)}
+                    style={{
+                      padding: '6px 12px',
+                      backgroundColor: '#007bff',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '5px',
+                      cursor: 'pointer',
+                      fontSize: '0.9em'
+                    }}
+                  >
+                    Reserveer gesprek
+                  </button>
               </div>
             </div>
           ))}
