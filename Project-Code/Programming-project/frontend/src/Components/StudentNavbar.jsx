@@ -8,7 +8,7 @@ import useRequireLogin from "./Functies";
 function Navbar(){
 
   const navigate = useNavigate();
-  const homepagePath = "/";
+  const homepagePath = "/HomePageStudent";
 
   const [showNotifications, setShowNotifications] = useState(false);
   const [meldingen, setMeldingen] = useState([]);
@@ -83,7 +83,7 @@ useRequireLogin("student");
         <Link to={homepagePath}>
           <Logo className="logo" />
         </Link>
-        <button className="login-btn" onClick={() => navigate('/login')}>{localStorage.getItem('naam')}</button>
+        <button className="login-btn" onClick={() => navigate('/StudentProfilePage')}>{localStorage.getItem('naam')}</button>
         <div className="navigatie-button-popout">
           <button className="notificatie-btn" ref={buttonRef} onClick={toggleNotifications} style={{ position: 'relative' }}>
   🔔{meldingen.some(m => !m.gelezen) && (
@@ -110,10 +110,10 @@ useRequireLogin("student");
       </div>
 
       <div className="nav-bar">
-        <button className='NavBar-kleur' onClick={() => navigate('/')}>Home</button>
-        <button className='NavBar-kleur' onClick={() => navigate('/Agenda')}>Speeddates</button>
-        <button className='NavBar-kleur' onClick={() => navigate('/BedrijvenLijst')}>Bedrijven</button>
-        <button className='NavBar-kleur' onClick={() => navigate('/Vacaturelijst')}>Vacatures</button>
+        <button className='NavBar-kleur' onClick={() => navigate('/HomePageStudent')}>Home</button>
+        <button className='NavBar-kleur' onClick={() => navigate('/AgendaStudenten')}>Speeddates</button>
+        <button className='NavBar-kleur' onClick={() => navigate('/StudentBedrijvenLijst')}>Bedrijven</button>
+        <button className='NavBar-kleur' onClick={() => navigate('/StudentVacatureLijst')}>Vacatures</button>
       </div>
     </div>
   );

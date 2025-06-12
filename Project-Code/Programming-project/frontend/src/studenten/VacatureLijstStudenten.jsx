@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './Assets/VacatureLijst.css';
-import Navbar from './Components/StudentNavbar';
-import Footer from './Components/Footer';
+import '../Assets/VacatureLijst.css';
+import Navbar from '../Components/StudentNavbar';
+import Footer from '../Components/Footer';
 
-export default function VacatureLijst() {
+export default function StudentVacatureLijst() {
   const [vacatures, setVacatures] = useState([]);
   const [filteredVacatures, setFilteredVacatures] = useState([]);
   const [selectedVacature, setSelectedVacature] = useState(null);
