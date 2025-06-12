@@ -4,7 +4,7 @@ import Navbar from './Components/Navbar';
 import Footer from '../Components/Footer';
 import axios from 'axios';  // axios import toevoegen
 
-export default function Agenda() {
+export default function bedrijfsagenda() {
   const [afspraken, setAfspraken] = useState([]);
   const [showInfo, setShowInfo] = useState(false);
   const [cancelId, setCancelId] = useState(null);
