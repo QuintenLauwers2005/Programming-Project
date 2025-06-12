@@ -26,7 +26,7 @@ import AgendaStudenten from './studenten/AgendaStudenten';
 import BedrijfProfileStudent from './studenten/bedrijfProfielStudent';
 import StudentBedrijvenLijst from './studenten/bedrijvenpagestudent';
 import StudentVacatureLijst from './studenten/VacatureLijstStudenten';
-import BedrijfAgenda from './bedrijven/BedrijfsAgenda';
+import Bedrijfsagenda from './bedrijven/BedrijfsAgenda';
 
 
 function App() {
@@ -59,7 +59,7 @@ function App() {
         <Route path="/BedrijfProfileStudent" element={<BedrijfProfileStudent />} />
         <Route path="/StudentBedrijvenLijst" element={<StudentBedrijvenLijst />} />
         <Route path="/StudentVacatureLijst" element={<StudentVacatureLijst />} />
-        <Route path="/BedrijfAgenda" element={<BedrijfAgenda />} />
+        <Route path="/BedrijfAgenda" element={<Bedrijfsagenda />} />
 
 
 

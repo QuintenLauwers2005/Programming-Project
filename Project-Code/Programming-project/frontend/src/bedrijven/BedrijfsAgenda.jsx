@@ -3,7 +3,7 @@ import '../Assets/Agenda.css';
 import Navbar from '../Components/BedrijfNavBar';
 import Footer from '../Components/Footer';
 
-export default function BedrijfAgenda() {
+export default function bedrijfsagenda() {
   const [afspraken, setAfspraken] = useState([]);
   const [showInfo, setShowInfo] = useState(false);
   const [cancelId, setCancelId] = useState(null);
