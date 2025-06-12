@@ -443,18 +443,70 @@ app.put('/api/speeddate/:id/status', (req, res) => {
   const speeddateId = req.params.id;
   const { status } = req.body;
 
-  const sql = `UPDATE speeddate SET status = ? WHERE speeddate_id = ?`;
+  console.log('PUT /api/speeddate/:id/status', { speeddateId, status });
 
-  db.query(sql, [status, speeddateId], (err, result) => {
-    if (err) return res.status(500).json({ error: err.message });
+  const updateSql = `UPDATE speeddate SET status = ? WHERE speeddate_id = ?`;
+
+  db.query(updateSql, [status, speeddateId], (err, result) => {
+    if (err) {
+      console.error('SQL error bij update status:', err);
+      return res.status(500).json({ error: err.message });
+    }
 
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Speeddate niet gevonden' });
     }
 
-    res.json({ message: 'Status succesvol bijgewerkt' });
+    if (status === 'geweigerd') {
+      const selectSql = `
+        SELECT s.student_id, g.gebruiker_id
+        FROM speeddate sp
+        JOIN student s ON sp.student_id = s.student_id
+        JOIN gebruiker g ON s.student_id = g.gebruiker_id
+        WHERE sp.speeddate_id = ?
+      `;
+
+      db.query(selectSql, [speeddateId], (err, rows) => {
+        if (err) {
+          console.error('SQL error bij ophalen gebruiker:', err);
+          return res.status(500).json({ error: err.message });
+        }
+
+        if (rows.length === 0) {
+          return res.status(404).json({ error: 'Student niet gevonden voor deze speeddate' });
+        }
+
+        const gebruiker_id = rows[0].gebruiker_id;
+
+        const insertMelding = `
+          INSERT INTO melding (gebruiker_id, boodschap, gelezen, datum)
+          VALUES (?, 'Je speeddate werd geweigerd door het bedrijf.', 0, NOW())
+        `;
+
+        db.query(insertMelding, [gebruiker_id], (err) => {
+          if (err) {
+            console.error('SQL error bij toevoegen melding:', err);
+            return res.status(500).json({ error: err.message });
+          }
+
+          const deleteSql = `DELETE FROM speeddate WHERE speeddate_id = ?`;
+          db.query(deleteSql, [speeddateId], (err) => {
+            if (err) {
+              console.error('SQL error bij verwijderen speeddate:', err);
+              return res.status(500).json({ error: err.message });
+            }
+
+            return res.json({ message: 'Speeddate geweigerd, student geïnformeerd, en verwijderd.' });
+          });
+        });
+      });
+    } else {
+      res.json({ message: 'Status succesvol bijgewerkt' });
+    }
   });
 });
+
+
 
 
 app.get('/api/meldingen/:gebruikerId', (req, res) => {

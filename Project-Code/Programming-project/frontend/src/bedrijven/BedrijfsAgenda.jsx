@@ -90,12 +90,14 @@ export default function Bedrijfsagenda() {
                 {afspraak.status === 'bevestigd' ? '❌ Weigeren' : '✅ Bevestigen'}
               </button>
 
+              {/* 
               <button
                 className="cancel-button"
                 onClick={() => handleCancelConfirm(afspraak.id)}
               >
                 Annuleren
               </button>
+              */}
             </div>
           ))
         ) : (
