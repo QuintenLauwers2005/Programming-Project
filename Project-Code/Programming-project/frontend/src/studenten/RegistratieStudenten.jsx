@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Components/Navbar';
+import axios from 'axios';
 
 export default function RegistratieStudentPage() {
+  const [Voornaam, setVoornaam] = useState('');
   const [naamAchternaam, setNaamAchternaam] = useState('');
   const [mail, setMail] = useState('');
   const [opleiding, setOpleiding] = useState('');
@@ -14,14 +16,16 @@ export default function RegistratieStudentPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleLogin = () => {
     navigate('/login');
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    // Validatie
     if (
+      !Voornaam ||
       !naamAchternaam ||
       !mail ||
       !opleiding ||
@@ -31,150 +35,183 @@ export default function RegistratieStudentPage() {
       !wachtwoord
     ) {
       setError('Vul alle gegevens in');
+      setSuccess(false);
       return;
     }
 
-    if (wachtwoord.length > 9) {
-      setSuccess(true);
-      setError('');
-    } else {
-      setSuccess(false);
+    if (wachtwoord.length <= 9) {
       setError('Gebruik een langere wachtwoord');
+      setSuccess(false);
       return;
+    }
+
+    setError('');
+
+    try {
+      // POST naar backend
+      const response = await axios.post('http://localhost:5000/api/studentenToevoegen', {
+        voornaam: Voornaam,
+        naam: naamAchternaam,
+        email: mail,
+        wachtwoord: wachtwoord,
+        opleiding: opleiding,
+        specialisatie: specialisatie,
+        opleidingsjaar: Number(opleidingsjaar), // Zorg dat dit een nummer is
+        adres: adres
+      });
+
+      if (response.status === 201) {
+        setSuccess(true);
+        setError('');
+        // Optioneel: na registratie doorsturen naar login
+        // navigate('/login');
+      }
+    } catch (err) {
+      setError(err.response?.data?.error || 'Er is iets misgegaan');
+      setSuccess(false);
     }
   };
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
-      {/* Navigatie */}
       <header>
         <Navbar />
       </header>
 
-
       <section style={{ margin: '30px 0', textAlign: 'center' }}>
         <h2>Registreer als Student</h2>
-        <p>
-          Vul onderstaande gegevens in om je te registreren.
-        </p>
+        <p>Vul onderstaande gegevens in om je te registreren.</p>
       </section>
 
       <section style={{ maxWidth: '400px', margin: '0 auto', padding: '20px' }}>
-        <form>
-          <input
-            type="text"
-            placeholder="Naam + Achternaam"
-            value={naamAchternaam}
-            onChange={(e) => setNaamAchternaam(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px',
-              marginBottom: '15px',
-              border: '1px solid #ccc',
-              borderRadius: '4px'
-            }}
-            required
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            value={mail}
-            onChange={(e) => setMail(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px',
-              marginBottom: '15px',
-              border: '1px solid #ccc',
-              borderRadius: '4px'
-            }}
-            required
-          />
-          <input
-            type="text"
-            placeholder="Opleiding"
-            value={opleiding}
-            onChange={(e) => setOpleiding(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px',
-              marginBottom: '15px',
-              border: '1px solid #ccc',
-              borderRadius: '4px'
-            }}
-            required
-          />
-          <input
-            type="text"
-            placeholder="Specialisatie"
-            value={specialisatie}
-            onChange={(e) => setSpecialisatie(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px',
-              marginBottom: '15px',
-              border: '1px solid #ccc',
-              borderRadius: '4px'
-            }}
-            required
-          />
-          <input
-            type="text"
-            placeholder="Opleidingsjaar"
-            value={opleidingsjaar}
-            onChange={(e) => setOpleidingsjaar(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px',
-              marginBottom: '15px',
-              border: '1px solid #ccc',
-              borderRadius: '4px'
-            }}
-            required
-          />
-          <input
-            type="text"
-            placeholder="Adres"
-            value={adres}
-            onChange={(e) => setAdres(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px',
-              marginBottom: '15px',
-              border: '1px solid #ccc',
-              borderRadius: '4px'
-            }}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Wachtwoord"
-            value={wachtwoord}
-            onChange={(e) => setWachtwoord(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px',
-              marginBottom: '15px',
-              border: '1px solid #ccc',
-              borderRadius: '4px'
-            }}
-            required
-          />
-          <button
-            type="submit"
-            onClick={handleSubmit}
-            style={{
-              width: '100%',
-              padding: '10px',
-              backgroundColor: '#4a90e2',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer'
-            }}
-          >
-            Registreer
-          </button>
-        </form>
+        <input
+          type="text"
+          placeholder="Voornaam"
+          value={Voornaam}
+          onChange={(e) => setVoornaam(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '10px',
+            marginBottom: '15px',
+            border: '1px solid #ccc',
+            borderRadius: '4px'
+          }}
+          required
+        />
+
+        <input
+          type="text"
+          placeholder="Achternaam"
+          value={naamAchternaam}
+          onChange={(e) => setNaamAchternaam(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '10px',
+            marginBottom: '15px',
+            border: '1px solid #ccc',
+            borderRadius: '4px'
+          }}
+          required
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={mail}
+          onChange={(e) => setMail(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '10px',
+            marginBottom: '15px',
+            border: '1px solid #ccc',
+            borderRadius: '4px'
+          }}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Opleiding"
+          value={opleiding}
+          onChange={(e) => setOpleiding(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '10px',
+            marginBottom: '15px',
+            border: '1px solid #ccc',
+            borderRadius: '4px'
+          }}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Specialisatie"
+          value={specialisatie}
+          onChange={(e) => setSpecialisatie(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '10px',
+            marginBottom: '15px',
+            border: '1px solid #ccc',
+            borderRadius: '4px'
+          }}
+          required
+        />
+        <input
+          type="number"
+          placeholder="Opleidingsjaar"
+          value={opleidingsjaar}
+          onChange={(e) => setOpleidingsjaar(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '10px',
+            marginBottom: '15px',
+            border: '1px solid #ccc',
+            borderRadius: '4px'
+          }}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Adres"
+          value={adres}
+          onChange={(e) => setAdres(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '10px',
+            marginBottom: '15px',
+            border: '1px solid #ccc',
+            borderRadius: '4px'
+          }}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Wachtwoord"
+          value={wachtwoord}
+          onChange={(e) => setWachtwoord(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '10px',
+            marginBottom: '15px',
+            border: '1px solid #ccc',
+            borderRadius: '4px'
+          }}
+          required
+        />
+        <button
+          type="button"
+          onClick={handleSubmit}
+          style={{
+            width: '100%',
+            padding: '10px',
+            backgroundColor: '#4a90e2',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer'
+          }}
+        >
+          Registreer
+        </button>
         {error && <p style={{ color: 'red', marginTop: '15px' }}>{error}</p>}
         {success && <p style={{ color: 'green', marginTop: '15px' }}>Registratie is compleet!</p>}
       </section>

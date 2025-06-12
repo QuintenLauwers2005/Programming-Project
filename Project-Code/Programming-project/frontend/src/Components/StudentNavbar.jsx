@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Logo from './Logo'
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import useRequireLogin from "./Functies";
 
 function Navbar(){
 
@@ -22,7 +23,7 @@ const toggleNotifications = () => {
     const next = !prev;
 
     if (next) {
-      setMeldingen(prevMeldingen =>
+      setMeldingen(prevMeldingen =>   
         prevMeldingen.map(melding => ({ ...melding, gelezen: true }))
       );
     }
@@ -73,14 +74,16 @@ useEffect(() => {
     .catch(err => console.error("Fout bij verwijderen:", err));
 };
 
-
+useRequireLogin("student");
   return(
+
+    
     <div>
       <div className="top-bar">
         <Link to={homepagePath}>
           <Logo className="logo" />
         </Link>
-        <button className="login-btn" onClick={() => navigate('/login')}>Login</button>
+        <button className="login-btn" onClick={() => navigate('/login')}>{localStorage.getItem('naam')}</button>
         <div className="navigatie-button-popout">
           <button className="notificatie-btn" ref={buttonRef} onClick={toggleNotifications} style={{ position: 'relative' }}>
   🔔{meldingen.some(m => !m.gelezen) && (
