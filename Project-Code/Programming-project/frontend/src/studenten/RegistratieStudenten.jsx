@@ -63,8 +63,9 @@ export default function RegistratieStudentPage() {
       if (response.status === 201) {
         setSuccess(true);
         setError('');
-        // Optioneel: na registratie doorsturen naar login
-        // navigate('/login');
+        setTimeout(() => {
+        navigate('/login');
+        }, 2000); 
       }
     } catch (err) {
       setError(err.response?.data?.error || 'Er is iets misgegaan');
