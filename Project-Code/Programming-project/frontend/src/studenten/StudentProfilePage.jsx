@@ -1,18 +1,23 @@
 // StudentProfilePage.jsx
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import Navbar from '../Components/StudentNavbar'
+import { useNavigate } from 'react-router-dom';
+import Navbar from '../Components/StudentNavbar';
 import Footer from '../Components/Footer';
 
 function StudentProfilePage() {
+  const [studentData, setStudentData] = useState(null);
+  const studentId = localStorage.getItem('gebruiker_id');
+  const navigate = useNavigate();
 
-const [studentData, setStudentData] = useState(null);
-const studentId = localStorage.getItem('gebruiker_id');
+  const handleLogout = () => {
+    localStorage.clear();         // Verwijder gebruiker_id en andere data
+    navigate('/login');           // Navigeer naar loginpagina
+  };
 
   useEffect(() => {
-    
     axios.get(`http://localhost:5000/api/student/${studentId}`)
-      .then(res => { 
+      .then(res => {
         setStudentData(res.data);
       })
       .catch(err => {
@@ -24,15 +29,31 @@ const studentId = localStorage.getItem('gebruiker_id');
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
-    <header style={{marginBottom: '50px'}}>
-    <Navbar/>
-    </header>
+      <header style={{ marginBottom: '50px' }}>
+        <Navbar />
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+          <button
+            onClick={handleLogout}
+            style={{
+              backgroundColor: '#dc3545',
+              color: 'white',
+              border: 'none',
+              padding: '10px 15px',
+              borderRadius: '5px',
+              cursor: 'pointer'
+            }}
+          >
+            Uitloggen
+          </button>
+        </div>
+      </header>
+
       {/* Profiel Hoofding */}
       <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>
-        <img 
-          src={studentData.profielFotoUrl} 
+        <img
+          src={studentData.profielFotoUrl}
           alt={`Profiel van ${studentData.name}`}
-          style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', marginRight: '30px' }} 
+          style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', marginRight: '30px' }}
         />
         <div>
           <h2 style={{ margin: '0 0 10px 0', fontSize: '2em' }}>{studentData.name}</h2>
@@ -59,10 +80,16 @@ const studentId = localStorage.getItem('gebruiker_id');
       <section style={{ marginBottom: '30px', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
         <h3 style={{ borderBottom: '2px solid #ddd', paddingBottom: '10px', marginBottom: '20px', color: '#333' }}>Vaardigheden</h3>
         <ul style={{ listStyleType: 'none', padding: 0, display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-          {studentData.vaardigheden.map((vaardigheid) => ( // index is niet meer nodig als vaardigheid een id heeft
-            <li 
-              key={vaardigheid.id || vaardigheid.naam} // Gebruik unieke ID van vaardigheid, of naam als fallback
-              style={{ backgroundColor: '#007bff', color: 'white', padding: '8px 15px', borderRadius: '20px', fontSize: '0.9em' }}
+          {studentData.vaardigheden.map((vaardigheid) => (
+            <li
+              key={vaardigheid.id || vaardigheid.naam}
+              style={{
+                backgroundColor: '#007bff',
+                color: 'white',
+                padding: '8px 15px',
+                borderRadius: '20px',
+                fontSize: '0.9em'
+              }}
             >
               {vaardigheid.naam}
             </li>
@@ -71,7 +98,7 @@ const studentId = localStorage.getItem('gebruiker_id');
       </section>
 
       <footer>
-       <Footer />
+        <Footer />
       </footer>
     </div>
   );

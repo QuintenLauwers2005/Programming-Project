@@ -43,7 +43,7 @@ export default function LoginPage() {
         localStorage.setItem('Bedrijf_Logo',logo_link); // schoonmaken indien geen naam
       }
 
-      alert(message || 'Succesvol ingelogd!');
+      console.log(message);
 
       setTimeout(() => {
         if(localStorage.getItem('rol') === 'student')
