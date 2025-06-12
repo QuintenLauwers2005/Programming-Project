@@ -8,8 +8,9 @@ export default function AgendaStudenten() {
   const [afspraken, setAfspraken] = useState([]);
   const [showInfo, setShowInfo] = useState(false);
   const [cancelId, setCancelId] = useState(null);
-  const gebruiker_id = localStorage.getItem('gebruiker_id');
+  
   useEffect(() => {
+    const gebruiker_id = localStorage.getItem('gebruiker_id');
     if (!gebruiker_id) return;
 
     fetch(`http://localhost:5000/api/afspraken?gebruiker_id=${gebruiker_id}`)
