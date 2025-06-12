@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Components/Navbar';
 import axios from 'axios';
+import eyeIconPath from './Assets/eye-empty.svg';
+import eyeSlashIconPath from './Assets/eye-off.svg';
+import Footer from './Components/Footer';
+
 
 export default function LoginPage() {
   const navigate = useNavigate();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,7 +46,7 @@ export default function LoginPage() {
       alert(message || 'Succesvol ingelogd!');
 
       setTimeout(() => {
-        if(localStorage.getItem('rol') == 'student')
+        if(localStorage.getItem('rol') === 'student')
         navigate('/HomePageStudent');  // ga naar home na logins
       }, 100);
 
@@ -67,8 +71,8 @@ export default function LoginPage() {
 
       <section style={{ maxWidth: '400px', margin: '0 auto', padding: '20px' }}>
         <form onSubmit={handleSubmit}>
-          <div>
-            <label>Email:</label><br />
+          <div style={{ marginBottom: '15px' }}>
+            <label style={{ display: 'block', marginBottom: '5px' }}>Email:</label>
             <input
               type="email"
               value={email}
@@ -77,30 +81,57 @@ export default function LoginPage() {
               style={{
                 width: '100%',
                 padding: '10px',
-                marginBottom: '15px',
                 border: '1px solid #ccc',
                 borderRadius: '4px',
+                boxSizing: 'border-box' // Belangrijk voor consistente breedte
               }}
               placeholder="Email"
             />
           </div>
 
-          <div>
-            <label>Wachtwoord:</label><br />
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              style={{
-                width: '100%',
-                padding: '10px',
-                marginBottom: '15px',
-                border: '1px solid #ccc',
-                borderRadius: '4px',
-              }}
-              placeholder="Wachtwoord"
-            />
+          <div style={{ marginBottom: '15px' }}>
+            <label style={{ display: 'block', marginBottom: '5px' }}>Wachtwoord:</label>
+            {/* Wrapper div met position: relative */}
+            <div style={{ position: 'relative', width: '100%' }}>
+              <input
+                type={passwordVisible ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                style={{
+                  width: '100%',
+                  padding: '10px 40px 10px 10px', // Padding rechts voor het icoon
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                  boxSizing: 'border-box' // Belangrijk voor consistente breedte
+                }}
+                placeholder="Wachtwoord"
+              />
+              <button 
+                type="button"
+                onClick={() => setPasswordVisible(!passwordVisible)}
+                style={{
+                  position: 'absolute',
+                  right: '0px',
+                  top: '0px',
+                  height: '100%',
+                  width: '40px',
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                {/* Gebruik de geïmporteerde SVG-bestanden in een <img> tag */}
+                <img 
+                  src={passwordVisible ? eyeSlashIconPath : eyeIconPath} 
+                  alt="Wachtwoord zichtbaarheid wisselen" 
+                  style={{ height: '20px', width: '20px', opacity: 0.7 }} 
+                />
+              </button>
+            </div>
           </div>
 
           <button
@@ -137,18 +168,8 @@ export default function LoginPage() {
         </p>
       </section>
 
-      <footer
-        style={{
-          backgroundColor: '#333',
-          color: '#fff',
-          padding: '20px',
-          marginTop: '40px',
-          textAlign: 'center',
-        }}
-      >
-        <h5>Contact</h5>
-        <p>info@careerlaunch.be</p>
-        <p>EhB - Erasmushogeschool Brussel</p>
+      <footer>
+       <Footer />
       </footer>
     </div>
   );
