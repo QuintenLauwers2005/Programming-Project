@@ -3,11 +3,12 @@ import React, { useState, useEffect, useRef } from "react";
 import Logo from './Logo'
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import useRequireLogin from "./Functies";
 
 function Navbar(){
 
   const navigate = useNavigate();
-  const homepagePath = "/";
+  const homepagePath = "/BedrijfHomePage";
 
   const [showNotifications, setShowNotifications] = useState(false);
   const [meldingen, setMeldingen] = useState([]);
@@ -17,8 +18,18 @@ function Navbar(){
   // ⚠️ Pas deze aan op basis van je auth/opslagmethode
   const gebruikerId = localStorage.getItem("gebruiker_id") || 2; // test: bedrijf 2 (SAP)
 
-  const toggleNotifications = () => {
-    setShowNotifications((prev) => !prev);
+const toggleNotifications = () => {
+  setShowNotifications((prev) => {
+    const next = !prev;
+
+    if (next) {
+      setMeldingen(prevMeldingen =>   
+        prevMeldingen.map(melding => ({ ...melding, gelezen: true }))
+      );
+    }
+
+    return next;
+  });
   };
 
   const handleClickOutside = (event) => {
@@ -31,24 +42,24 @@ function Navbar(){
     }
   };
 
- useEffect(() => {
-   fetch(`http://localhost:5000/api/meldingen/${gebruikerId}`)
-     .then(res => res.json())
-     .then(data => setMeldingen(data))
-     .catch(err => console.error("Meldingen ophalen mislukt:", err));
- }, [gebruikerId]);
- 
- useEffect(() => {
-   if (showNotifications) {
-     document.addEventListener("mousedown", handleClickOutside);
-   } else {
-     document.removeEventListener("mousedown", handleClickOutside);
-   }
- 
-   return () => {
-     document.removeEventListener("mousedown", handleClickOutside);
-   };
- }, [showNotifications]);
+  useEffect(() => {
+  fetch(`http://localhost:5000/api/meldingen/${gebruikerId}`)
+    .then(res => res.json())
+    .then(data => setMeldingen(data))
+    .catch(err => console.error("Meldingen ophalen mislukt:", err));
+}, [gebruikerId]);
+
+useEffect(() => {
+  if (showNotifications) {
+    document.addEventListener("mousedown", handleClickOutside);
+  } else {
+    document.removeEventListener("mousedown", handleClickOutside);
+  }
+
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, [showNotifications]);
 
 
   const verwijderMelding = (id) => {
@@ -63,16 +74,18 @@ function Navbar(){
     .catch(err => console.error("Fout bij verwijderen:", err));
 };
 
-
+useRequireLogin("bedrijf");
   return(
+
+    
     <div>
       <div className="top-bar">
         <Link to={homepagePath}>
           <Logo className="logo" />
         </Link>
-        <button className="login-btn" onClick={() => navigate('/login')}>Login</button>
+        <button className="login-btn" onClick={() => navigate('/StudentProfilePage')}>{localStorage.getItem('Bedrijf_Logo')}</button>
         <div className="navigatie-button-popout">
-         <button className="notificatie-btn" ref={buttonRef} onClick={toggleNotifications} style={{ position: 'relative' }}>
+          <button className="notificatie-btn" ref={buttonRef} onClick={toggleNotifications} style={{ position: 'relative' }}>
   🔔{meldingen.some(m => !m.gelezen) && (
               <span
                 style={{position: 'absolute',top: 0,right: 0,width: '10px',
@@ -97,10 +110,10 @@ function Navbar(){
       </div>
 
       <div className="nav-bar">
-        <button className='NavBar-kleur' onClick={() => navigate('/')}>Home</button>
-        <button className='NavBar-kleur' onClick={() => navigate('/Agenda')}>Speeddates</button>
-        <button className='NavBar-kleur' onClick={() => navigate('/BedrijvenLijst')}>Bedrijven</button>
-        <button className='NavBar-kleur' onClick={() => navigate('/Vacaturelijst')}>Vacatures</button>
+        <button className='NavBar-kleur' onClick={() => navigate('/BedrijfHomePage')}>Home</button>
+        <button className='NavBar-kleur' onClick={() => navigate('/BedrijfAgenda')}>Speeddates</button>
+        <button className='NavBar-kleur' onClick={() => navigate('/StudentBedrijvenLijst')}>Bedrijven</button>
+        <button className='NavBar-kleur' onClick={() => navigate('/StudentVacatureLijst')}>Vacatures</button>
       </div>
     </div>
   );

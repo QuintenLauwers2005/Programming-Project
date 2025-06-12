@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import './Assets/Agenda.css';
-import Navbar from './Components/Navbar';
+import '../Assets/Agenda.css';
+import Navbar from '../Components/BedrijfNavBar';
 import Footer from '../Components/Footer';
 
-export default function Agenda() {
+export default function BedrijfAgenda() {
   const [afspraken, setAfspraken] = useState([]);
   const [showInfo, setShowInfo] = useState(false);
   const [cancelId, setCancelId] = useState(null);
