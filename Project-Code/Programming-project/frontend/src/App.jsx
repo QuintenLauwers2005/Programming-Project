@@ -61,7 +61,7 @@ function App() {
         <Route path="/admin/bedrijf/:id/profiel" element={<AdminBedrijfProfiel/>} />
         <Route path="/admin/bedrijf/:id/instellingen" element={<AdminBedrijfInstellingen />} />
         <Route path="/AgendaStudenten" element={<AgendaStudenten />} />
-        <Route path="/BedrijfProfileStudent" element={<BedrijfProfileStudent />} />
+        <Route path="/BedrijfProfileStudent/:id" element={<BedrijfProfileStudent />} />
         <Route path="/StudentBedrijvenLijst" element={<StudentBedrijvenLijst />} />
         <Route path="/StudentVacatureLijst" element={<StudentVacatureLijst />} />
         <Route path="/BedrijfAgenda" element={<Bedrijfsagenda />} />

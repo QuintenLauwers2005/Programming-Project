@@ -72,7 +72,7 @@ export default function StudentBedrijvenLijst() {
           {filteredBedrijven.map((bedrijf) => (
             <div
               key={bedrijf.id}
-              onClick={() => navigate(`/bedrijf/${bedrijf.id}`)}
+              onClick={() => navigate(`/BedrijfProfileStudent/${bedrijf.id}`)}
               style={{
                 cursor: 'pointer',
                 width: '200px',
