@@ -1,5 +1,6 @@
 // HomePage.jsx
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import Navbar from '../Components/BedrijfNavBar'
 import Footer from '../Components/Footer';
 import '../HomePage.css';
