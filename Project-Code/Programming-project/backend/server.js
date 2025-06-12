@@ -458,11 +458,13 @@ app.put('/api/speeddate/:id/status', (req, res) => {
     }
 
     if (status === 'geweigerd') {
+      // Hier voegen we de bedrijfsnaam toe in de join
       const selectSql = `
-        SELECT s.student_id, g.gebruiker_id
+        SELECT s.student_id, g.gebruiker_id, b.naam AS bedrijfsnaam
         FROM speeddate sp
         JOIN student s ON sp.student_id = s.student_id
         JOIN gebruiker g ON s.student_id = g.gebruiker_id
+        JOIN bedrijf b ON sp.bedrijf_id = b.bedrijf_id
         WHERE sp.speeddate_id = ?
       `;
 
@@ -477,13 +479,16 @@ app.put('/api/speeddate/:id/status', (req, res) => {
         }
 
         const gebruiker_id = rows[0].gebruiker_id;
+        const bedrijfsnaam = rows[0].bedrijfsnaam;
 
         const insertMelding = `
           INSERT INTO melding (gebruiker_id, boodschap, gelezen, datum)
-          VALUES (?, 'Je speeddate werd geweigerd door het bedrijf.', 0, NOW())
+          VALUES (?, ?, 0, NOW())
         `;
 
-        db.query(insertMelding, [gebruiker_id], (err) => {
+        const boodschap = `Je speeddate werd geweigerd door ${bedrijfsnaam}.`;
+
+        db.query(insertMelding, [gebruiker_id, boodschap], (err) => {
           if (err) {
             console.error('SQL error bij toevoegen melding:', err);
             return res.status(500).json({ error: err.message });
@@ -505,6 +510,7 @@ app.put('/api/speeddate/:id/status', (req, res) => {
     }
   });
 });
+
 
 
 

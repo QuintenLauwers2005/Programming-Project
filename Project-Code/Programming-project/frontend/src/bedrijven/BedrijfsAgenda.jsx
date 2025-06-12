@@ -58,6 +58,7 @@ export default function Bedrijfsagenda() {
       );
       setNotificatie(`Status gewijzigd naar "${nieuweStatus}" ✅`);
       setTimeout(() => setNotificatie(null), 3000);
+      window.location.reload()
     } catch (err) {
       console.error('Fout bij bijwerken status:', err);
       setNotificatie('❌ Fout bij wijzigen status');
