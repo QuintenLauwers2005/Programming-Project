@@ -7,37 +7,30 @@ import Footer from '../Components/Footer';
 export default function BedrijfVacatureLijst() {
   const [vacatures, setVacatures] = useState([]);
   const [filteredVacatures, setFilteredVacatures] = useState([]);
-  const [selectedVacature, setSelectedVacature] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedTime, setSelectedTime] = useState('');
   const [filters, setFilters] = useState({
     bedrijf: '',
     functie: '',
     contractType: ''
   });
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editVacature, setEditVacature] = useState(null);
+  const bedrijfId = localStorage.getItem("gebruiker_id");
 
-  // Fetch vacatures from API
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/vacatures')
-      .then((res) => {    
-        setVacatures(res.data);
-        setFilteredVacatures(res.data);
-      })
-      .catch((err) => {
-        console.error('Fout bij ophalen vacatures:', err.message);
-      });
-  }, []);
+  // Fetch vacatures
+ useEffect(() => {
+  if (!bedrijfId) return;
 
-  // Handle filter change
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters({
-      ...filters,
-      [name]: value
+  axios.get(`http://localhost:5000/api/vacatures/bedrijf/${bedrijfId}`)
+    .then((res) => {
+      setVacatures(res.data);
+      setFilteredVacatures(res.data);
+    })
+    .catch((err) => {
+      console.error('Fout bij ophalen vacatures:', err.message);
     });
-  };
+}, [bedrijfId]);
 
-  // Apply filters
+  // Filter logic
   useEffect(() => {
     let filtered = vacatures;
 
@@ -56,98 +49,64 @@ export default function BedrijfVacatureLijst() {
     setFilteredVacatures(filtered);
   }, [filters, vacatures]);
 
-  // Handle selecting a vacature and showing the modal
-  const handleSelectVacature = (vacature) => {
-    setSelectedVacature(vacature);
-    setShowModal(true);
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters({ ...filters, [name]: value });
   };
 
-  // Handle form submission
-  const handleConfirm = () => {
-    if (!selectedTime) {
-      alert('Kies een tijdstip');
-      return;
-    }
+  const handleEditClick = (vacature) => {
+    setEditVacature(vacature);
+    setShowEditModal(true);
+  };
 
-    // Store the selected date and time
-    const selectedData = {
-      vacatureId: selectedVacature.vacature_id,
-      time: selectedTime
-    };
-
-    // Save to localStorage or send to backend
-    // For now, just redirect to Agenda with query params
-    axios.post('http://localhost:5000/api/speeddate', {
-    student_id: 1,
-    bedrijf_id: selectedVacature.bedrijf_id,
-    tijdstip: selectedTime + ':00',
-    locatie: 'Aula 1', 
-    status: 'bevestigd'
-    })
-    .then(() => {
-      alert('Afspraak succesvol vastgelegd!');
-      setShowModal(false);
+  const handleEditSave = () => {
+    axios.put(`http://localhost:5000/api/vacatures/${editVacature.vacature_id}`, editVacature)
+      .then(() => {
+        alert('Vacature bijgewerkt!');
+        setShowEditModal(false);
       })
-      .catch(err => {
-      alert(err.response?.data?.error || 'Er ging iets mis bij het reserveren.');
+      .catch((err) => {
+        alert('Fout bij bijwerken:', err.message);
       });
-
-    
   };
-  const generateTimeOptions = () => {
-    const options = [];
-    for (let hour = 8; hour < 19; hour++) {
-      for (let minute = 0; minute < 60; minute += 10) {
-        const time = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
-        options.push(<option key={time} value={time}>{time}</option>);
-      }
-    }
-    return options;
+
+  const handleDelete = (vacatureId) => {
+    if (!window.confirm('Weet je zeker dat je deze vacature wilt verwijderen?')) return;
+
+    axios.delete(`http://localhost:5000/api/vacatures/${vacatureId}`)
+      .then(() => {
+        setVacatures(prev => prev.filter(v => v.vacature_id !== vacatureId));
+        alert('Vacature verwijderd!');
+      })
+      .catch(err => alert('Fout bij verwijderen:', err.message));
   };
 
   return (
     <div className="pagina">
-      {/* Header with Navbar */}
       <header>
         <Navbar />
       </header>
 
       <main className="inhoud">
-        <h2>Vacatures</h2>
+        <h2>Vacatures beheren</h2>
 
-        {/* Filter Form */}
+        {/* Filters */}
         <div className="filter-form">
-          <input
-            type="text"
-            name="bedrijf"
-            placeholder="Bedrijf"
-            value={filters.bedrijf}
-            onChange={handleFilterChange}
-          />
-          <input
-            type="text"
-            name="functie"
-            placeholder="Functie"
-            value={filters.functie}
-            onChange={handleFilterChange}
-          />
-          <input
-            type="text"
-            name="contractType"
-            placeholder="Contracttype"
-            value={filters.contractType}
-            onChange={handleFilterChange}
-          />
+          <input type="text" name="bedrijf" placeholder="Bedrijf" value={filters.bedrijf} onChange={handleFilterChange} />
+          <input type="text" name="functie" placeholder="Functie" value={filters.functie} onChange={handleFilterChange} />
+          <input type="text" name="contractType" placeholder="Contracttype" value={filters.contractType} onChange={handleFilterChange} />
         </div>
 
         <div className="vacature-list">
           {filteredVacatures.map((vacature) => (
             <div key={vacature.vacature_id} className="vacature-card">
-              <div className="logo-blok" >
+              <div className="logo-blok">
                 <img 
-          src={`/${vacature.logo_link}`} 
-          style={{ width: '80px', height: '80px', borderRadius: '8px', objectFit: 'cover' }} 
-        /></div>
+                  src={`/${vacature.logo_link}`} 
+                  style={{ width: '80px', height: '80px', borderRadius: '8px', objectFit: 'cover' }} 
+                  alt="Logo" 
+                />
+              </div>
               <div className="vacature-info">
                 <p className="bedrijf">{vacature.bedrijf}</p>
                 <p className="beschrijving">{vacature.synopsis}</p>
@@ -155,41 +114,43 @@ export default function BedrijfVacatureLijst() {
                   Functie: {vacature.functie}<br />
                   Contract: {vacature.contract_type}
                 </p>
-                <button 
-                  className="reserveer-btn" 
-                  onClick={() => handleSelectVacature(vacature)}
-                >
-                  Reserveer gesprek
-                </button>
+                <button className="bewerken-btn" onClick={() => handleEditClick(vacature)}>Bewerk</button>
+                <button className="verwijder-btn" onClick={() => handleDelete(vacature.vacature_id)}>Verwijder</button>
               </div>
             </div>
           ))}
         </div>
-
-        <button className="toonmeer-btn" onClick={() => alert('Toon meer geklikt!')}>Toon meer</button>
       </main>
 
-      {/* Modal for selecting time */}
-      {showModal && (
+      {showEditModal && editVacature && (
         <div className="modal-overlay">
           <div className="modal">
-            <h3>Kies een tijdstip</h3>
-            <label>Tijdstip:</label>
-<select
-  value={selectedTime}
-  onChange={(e) => setSelectedTime(e.target.value)}
->
-  {generateTimeOptions()}
-</select>
+            <h3>Vacature bewerken</h3>
+            <label>Functie:</label>
+            <input
+              value={editVacature.functie}
+              onChange={(e) => setEditVacature({ ...editVacature, functie: e.target.value })}
+            />
+            <label>Contracttype:</label>
+            <input
+              value={editVacature.contract_type}
+              onChange={(e) => setEditVacature({ ...editVacature, contract_type: e.target.value })}
+            />
+            <label>Beschrijving:</label>
+            <textarea
+              value={editVacature.synopsis}
+              onChange={(e) => setEditVacature({ ...editVacature, synopsis: e.target.value })}
+            />
             <div className="modal-buttons">
-              <button onClick={handleConfirm}>Bevestigen</button>
-              <button onClick={() => setShowModal(false)}>Annuleren</button>
+              <button onClick={handleEditSave}>Opslaan</button>
+              <button onClick={() => setShowEditModal(false)}>Annuleren</button>
             </div>
           </div>
         </div>
       )}
+
       <footer>
-       <Footer />
+        <Footer />
       </footer>
     </div>
   );

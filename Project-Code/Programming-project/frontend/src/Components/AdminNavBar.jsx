@@ -83,7 +83,7 @@ useRequireLogin("admin");
         <Link to={homepagePath}>
           <Logo className="logo" />
         </Link>
-        <button className="login-btn" onClick={() => navigate('/StudentProfilePage')}>{localStorage.getItem('naam')}</button>
+        <button className="login-btn">{localStorage.getItem('naam')}</button>
         <div className="navigatie-button-popout">
           <button className="notificatie-btn" ref={buttonRef} onClick={toggleNotifications} style={{ position: 'relative' }}>
   🔔{meldingen.some(m => !m.gelezen) && (
