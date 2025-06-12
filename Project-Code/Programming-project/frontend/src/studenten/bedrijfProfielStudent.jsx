@@ -1,10 +1,10 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Navbar from "./Components/StudentNavbar";
-import Footer from './Components/Footer';
+import Navbar from "../Components/StudentNavbar";
+import Footer from '../Components/Footer';
 
-export default function BedrijfProfilePage() {
+export default function BedrijfProfileStudent() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [companyData, setCompanyData] = useState(null);
