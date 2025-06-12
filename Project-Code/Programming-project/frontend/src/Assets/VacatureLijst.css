@@ -73,7 +73,6 @@
 }
 
 
-
 .bedrijf {
   font-weight: bold;
     font-weight: bold;
@@ -94,18 +93,21 @@
 
 .toonmeer-btn {
   width: 100%;
-  padding: 12px;
-  border: 1px solid black;
-  background-color: white;
-  margin-top: 20px;
+  padding: 16px;
+  color: #5d5d5d;
+  border: 2px solid #ccc;
+  background-color: #f6f6f6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+  margin-top: 30px;
   font-weight: bold;
-    width: 100%;
-    padding: 16px;
-    border: 1px solid black;
-    background-color: white;
-    margin-top: 30px;
-    font-weight: bold;
-    font-size: 16px;
+  font-size: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.toonmeer-btn:active {
+  transform: translateY(4px);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 /* Debug: laat outlines zien rond alle elementen */
 button {
@@ -138,4 +140,6 @@ button {
 
 .filter-btn:hover {
   background-color: #357ab8;
+  transform: translateY(4px);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }

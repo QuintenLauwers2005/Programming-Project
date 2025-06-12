@@ -1,56 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Logo from './Components/Logo';
 import Navbar from './Components/Navbar';
 import Footer from './Components/Footer';
+import './Components/BedrijfPage.css'; // 👈 CSS import
 
 export default function BedrijvenLijst() {
   const navigate = useNavigate();
   const [bedrijven, setBedrijven] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({
-    naam: ''
-  });
+  const [filters, setFilters] = useState({ naam: '' });
 
   useEffect(() => {
     axios.get('http://localhost:5000/api/bedrijven')
-      .then((response) => {
-        console.log("Ophaalde bedrijven:", response.data);
-        setBedrijven(response.data);
+      .then((res) => {
+        console.log("Ophaalde bedrijven:", res.data);
+        setBedrijven(res.data);
       })
-      .catch((error) => {
-        console.error('Fout bij ophalen bedrijven:', error);
+      .catch((err) => {
+        console.error('Fout bij ophalen bedrijven:', err);
       })
-      .finally(() => {
-        setLoading(false);
-      });
+      .finally(() => setLoading(false));
   }, []);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setFilters({
-      ...filters,
-      [name]: value
-    });
+    setFilters(prev => ({ ...prev, [name]: value }));
   };
 
-  // Filter alleen op naam
-  const filteredBedrijven = bedrijven.filter(bedrijf => {
-    const naam = bedrijf.naam || '';
-    return naam.toLowerCase().includes(filters.naam.toLowerCase());
-  });
+  const filteredBedrijven = bedrijven.filter(bedrijf =>
+    (bedrijf.naam || '').toLowerCase().includes(filters.naam.toLowerCase())
+  );
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
+    <div className="bedrijven-container">
       <header>
         <Navbar />
       </header>
 
-      <h2 style={{ textAlign: 'center', fontSize: '28px', margin: '40px 0 20px', fontWeight: 'bold' }}>Bedrijven</h2>
+      <h2 className="bedrijven-titel">Bedrijven</h2>
 
-      {/* Filter Form */}
-      <div className="filter-form" style={{ display: 'flex', gap: '10px', marginBottom: '30px', justifyContent: 'center' }}>
+      <div className="filter-form">
         <input 
           type="text" 
           name="naam" 
@@ -61,64 +51,32 @@ export default function BedrijvenLijst() {
       </div>
 
       {loading ? (
-        <p style={{ textAlign: 'center' }}>Laden...</p>
+        <p className="loading-text">Laden...</p>
       ) : (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center' }}>
+        <div className="bedrijven-grid">
           {filteredBedrijven.length > 0 ? (
-            filteredBedrijven.map((bedrijf) => (
+            filteredBedrijven.map(bedrijf => (
               <div
                 key={bedrijf.id}
+                className="bedrijf-card"
                 onClick={() => navigate(`/bedrijf/${bedrijf.id}`)}
-                style={{
-                  cursor: 'pointer',
-                  width: '200px',
-                  backgroundColor: '#f9f9f9',
-                  borderRadius: '8px',
-                  padding: '20px',
-                  boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-                  transition: 'transform 0.2s',
-                  textAlign: 'center'
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
               >
-                <div style={{
-                  width: '100%',
-                  height: '75px',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginBottom: '15px',
-                  borderRadius: '6px'
-                }}>
+                <div className="bedrijf-logo">
                   <img
                     src={`/${bedrijf.logo_link}`}
                     alt={`${bedrijf.naam} logo`}
-                    style={{
-                      maxWidth: '75px',
-                      maxHeight: '60px',
-                      objectFit: 'contain'
-                    }}
                   />
                 </div>
-                <p style={{ fontSize: '18px', fontWeight: 'bold' }}>{bedrijf.naam}</p>
+                <p className="bedrijf-naam">{bedrijf.naam}</p>
               </div>
             ))
           ) : (
-            <p style={{ textAlign: 'center', color: '#888' }}>Geen bedrijven gevonden.</p>
+            <p className="geen-resultaten">Geen bedrijven gevonden.</p>
           )}
         </div>
       )}
 
-      <button style={{
-        width: '100%',
-        padding: '16px',
-        border: '1px solid black',
-        backgroundColor: 'white',
-        marginTop: '30px',
-        fontWeight: 'bold',
-        fontSize: '16px'
-      }}>
+      <button className="toonmeer-btn" onClick={() => alert('Toon meer geklikt!')}>
         Toon meer
       </button>
 

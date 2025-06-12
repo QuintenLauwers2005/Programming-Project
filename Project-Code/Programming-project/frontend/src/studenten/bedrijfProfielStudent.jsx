@@ -5,6 +5,7 @@ import Navbar from "../Components/StudentNavbar";
 import Footer from '../Components/Footer';
 
 export default function BedrijfProfileStudent() {
+  const studentId = localStorage.getItem('gebruiker_id');
   const { id } = useParams();
   const navigate = useNavigate();
   const [companyData, setCompanyData] = useState(null);
@@ -22,7 +23,7 @@ export default function BedrijfProfileStudent() {
       .then((response) => {
         setCompanyData(response.data);
       })
-      .catch((error) => {
+      .catch(() => {
         setError('Kon bedrijf niet ophalen');
       })
       .finally(() => {
@@ -42,24 +43,35 @@ export default function BedrijfProfileStudent() {
     return options;
   };
 
-  // Open modal for selected vacature
+  // Open modal for selected vacature (of null als geen vacature)
   const handleOpenModal = (vacature) => {
     setSelectedVacature(vacature);
     setSelectedTime('');
     setShowModal(true);
   };
 
-  // Confirm afspraak
+  // Confirm afspraak and send POST request to backend
   const handleConfirm = () => {
     if (!selectedTime) {
-      alert('Kies een datum en tijdstip');
+      alert('Kies een tijdstip');
       return;
     }
 
-    // Hier kan je bv. data opsturen naar backend of redirecten met params
-    // Voorbeeld: redirect naar agenda pagina met query params
-    window.location.href = `/Agenda?vacatureId=${selectedVacature.vacature_id}&time=${selectedTime}`;
-    setShowModal(false);
+    axios.post('http://localhost:5000/api/speeddate', {
+      student_id: studentId,
+      bedrijf_id: id,
+      vacature_id: selectedVacature ? selectedVacature.vacature_id : null,
+      tijdstip: selectedTime + ':00', // "HH:mm:ss" formaat
+      locatie: 'Aula 1',
+      status: 'bevestigd'
+    })
+      .then(() => {
+        alert('Afspraak succesvol vastgelegd!');
+        setShowModal(false);
+      })
+      .catch(err => {
+        alert(err.response?.data?.error || 'Er ging iets mis bij het reserveren.');
+      });
   };
 
   if (loading) {
@@ -74,7 +86,7 @@ export default function BedrijfProfileStudent() {
     return (
       <div style={{ textAlign: 'center', color: 'red', padding: '20px' }}>
         <h2>{error}</h2>
-        <button 
+        <button
           onClick={() => navigate('/BedrijvenLijst')}
           style={{
             marginTop: '10px',
@@ -96,7 +108,7 @@ export default function BedrijfProfileStudent() {
     return (
       <div style={{ textAlign: 'center', padding: '20px' }}>
         <h2>Geen bedrijf gevonden</h2>
-        <button 
+        <button
           onClick={() => navigate('/BedrijvenLijst')}
           style={{
             marginTop: '10px',
@@ -118,11 +130,11 @@ export default function BedrijfProfileStudent() {
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
       <Navbar />
       {/* Company Profile Section */}
-      <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee', marginTop:'70px' }}>
-        <img 
-          src={`/${companyData.logo_link}`}       
+      <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee', marginTop: '70px' }}>
+        <img
+          src={`/${companyData.logo_link}`}
           alt={`Logo van ${companyData.naam}`}
-          style={{ width: '150px', height: '150px', borderRadius: '8px', objectFit: 'cover', marginRight: '30px' }} 
+          style={{ width: '150px', height: '150px', borderRadius: '8px', objectFit: 'cover', marginRight: '30px' }}
         />
         <div>
           <h2 style={{ margin: '0 0 10px 0', fontSize: '2em', color: '#007bff' }}>{companyData.naam}</h2>
@@ -137,26 +149,26 @@ export default function BedrijfProfileStudent() {
         {companyData.vacatures && companyData.vacatures.length > 0 ? (
           <div>
             {companyData.vacatures.map((vacature) => (
-              <div key={vacature.vacature_id} style={{ 
-                border: '1px solid #e0e0e0', 
-                padding: '15px', 
-                marginBottom: '15px', 
-                borderRadius: '8px', 
-                display: 'flex', 
-                justifyContent: 'space-between', 
-                alignItems: 'center' 
+              <div key={vacature.vacature_id} style={{
+                border: '1px solid #e0e0e0',
+                padding: '15px',
+                marginBottom: '15px',
+                borderRadius: '8px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
               }}>
                 <div>
                   <h4 style={{ margin: '0 0 5px 0' }}>{vacature.functie}</h4>
                   <p style={{ margin: 0, color: '#666' }}>{vacature.synopsis}</p>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ 
-                    backgroundColor: vacature.contract_type === 'Stage' ? '#007bff' : '#28a745', 
-                    color: 'white', 
-                    padding: '5px 10px', 
-                    borderRadius: '15px', 
-                    fontSize: '0.8em' 
+                  <span style={{
+                    backgroundColor: vacature.contract_type === 'Stage' ? '#007bff' : '#28a745',
+                    color: 'white',
+                    padding: '5px 10px',
+                    borderRadius: '15px',
+                    fontSize: '0.8em'
                   }}>
                     {vacature.contract_type}
                   </span>
@@ -179,7 +191,23 @@ export default function BedrijfProfileStudent() {
             ))}
           </div>
         ) : (
-          <p style={{ color: '#777' }}>Geen openstaande vacatures.</p>
+          <div>
+            <p style={{ color: '#777', marginBottom: '10px' }}>Geen openstaande vacatures.</p>
+            <button
+              onClick={() => handleOpenModal(null)}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: '#007bff',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                fontSize: '1em'
+              }}
+            >
+              Reserveer een gesprek
+            </button>
+          </div>
         )}
       </section>
 
@@ -251,9 +279,7 @@ export default function BedrijfProfileStudent() {
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Telefoon:</strong> {companyData.telefoon}</p>
       </section>
 
-      <footer>
-       <Footer />
-      </footer>
+      <Footer />
     </div>
   );
 }
