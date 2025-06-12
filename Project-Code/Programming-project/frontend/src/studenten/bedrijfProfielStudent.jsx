@@ -58,7 +58,7 @@ export default function BedrijfProfileStudent() {
 
     // Hier kan je bv. data opsturen naar backend of redirecten met params
     // Voorbeeld: redirect naar agenda pagina met query params
-    window.location.href = `/Agenda?vacatureId=${selectedVacature.vacature_id}&time=${selectedTime}`;
+    window.location.href = `/AgendaStudenten?vacatureId=${selectedVacature.vacature_id}&time=${selectedTime}`;
     setShowModal(false);
   };
 
