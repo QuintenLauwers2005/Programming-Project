@@ -1,23 +1,25 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Navbar from '../Components/AdminNavBar'
 import Footer from '../Components/Footer';
 
 function AdminStudentProfiel() {
 const navigate = useNavigate();
 const [studentData, setStudentData] = useState(null);
-  const studentId = "1"; 
+const { id } = useParams(); // inplaats van 1, gebruiken we dit, anders altijd zelfde student te zien
+
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/student/${studentId}`)
+    axios.get(`http://localhost:5000/api/student/${id}`)
       .then(res => { 
         setStudentData(res.data);
       })
       .catch(err => {
         console.error('Fout bij ophalen student:', err.message);
       });
-  }, [studentId]);
+  }, [id]);
 
   if (!studentData) return <p>Studentgegevens laden...</p>;
 
