@@ -15,8 +15,6 @@ export default function AdminBedrijfInstellingen() {
     telefoon: ''
   });
 
-  
-
   useEffect(() => {
     axios.get(`http://localhost:5000/api/bedrijf/${id}`)
       .then((res) => {
@@ -91,14 +89,15 @@ export default function AdminBedrijfInstellingen() {
           onChange={handleChange}
           style={inputStyle}
         />
-        <input
-          name="telefoon"
-          type="number"
-          placeholder="Telefoon"
-          value={form.telefoon}
-          onChange={handleChange}
-          style={inputStyle}
+       <input
+        name="telefoon"
+        type="tel"
+        placeholder="Telefoon"
+        value={form.telefoon}
+        onChange={handleChange}
+        style={inputStyle}
         />
+
 
         <button type="submit" style={buttonStyle}>Opslaan</button>
       </form>
