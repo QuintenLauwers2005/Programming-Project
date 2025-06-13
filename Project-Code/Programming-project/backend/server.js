@@ -766,7 +766,7 @@ app.post('/api/studentenToevoegen', (req, res) => {
 app.post('/api/bedrijvenToevoegen', (req, res) => {
   const {
     naam,
-    locatie,
+    adres,
     vertegenwoordiger,
     telefoon,
     email,
@@ -797,7 +797,7 @@ app.post('/api/bedrijvenToevoegen', (req, res) => {
     const values = [
       gebruikerId,   // bedrijf_id = zelfde als gebruiker_id
       naam,
-      locatie,
+      adres,
       vertegenwoordiger,
       telefoon,
       'logo_'+naam

@@ -1,9 +1,11 @@
+// src/Pages/RegistratieBedrijfPage.jsx
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
-import eyeIconPath from '../Assets/eye-empty.svg';
-import eyeSlashIconPath from '../Assets/eye-off.svg';
+import eyeIcon from '../Assets/eye-empty.svg';
+import eyeSlashIcon from '../Assets/eye-off.svg';
 import axios from 'axios';
 
 const Requirement = ({ label, met }) => (
@@ -14,9 +16,10 @@ const Requirement = ({ label, met }) => (
 
 export default function RegistratieBedrijfPage() {
   const [naam, setNaam] = useState('');
-  const [email, setEmail] = useState('');
   const [adres, setAdres] = useState('');
-  const [telefoonnummer, setTelefoonnummer] = useState('');
+  const [vertegenwoordiger, setVertegenwoordiger] = useState('');
+  const [telefoon, setTelefoon] = useState('');
+  const [email, setEmail] = useState('');
   const [wachtwoord, setWachtwoord] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -49,26 +52,19 @@ export default function RegistratieBedrijfPage() {
     valideerWachtwoord(nieuwWachtwoord);
   };
 
-  const isValidEmail = (email) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(String(email).toLowerCase());
-  };
-
-  const handleLogin = () => {
-    navigate('/login');
-  };
+  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email).toLowerCase());
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const isWachtwoordGeldig = Object.values(wachtwoordValidatie).every(Boolean);
-    if (!isWachtwoordGeldig) {
-      setError('Je wachtwoord voldoet niet aan alle eisen.');
+
+    if (!naam || !adres || !vertegenwoordiger || !telefoon || !email || !wachtwoord) {
+      setError('Vul alle velden in.');
       return;
     }
 
-    if (!naam || !email || !adres || !telefoonnummer || !wachtwoord) {
-      setError('Vul alle verplichte velden in.');
+    if (!isWachtwoordGeldig) {
+      setError('Je wachtwoord voldoet niet aan alle eisen.');
       return;
     }
 
@@ -77,19 +73,19 @@ export default function RegistratieBedrijfPage() {
       return;
     }
 
-    setError('');
-
     try {
       const response = await axios.post('http://localhost:5000/api/bedrijvenToevoegen', {
         naam,
-        email,
-        wachtwoord,
         adres,
-        telefoonnummer
+        vertegenwoordiger,
+        telefoon,
+        email,
+        wachtwoord
       });
 
       if (response.status === 201) {
         setSuccess(true);
+        setError('');
         setTimeout(() => {
           navigate('/login');
         }, 2000);
@@ -102,51 +98,19 @@ export default function RegistratieBedrijfPage() {
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
-      <header><Navbar /></header>
-
-      <section style={{ margin: '30px 0', textAlign: 'center' }}>
+      <Navbar />
+      <section style={{ textAlign: 'center', margin: '30px 0' }}>
         <h2>Registreer als Bedrijf</h2>
-        <p>Vul onderstaande gegevens in om je te registreren.</p>
+        <p>Vul onderstaande gegevens in om uw bedrijf te registreren.</p>
       </section>
+      <section style={{ maxWidth: '400px', margin: '0 auto' }}>
+        <input type="text" placeholder="Bedrijfsnaam *" value={naam} onChange={(e) => setNaam(e.target.value)} required style={inputStyle} />
+        <input type="text" placeholder="Adres *" value={adres} onChange={(e) => setAdres(e.target.value)} required style={inputStyle} />
+        <input type="text" placeholder="Vertegenwoordiger *" value={vertegenwoordiger} onChange={(e) => setVertegenwoordiger(e.target.value)} required style={inputStyle} />
+        <input type="text" placeholder="Telefoonnummer *" value={telefoon} onChange={(e) => setTelefoon(e.target.value)} required style={inputStyle} />
+        <input type="email" placeholder="Email *" value={email} onChange={(e) => setEmail(e.target.value)} required style={inputStyle} />
 
-      <section style={{ maxWidth: '400px', margin: '0 auto', padding: '20px' }}>
-        <input
-          type="text"
-          placeholder="Bedrijfsnaam *"
-          value={naam}
-          onChange={(e) => setNaam(e.target.value)}
-          required
-          style={inputStyle}
-        />
-
-        <input
-          type="email"
-          placeholder="Email *"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={inputStyle}
-        />
-
-        <input
-          type="text"
-          placeholder="Adres *"
-          value={adres}
-          onChange={(e) => setAdres(e.target.value)}
-          required
-          style={inputStyle}
-        />
-
-        <input
-          type="text"
-          placeholder="Telefoonnummer *"
-          value={telefoonnummer}
-          onChange={(e) => setTelefoonnummer(e.target.value)}
-          required
-          style={inputStyle}
-        />
-
-        <div style={{ position: 'relative', width: '100%', marginBottom: '15px' }}>
+        <div style={{ position: 'relative', marginBottom: '15px' }}>
           <input
             type={passwordVisible ? 'text' : 'password'}
             placeholder="Wachtwoord *"
@@ -156,16 +120,8 @@ export default function RegistratieBedrijfPage() {
             required
             style={{ ...inputStyle, paddingRight: '45px' }}
           />
-          <button
-            type="button"
-            onClick={() => setPasswordVisible(!passwordVisible)}
-            style={toggleButtonStyle}
-          >
-            <img
-              src={passwordVisible ? eyeSlashIconPath : eyeIconPath}
-              alt="Toon/verberg wachtwoord"
-              style={{ height: '20px', width: '20px', opacity: 0.7 }}
-            />
+          <button type="button" onClick={() => setPasswordVisible(!passwordVisible)} style={eyeButtonStyle}>
+            <img src={passwordVisible ? eyeSlashIcon : eyeIcon} alt="Toggle wachtwoord" style={{ height: '20px', width: '20px', opacity: 0.7 }} />
           </button>
         </div>
 
@@ -179,49 +135,41 @@ export default function RegistratieBedrijfPage() {
           </div>
         )}
 
-        <button
-          type="button"
-          onClick={handleSubmit}
-          style={submitButtonStyle}
-        >
-          Registreer
-        </button>
+        <button type="button" onClick={handleSubmit} style={submitStyle}>Registreer</button>
 
         {error && <p style={{ color: 'red', marginTop: '15px' }}>{error}</p>}
-        {success && <p style={{ color: 'green', marginTop: '15px' }}>Registratie voltooid!</p>}
+        {success && <p style={{ color: 'green', marginTop: '15px' }}>Registratie succesvol!</p>}
       </section>
 
       <section style={{ textAlign: 'center', marginTop: '20px' }}>
-        <button
-          onClick={handleLogin}
-          style={{
-            color: '#4a90e2',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            fontWeight: 'bold'
-          }}
-        >
-          Terug naar Login
-        </button>
+        <button onClick={() => navigate('/login')} style={loginButtonStyle}>Terug naar Login</button>
       </section>
 
-      <footer><Footer /></footer>
+      <Footer />
     </div>
   );
 }
 
-// Stijlobjecten
 const inputStyle = {
   width: '100%',
   padding: '10px',
   marginBottom: '15px',
   border: '1px solid #ccc',
   borderRadius: '4px',
-  boxSizing: 'border-box'
+  boxSizing: 'border-box',
 };
 
-const toggleButtonStyle = {
+const submitStyle = {
+  width: '100%',
+  padding: '10px',
+  backgroundColor: '#4a90e2',
+  color: 'white',
+  border: 'none',
+  borderRadius: '4px',
+  cursor: 'pointer',
+};
+
+const eyeButtonStyle = {
   position: 'absolute',
   right: '0px',
   top: '50%',
@@ -233,15 +181,13 @@ const toggleButtonStyle = {
   cursor: 'pointer',
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'center'
+  justifyContent: 'center',
 };
 
-const submitButtonStyle = {
-  width: '100%',
-  padding: '10px',
-  backgroundColor: '#4a90e2',
-  color: 'white',
+const loginButtonStyle = {
+  color: '#4a90e2',
+  background: 'none',
   border: 'none',
-  borderRadius: '4px',
-  cursor: 'pointer'
+  cursor: 'pointer',
+  fontWeight: 'bold',
 };
