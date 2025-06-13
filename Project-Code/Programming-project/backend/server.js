@@ -375,6 +375,32 @@ app.put('/api/bedrijf/:id', (req, res) => {
   });
 });
 
+// PUT: student bijwerken
+app.put('/api/student/:id', (req, res) => {
+  const studentId = req.params.id;
+  const { voornaam, naam, email, adres, specialisatie, linkedin } = req.body;
+
+  const sql = `
+    UPDATE student 
+    SET voornaam = ?, naam = ?, email = ?, adres = ?, specialisatie = ?, linkedin_url = ?
+    WHERE student_id = ?
+  `;
+
+  const values = [voornaam, naam, email, adres, specialisatie, linkedin, studentId];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error('Fout bij bijwerken student:', err);
+      return res.status(500).json({ error: 'Databasefout' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'student niet gevonden' });
+    }
+
+    res.json({ message: 'student succesvol bijgewerkt' });
+  });
+});
 
 app.get('/api/HomePageAantalen', (req, res) => {
   const sql = `
@@ -851,5 +877,6 @@ app.post('/api/upload', upload.single('image'), (req, res) => {
     });
   });
 });
+app.listen(5000, () => console.log('Backend running on http://localhost:5000'));
 
 
