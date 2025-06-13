@@ -11,9 +11,7 @@ export default function AdminBedrijfProfiel() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [showModal, setShowModal] = useState(false);
-  const [selectedVacature, setSelectedVacature] = useState(null);
-  const [selectedTime, setSelectedTime] = useState('');
+
 
   useEffect(() => {
     axios.get(`http://localhost:5000/api/bedrijf/${id}`)
