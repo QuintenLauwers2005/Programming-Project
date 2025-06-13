@@ -62,7 +62,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', padding: '40px' }}>
+    <div style={{ fontFamily: 'Arial, sans-serif' }}>
       {/* Navbar */}
       <header>
         <Navbar />
