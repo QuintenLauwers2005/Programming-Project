@@ -360,7 +360,8 @@ app.get('/api/bedrijf/:id', (req, res) => {
       v.functie,
       v.contract_type,
       v.synopsis,
-      v.open
+      v.open,
+      b.url
     FROM bedrijf b
     LEFT JOIN vacature v ON b.bedrijf_id = v.bedrijf_id
     WHERE b.bedrijf_id = ?
@@ -384,6 +385,7 @@ app.get('/api/bedrijf/:id', (req, res) => {
       vertegenwoordiger: results[0].vertegenwoordiger,
       telefoon: results[0].telefoon,
       logo_link: results[0].logo_link,
+      url:results[0].url,
       vacatures: []
     };
 
