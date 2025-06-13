@@ -6,9 +6,11 @@ const port = 5000
 const multer = require('multer');
 const path = require('path');
 require('dotenv').config();
+const fs = require('fs');
 
 app.use(cors())
 app.use(express.json())
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // serve images
 
 // aanpassen als de database verandert
 /*const db = mysql.createConnection({
@@ -19,68 +21,8 @@ app.use(express.json())
   
 })*/
 
-// Configuratie voor bestandsopslag
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // map waar je bestanden opslaat
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + path.extname(file.originalname)); // unieke naam
-  }
-});
 
-const upload = multer({ storage: storage });
 
-// Upload profielfoto voor student
-app.post('/api/student/upload/profielFoto/:id', upload.single('profielFoto'), (req, res) => {
-  const { id } = req.params;
-  const filePath = '/uploads/' + req.file.filename;
-
-  const sql = `
-    UPDATE student 
-    SET profiel_foto_url = ?
-    WHERE student_id = ?
-  `;
-
-  db.query(sql, [filePath, id], (err, result) => {
-    if (err) {
-      console.error('Fout bij updaten profielfoto:', err);
-      return res.status(500).json({ error: 'Fout bij updaten profielfoto' });
-    }
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Student niet gevonden' });
-    }
-
-    res.json({ message: 'Profielfoto succesvol geüpload', url: filePath });
-  });
-});
-
-// Upload CV voor student
-app.post('/api/student/upload/cv/:id', upload.single('cv'), (req, res) => {
-  const { id } = req.params;
-  const filePath = '/uploads/' + req.file.filename;
-
-  const sql = `
-    UPDATE student 
-    SET cv_url = ?
-    WHERE student_id = ?
-  `;
-
-  db.query(sql, [filePath, id], (err, result) => {
-    if (err) {
-      console.error('Fout bij updaten CV:', err);
-      return res.status(500).json({ error: 'Fout bij updaten CV' });
-    }
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Student niet gevonden' });
-    }
-
-    res.json({ message: 'CV succesvol geüpload', url: filePath });
-  });
-});
 
 
 const db = mysql.createConnection({
@@ -360,7 +302,8 @@ app.get('/api/bedrijf/:id', (req, res) => {
       v.functie,
       v.contract_type,
       v.synopsis,
-      v.open
+      v.open,
+      b.url
     FROM bedrijf b
     LEFT JOIN vacature v ON b.bedrijf_id = v.bedrijf_id
     WHERE b.bedrijf_id = ?
@@ -384,6 +327,7 @@ app.get('/api/bedrijf/:id', (req, res) => {
       vertegenwoordiger: results[0].vertegenwoordiger,
       telefoon: results[0].telefoon,
       logo_link: results[0].logo_link,
+      url:results[0].url,
       vacatures: []
     };
 
@@ -431,6 +375,32 @@ app.put('/api/bedrijf/:id', (req, res) => {
   });
 });
 
+// PUT: student bijwerken
+app.put('/api/student/:id', (req, res) => {
+  const studentId = req.params.id;
+  const { voornaam, naam, email, adres, specialisatie, linkedin } = req.body;
+
+  const sql = `
+    UPDATE student 
+    SET voornaam = ?, naam = ?, email = ?, adres = ?, specialisatie = ?, linkedin_url = ?
+    WHERE student_id = ?
+  `;
+
+  const values = [voornaam, naam, email, adres, specialisatie, linkedin, studentId];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error('Fout bij bijwerken student:', err);
+      return res.status(500).json({ error: 'Databasefout' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'student niet gevonden' });
+    }
+
+    res.json({ message: 'student succesvol bijgewerkt' });
+  });
+});
 
 app.get('/api/HomePageAantalen', (req, res) => {
   const sql = `
@@ -550,6 +520,33 @@ app.get('/api/afspraken/bedrijf/:bedrijfId', (req, res) => {
   });
 });
 
+// alle afspraken opvragen. voor admin agenda
+app.get('/api/afspraken/all', (req, res) => {
+  const sql = `
+    SELECT 
+      s.speeddate_id AS id,
+      s.tijdstip AS time,
+      st.voornaam,
+      st.naam,
+      s.locatie,
+      b.naam AS bedrijf_naam,
+      s.status
+    FROM speeddate s
+    LEFT JOIN student st ON s.student_id = st.student_id
+    JOIN bedrijf b ON s.bedrijf_id = b.bedrijf_id
+    ORDER BY s.tijdstip;
+  `;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Database fout:', err);
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(results);
+  });
+});
+
+
 app.get('/api/afspraken', (req, res) => {
   const gebruikerId = req.query.gebruiker_id;  // gebruiker_id vanuit query
 
@@ -576,7 +573,7 @@ app.get('/api/afspraken', (req, res) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(results);
   });
-});
+}); 
 
 app.delete('/api/speeddate/:id', (req, res) => {
   const speeddateId = req.params.id;
@@ -816,5 +813,70 @@ app.post('/api/bedrijvenToevoegen', (req, res) => {
     });
   });
 });
+
+
+
+
+// 1. Set up Multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, 'uploads/'),
+  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname),
+});
+
+const fileFilter = (req, file, cb) => {
+  const allowed = /jpeg|jpg|png|gif/;
+  const isValid = allowed.test(file.mimetype);
+  isValid ? cb(null, true) : cb(new Error('Only images allowed'));
+};
+
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
+});
+
+// 2. Upload Route with old file cleanup
+app.post('/api/upload', upload.single('image'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+
+  const imagePath = `/uploads/${req.file.filename}`;
+  const userId = req.body.userId;
+
+  if (!userId) return res.status(400).json({ error: 'Missing userId' });
+
+  // Step 1: Get existing profiel_foto_url from student
+  const selectQuery = 'SELECT profiel_foto_url FROM student WHERE student_id = ?';
+
+  db.query(selectQuery, [userId], (selectErr, results) => {
+    if (selectErr) {
+      console.error('MySQL SELECT error:', selectErr);
+      return res.status(500).json({ error: 'Could not fetch existing image' });
+    }
+
+    const oldImage = results[0]?.profiel_foto_url;
+
+    // Step 2: Delete old image if it exists
+    if (oldImage) {
+      const oldImagePath = path.join(__dirname, oldImage);
+      fs.unlink(oldImagePath, (unlinkErr) => {
+        if (unlinkErr && unlinkErr.code !== 'ENOENT') {
+          console.warn('Failed to delete previous image:', unlinkErr.message);
+        }
+      });
+    }
+
+    // Step 3: Save new path to DB
+    const updateQuery = 'UPDATE student SET profiel_foto_url = ? WHERE student_id = ?';
+    db.query(updateQuery, [imagePath, userId], (updateErr) => {
+      if (updateErr) {
+        console.error('MySQL UPDATE error:', updateErr);
+        return res.status(500).json({ error: 'Failed to update image in DB' });
+      }
+
+      res.json({ imageUrl: imagePath });
+    });
+  });
+});
+app.listen(5000, () => console.log('Backend running on http://localhost:5000'));
 
 

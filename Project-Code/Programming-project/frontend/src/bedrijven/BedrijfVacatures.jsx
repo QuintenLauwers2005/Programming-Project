@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../Components/VacatureLijst.css';
 import Navbar from '../Components/BedrijfNavBar';
@@ -6,6 +7,7 @@ import Footer from '../Components/Footer';
 
 export default function BedrijfVacatureLijst() {
   const [vacatures, setVacatures] = useState([]);
+    const navigate = useNavigate();
   const [filteredVacatures, setFilteredVacatures] = useState([]);
   const [filters, setFilters] = useState({
     bedrijf: '',
@@ -114,10 +116,27 @@ export default function BedrijfVacatureLijst() {
         <h2>Vacatures beheren</h2>
 
         {/* Filters */}
+
         <div className="filter-form">
           <input type="text" name="bedrijf" placeholder="Bedrijf" value={filters.bedrijf} onChange={handleFilterChange} />
           <input type="text" name="functie" placeholder="Functie" value={filters.functie} onChange={handleFilterChange} />
           <input type="text" name="contractType" placeholder="Contracttype" value={filters.contractType} onChange={handleFilterChange} />
+           <button
+        onClick={() => navigate('/VacaturePage')}
+        style={{
+          backgroundColor: '#007bff',
+          color: 'white',
+          border: 'none',
+          padding: '10px 20px',
+          borderRadius: '5px',
+          cursor: 'pointer',
+          fontWeight: 'bold'
+        }}
+        onMouseOver={(e) => e.target.style.backgroundColor = '#0056b3'}
+        onMouseOut={(e) => e.target.style.backgroundColor = '#007bff'}
+      >
+        vacature aanmaken
+      </button>
         </div>
 
         {/* Vacaturelijst */}
