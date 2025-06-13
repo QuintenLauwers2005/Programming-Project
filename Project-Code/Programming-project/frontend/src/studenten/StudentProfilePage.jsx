@@ -28,10 +28,14 @@ function StudentProfilePage() {
   if (!studentData) return <p>Studentgegevens laden...</p>;
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
-      <header style={{ marginBottom: '50px' }}>
+
+  <div>
+    <header style={{ marginBottom: '50px' }}>
         <Navbar />
       </header>
+
+    <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
+      
 
       {/* Profiel Hoofding */}
       <section style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>
@@ -120,8 +124,10 @@ function StudentProfilePage() {
       </section>
 
       <footer>
-        <Footer />
+        
       </footer>
+    </div>
+    <Footer />
     </div>
   );
 }
