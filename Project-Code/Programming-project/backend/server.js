@@ -3,6 +3,8 @@ const cors = require('cors')
 const mysql = require('mysql2')
 const app = express()
 const port = 5000
+const multer = require('multer');
+const path = require('path');
 require('dotenv').config();
 const fs = require('fs');
 
@@ -21,6 +23,69 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // serve i
   database: 'carrierlauch'
   
 })*/
+
+// Configuratie voor bestandsopslag
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // map waar je bestanden opslaat
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + path.extname(file.originalname)); // unieke naam
+  }
+});
+
+const upload = multer({ storage: storage });
+
+// Upload profielfoto voor student
+app.post('/api/student/upload/profielFoto/:id', upload.single('profielFoto'), (req, res) => {
+  const { id } = req.params;
+  const filePath = '/uploads/' + req.file.filename;
+
+  const sql = `
+    UPDATE student 
+    SET profiel_foto_url = ?
+    WHERE student_id = ?
+  `;
+
+  db.query(sql, [filePath, id], (err, result) => {
+    if (err) {
+      console.error('Fout bij updaten profielfoto:', err);
+      return res.status(500).json({ error: 'Fout bij updaten profielfoto' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Student niet gevonden' });
+    }
+
+    res.json({ message: 'Profielfoto succesvol geüpload', url: filePath });
+  });
+});
+
+// Upload CV voor student
+app.post('/api/student/upload/cv/:id', upload.single('cv'), (req, res) => {
+  const { id } = req.params;
+  const filePath = '/uploads/' + req.file.filename;
+
+  const sql = `
+    UPDATE student 
+    SET cv_url = ?
+    WHERE student_id = ?
+  `;
+
+  db.query(sql, [filePath, id], (err, result) => {
+    if (err) {
+      console.error('Fout bij updaten CV:', err);
+      return res.status(500).json({ error: 'Fout bij updaten CV' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Student niet gevonden' });
+    }
+
+    res.json({ message: 'CV succesvol geüpload', url: filePath });
+  });
+});
 
 
 const db = mysql.createConnection({
@@ -41,6 +106,7 @@ db.connect(err => {
 app.listen(port, () => {
   console.log(`Server draait op http://localhost:${port}`)
 })
+
 // login gegevens checken
 app.post('/api/login', (req, res) => {
   const { email, password } = req.body;
@@ -89,8 +155,7 @@ app.get('/api/vacatures', (req, res) => {
     if (err) return res.status(500).json({ error: err.message })
     res.json(results)
   })
-})
-
+});
 
 app.put('/api/vacatures/:id', (req, res) => {
   const { id } = req.params;
@@ -157,7 +222,7 @@ WHERE b.bedrijf_id = ${BedrijfID}`, (err, results) => {
     if (err) return res.status(500).json({ error: err.message })
     res.json(results)
   })
-})
+});
 
 // alle studenten ophalen
 app.get('/api/studenten', (req, res) => {
@@ -189,6 +254,28 @@ app.get('/api/studenten', (req, res) => {
     }));
 
     res.json(studenten);
+  });
+});
+
+app.post('/api/vacatures', (req, res) => {
+  const { functie, synopsis, contract_type, bedrijf_id } = req.body;
+
+  if (!functie || !synopsis || !contract_type || !bedrijf_id) {
+    return res.status(400).json({ error: 'Verplichte velden ontbreken' });
+  }
+
+  const sql = `
+    INSERT INTO vacature (functie, synopsis, contract_type, bedrijf_id)
+    VALUES (?, ?, ?, ?)
+  `;
+
+  db.query(sql, [functie, synopsis, contract_type, bedrijf_id], (err, result) => {
+    if (err) {
+      console.error('Fout bij toevoegen vacature:', err);
+      return res.status(500).json({ error: 'Vacature kon niet worden aangemaakt' });
+    }
+
+    res.status(201).json({ message: 'Vacature succesvol aangemaakt', vacature_id: result.insertId });
   });
 });
 
@@ -278,7 +365,8 @@ app.get('/api/bedrijf/:id', (req, res) => {
       v.functie,
       v.contract_type,
       v.synopsis,
-      v.open
+      v.open,
+      b.url
     FROM bedrijf b
     LEFT JOIN vacature v ON b.bedrijf_id = v.bedrijf_id
     WHERE b.bedrijf_id = ?
@@ -302,6 +390,7 @@ app.get('/api/bedrijf/:id', (req, res) => {
       vertegenwoordiger: results[0].vertegenwoordiger,
       telefoon: results[0].telefoon,
       logo_link: results[0].logo_link,
+      url:results[0].url,
       vacatures: []
     };
 
@@ -468,6 +557,33 @@ app.get('/api/afspraken/bedrijf/:bedrijfId', (req, res) => {
   });
 });
 
+// alle afspraken opvragen. voor admin agenda
+app.get('/api/afspraken/all', (req, res) => {
+  const sql = `
+    SELECT 
+      s.speeddate_id AS id,
+      s.tijdstip AS time,
+      st.voornaam,
+      st.naam,
+      s.locatie,
+      b.naam AS bedrijf_naam,
+      s.status
+    FROM speeddate s
+    LEFT JOIN student st ON s.student_id = st.student_id
+    JOIN bedrijf b ON s.bedrijf_id = b.bedrijf_id
+    ORDER BY s.tijdstip;
+  `;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Database fout:', err);
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(results);
+  });
+});
+
+
 app.get('/api/afspraken', (req, res) => {
   const gebruikerId = req.query.gebruiker_id;  // gebruiker_id vanuit query
 
@@ -494,7 +610,7 @@ app.get('/api/afspraken', (req, res) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(results);
   });
-});
+}); 
 
 app.delete('/api/speeddate/:id', (req, res) => {
   const speeddateId = req.params.id;

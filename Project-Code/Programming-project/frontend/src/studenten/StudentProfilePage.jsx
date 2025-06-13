@@ -1,4 +1,3 @@
-// StudentProfilePage.jsx
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -8,32 +7,131 @@ import UploadForm from '../Components/Uploadform';
 
 function StudentProfilePage() {
   const [studentData, setStudentData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastType, setToastType] = useState('success');
+
   const studentId = localStorage.getItem('gebruiker_id');
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.clear();         // Verwijder gebruiker_id en andere data
-    navigate('/login');           // Navigeer naar loginpagina
+    localStorage.clear();
+    navigate('/login');
   };
 
+  // Profielfoto upload
+  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [currentProfilePhoto, setCurrentProfilePhoto] = useState('');
+
+  // Custom Toast Component
+  const Toast = ({ message, type = 'success', onClose }) => {
+    return (
+      <div style={{
+        position: 'fixed',
+        top: '20px',
+        right: '20px',
+        backgroundColor: type === 'success' ? '#28a745' : '#dc3545',
+        color: 'white',
+        padding: '12px 20px',
+        borderRadius: '8px',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+        zIndex: 1001,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}>
+        <span>{message}</span>
+        <button 
+          onClick={onClose}
+          style={{ 
+            background: 'none', 
+            border: 'none', 
+            color: 'white', 
+            fontSize: '16px', 
+            cursor: 'pointer' 
+          }}
+        >
+          &times;
+        </button>
+      </div>
+    );
+  };
+
+  // Ophalen studentgegevens
   useEffect(() => {
     axios.get(`http://localhost:5000/api/student/${studentId}`)
       .then(res => {
         setStudentData(res.data);
+        setCurrentProfilePhoto(res.data.profielFotoUrl || '');
+        setLoading(false);
       })
       .catch(err => {
         console.error('Fout bij ophalen student:', err.message);
+        setError('Kon studentgegevens niet ophalen');
+        setLoading(false);
       });
   }, [studentId]);
 
-  if (!studentData) return <p>Studentgegevens laden...</p>;
+  // Upload profielfoto
+  const handleProfilePhotoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setProfilePhoto(file);
+      // Toon preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setCurrentProfilePhoto(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setToastMessage('Selecteer een geldig afbeeldingsbestand.');
+      setToastType('error');
+      setShowToast(true);
+    }
+  };
+
+  // Verstuur profielfoto naar backend
+  const handleUpload = async () => {
+    const formData = new FormData();
+    if (profilePhoto) formData.append('profielFoto', profilePhoto);
+    //if (cvFile) formData.append('cv', cvFile);
+  
+    try {
+      const response = await axios.post(
+        `http://localhost:5000/api/student/upload/profielFoto/${studentId}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+      // ...
+    } catch (err) {
+      // ...
+    }
+  };
+  // Sluit toast automatisch na 3 seconden
+  useEffect(() => {
+    if (showToast) {
+      const timer = setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showToast]);
+
+  if (loading) return <p>Studentgegevens laden...</p>;
+  if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
   return (
-
-  <div>
-    <header style={{ marginBottom: '50px' }}>
+    <div>
+      <header style={{ marginBottom: '50px' }}>
         <Navbar />
       </header>
+
 
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
       <UploadForm />
@@ -129,6 +227,7 @@ function StudentProfilePage() {
       </footer>
     </div>
     <Footer />
+
     </div>
   );
 }

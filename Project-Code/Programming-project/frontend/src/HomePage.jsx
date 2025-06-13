@@ -55,7 +55,7 @@ function HomePage() {
         </section>
 
         {/* Praktisch */}
-        <section className="location enhanced-box">
+        <section id="locatie" className="location enhanced-box">
           <h2>Locatie & Datum</h2>
 
           <div className="map-card">
@@ -77,7 +77,7 @@ function HomePage() {
         </section>
 
         {/* Waarom deelnemen */}
-        <section className="why enhanced-box">
+        <section id="waarom" className="why enhanced-box">
           <h2>Waarom je dit niet mag missen</h2>
           <p>
             Tijdens de Career Launch krijg je de unieke kans om in contact te komen met topbedrijven uit jouw sector. Netwerk, ontdek en zet de eerste stap naar jouw droomjob.
@@ -102,7 +102,7 @@ function HomePage() {
         </section>
 
         {/* Testimonial */}
-        <section className="testimonial enhanced-box">
+        <section id="testimonial" className="testimonial enhanced-box">
           <h2>Ervaringen van studenten</h2>
 
           <div className="studentenverklaring">
@@ -134,7 +134,7 @@ function HomePage() {
         </section>
 
         {/* Veelgestelde vragen */}
-        <section className="faq">
+        <section id="faq" className="faq">
           <h2>Veelgestelde vragen</h2>
           <div className="faq-container">
             <div className="faq-blok">

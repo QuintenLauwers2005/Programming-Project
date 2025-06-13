@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Components/Navbar';
+import Footer from '../Components/Footer';
+import eyeIconPath from '../Assets/eye-empty.svg';
+import eyeSlashIconPath from '../Assets/eye-off.svg';
 import axios from 'axios';
 
 const Requirement = ({ label, met }) => (
@@ -18,10 +21,10 @@ export default function RegistratieStudentPage() {
   const [opleidingsjaar, setOpleidingsjaar] = useState('');
   const [adres, setAdres] = useState('');
   const [wachtwoord, setWachtwoord] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-
   const [wachtwoordValidatie, setWachtwoordValidatie] = useState({
     lengte: false,
     hoofdletter: false,
@@ -144,7 +147,8 @@ export default function RegistratieStudentPage() {
             padding: '10px',
             marginBottom: '15px',
             border: '1px solid #ccc',
-            borderRadius: '4px'
+            borderRadius: '4px',
+            boxSizing: 'border-box'
           }}
           required
         />
@@ -159,7 +163,8 @@ export default function RegistratieStudentPage() {
             padding: '10px',
             marginBottom: '15px',
             border: '1px solid #ccc',
-            borderRadius: '4px'
+            borderRadius: '4px',
+            boxSizing: 'border-box'
           }}
           required
         />
@@ -175,7 +180,8 @@ export default function RegistratieStudentPage() {
             padding: '10px',
             marginBottom: '15px',
             border: '1px solid #ccc',
-            borderRadius: '4px'
+            borderRadius: '4px',
+            boxSizing: 'border-box'
           }}
         />
 
@@ -189,7 +195,8 @@ export default function RegistratieStudentPage() {
             padding: '10px',
             marginBottom: '15px',
             border: '1px solid #ccc',
-            borderRadius: '4px'
+            borderRadius: '4px',
+            boxSizing: 'border-box'
           }}
           required
         />
@@ -203,7 +210,8 @@ export default function RegistratieStudentPage() {
             padding: '10px',
             marginBottom: '15px',
             border: '1px solid #ccc',
-            borderRadius: '4px'
+            borderRadius: '4px',
+            boxSizing: 'border-box'
           }}
           required
         />
@@ -217,7 +225,8 @@ export default function RegistratieStudentPage() {
             padding: '10px',
             marginBottom: '15px',
             border: '1px solid #ccc',
-            borderRadius: '4px'
+            borderRadius: '4px',
+            boxSizing: 'border-box'
           }}
           required
         />
@@ -231,28 +240,65 @@ export default function RegistratieStudentPage() {
             padding: '10px',
             marginBottom: '15px',
             border: '1px solid #ccc',
-            borderRadius: '4px'
+            borderRadius: '4px',
+            boxSizing: 'border-box'
           }}
           required
         />
-        <input
-          type="password"
-          placeholder="Wachtwoord"
-          value={wachtwoord}
-          onChange={handleWachtwoordChange}
-          onFocus={() => setShowValidation(true)}
-          required
-          style={{ width: '100%', padding: '10px', marginBottom: '5px', border: '1px solid #ccc', borderRadius: '4px' }}
-        />
-        {showValidation && (
-          <div style={{ marginBottom: '15px' }}>
-            <Requirement label="Minstens 5 tekens" met={wachtwoordValidatie.lengte} />
-            <Requirement label="Minstens één hoofdletter" met={wachtwoordValidatie.hoofdletter} />
-            <Requirement label="Minstens één kleine letter" met={wachtwoordValidatie.kleineletter} />
-            <Requirement label="Minstens één cijfer" met={wachtwoordValidatie.cijfer} />
-            <Requirement label="Minstens één speciaal teken" met={wachtwoordValidatie.speciaalteken} />
+          <div style={{ 
+            position: 'relative', 
+            width: '100%', 
+            marginBottom: '15px'
+          }}>
+            <input
+              type={passwordVisible ? 'text' : 'password'}
+              placeholder="Wachtwoord"
+              value={wachtwoord}
+              onChange={handleWachtwoordChange}
+              onFocus={() => setShowValidation(true)}
+              required
+              style={{
+                width: '100%',
+                padding: '10px 45px 10px 10px',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                boxSizing: 'border-box' 
+              }}
+            /> 
+            <button 
+              type="button" 
+              onClick={() => setPasswordVisible(!passwordVisible)} 
+              style={{
+                position: 'absolute',
+                right: '0px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: '45px',
+                height: '100%',
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <img 
+                src={passwordVisible ? eyeSlashIconPath : eyeIconPath} 
+                alt="Toggle wachtwoord" 
+                style={{ height: '20px', width: '20px', opacity: 0.7 }} 
+              />
+            </button>
           </div>
-        )}
+          {showValidation && (
+            <div style={{ marginBottom: '15px' }}>
+              <Requirement label="Minstens 5 tekens" met={wachtwoordValidatie.lengte} />
+              <Requirement label="Minstens één hoofdletter" met={wachtwoordValidatie.hoofdletter} />
+              <Requirement label="Minstens één kleine letter" met={wachtwoordValidatie.kleineletter} />
+              <Requirement label="Minstens één cijfer" met={wachtwoordValidatie.cijfer} />
+              <Requirement label="Minstens één speciaal teken" met={wachtwoordValidatie.speciaalteken} />
+            </div>
+          )}
         <button
           type="button"
           onClick={handleSubmit}
@@ -287,10 +333,8 @@ export default function RegistratieStudentPage() {
         </button>
       </section>
 
-      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px' }}>
-        <h5>Contact</h5>
-        <p>info@careerlaunch.be</p>
-        <p>EhB - Erasmushogeschool Brussel</p>
+      <footer>
+       <Footer />
       </footer>
     </div>
   );

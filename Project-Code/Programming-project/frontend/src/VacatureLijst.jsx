@@ -159,18 +159,7 @@ export default function VacatureLijst() {
               <br />
               Contract: {vacature.contract_type}
             </p>
-            <button
-              onClick={() => handleOpenModal(vacature)}
-              style={{
-                padding: '6px 12px',
-                backgroundColor: '#007bff',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer',
-                fontSize: '0.9em'
-              }}
-            >
+            <button className="bewerken-btn" onClick={() => handleOpenModal(vacature)}>
               Reserveer gesprek
             </button>
           </div>

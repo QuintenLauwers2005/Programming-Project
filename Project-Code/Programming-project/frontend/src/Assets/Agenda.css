@@ -95,3 +95,19 @@
 .modal button:hover {
   background-color: #005fa3;
 }
+
+.weigenKnopAdmin{
+  background-color:red ;
+  color: whitesmoke;
+  border:black;
+  border-width: 3px;
+  border-radius: 0.2rem;
+  margin-top: 15px;
+  padding: 3px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.weigenKnopAdmin:hover{
+  background-color: rgb(204, 1, 1);
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+}

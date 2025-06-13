@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Components/Navbar';
+import eyeIconPath from '../Assets/eye-empty.svg';
+import eyeSlashIconPath from '../Assets/eye-off.svg';
+import Footer from '../Components/Footer';
 
 const Requirement = ({ label, met }) => (
   <p style={{ margin: '2px 0', fontSize: '0.8em', color: met ? 'green' : 'red' }}>
@@ -15,10 +18,10 @@ export default function RegistratieBedrijfPage() {
   const [locatie, setLocatie] = useState('');
   const [vertegenwoordiger, setVertegenwoordiger] = useState('');
   const [telefoonnummer, setTelefoonnummer] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const [error, setError] = useState('');
-  const [success] = useState(false);
-
+  const [success, setSuccess] = useState(''); 
   const [wachtwoordValidatie, setWachtwoordValidatie] = useState({
     lengte: false,
     hoofdletter: false,
@@ -50,23 +53,26 @@ export default function RegistratieBedrijfPage() {
     navigate('/login');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+    setError('');
+    setSuccess('');
 
     const isWachtwoordGeldig = Object.values(wachtwoordValidatie).every(Boolean);
 
-    if (!bedrijfsnaam || !locatie || !wachtwoord || !mail || !vertegenwoordiger || !telefoonnummer) {
-      setError('Vul alle verplichte velden in');
-      return;
-    }
+    if (!bedrijfsnaam || !locatie || !wachtwoord || !mail || !vertegenwoordiger || !telefoonnummer) {
+      setError('Vul alle verplichte velden in');
+      return;
+    }
     if (!isWachtwoordGeldig) {
       setError("Je wachtwoord voldoet niet aan alle eisen.");
       return;
     }
-    setError('');
     
+    setSuccess('Bedrijfsregistratie is succesvol ontvangen!');
     alert('Bedrijfsregistratie verzonden!');
-  };
+    navigate('/login');
+  };
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
@@ -94,7 +100,8 @@ export default function RegistratieBedrijfPage() {
               padding: '10px',
               marginBottom: '15px',
               border: '1px solid #ccc',
-              borderRadius: '4px'
+              borderRadius: '4px',
+              boxSizing: 'border-box'
             }}
             required
           />
@@ -108,7 +115,8 @@ export default function RegistratieBedrijfPage() {
               padding: '10px',
               marginBottom: '15px',
               border: '1px solid #ccc',
-              borderRadius: '4px'
+              borderRadius: '4px',
+              boxSizing: 'border-box'
             }}
             required
           />
@@ -122,7 +130,8 @@ export default function RegistratieBedrijfPage() {
               padding: '10px',
               marginBottom: '15px',
               border: '1px solid #ccc',
-              borderRadius: '4px'
+              borderRadius: '4px',
+              boxSizing: 'border-box'
             }}
             required
           />
@@ -136,7 +145,8 @@ export default function RegistratieBedrijfPage() {
               padding: '10px',
               marginBottom: '15px',
               border: '1px solid #ccc',
-              borderRadius: '4px'
+              borderRadius: '4px',
+              boxSizing: 'border-box'
             }}
             required
           />
@@ -150,19 +160,56 @@ export default function RegistratieBedrijfPage() {
               padding: '10px',
               marginBottom: '15px',
               border: '1px solid #ccc',
-              borderRadius: '4px'
+              borderRadius: '4px',
+              boxSizing: 'border-box'
             }}
             required
           />
-          <input
-            type="password"
-            placeholder="Wachtwoord"
-            value={wachtwoord}
-            onChange={handleWachtwoordChange}
-            onFocus={() => setShowValidation(true)}
-            required
-            style={{ width: '100%', padding: '10px', marginBottom: '5px', border: '1px solid #ccc', borderRadius: '4px' }}
-          />
+          <div style={{ 
+            position: 'relative', 
+            width: '100%', 
+            marginBottom: '15px'
+          }}>
+            <input
+              type={passwordVisible ? 'text' : 'password'}
+              placeholder="Wachtwoord"
+              value={wachtwoord}
+              onChange={handleWachtwoordChange}
+              onFocus={() => setShowValidation(true)}
+              required
+              style={{
+                width: '100%',
+                padding: '10px 45px 10px 10px',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                boxSizing: 'border-box' 
+              }}
+            /> 
+            <button 
+              type="button" 
+              onClick={() => setPasswordVisible(!passwordVisible)} 
+              style={{
+                position: 'absolute',
+                right: '0px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: '45px',
+                height: '100%',
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <img 
+                src={passwordVisible ? eyeSlashIconPath : eyeIconPath} 
+                alt="Toggle wachtwoord" 
+                style={{ height: '20px', width: '20px', opacity: 0.7 }} 
+              />
+            </button>
+          </div>
           {showValidation && (
             <div style={{ marginBottom: '15px', textAlign: 'left' }}>
               <Requirement label="Minstens 5 tekens" met={wachtwoordValidatie.lengte} />
@@ -207,10 +254,8 @@ export default function RegistratieBedrijfPage() {
         </button>
       </section>
 
-      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px' }}>
-        <h5>Contact</h5>
-        <p>info@careerlaunch.be</p>
-        <p>EhB - Erasmushogeschool Brussel</p>
+      <footer>
+       <Footer />
       </footer>
     </div>
   );
