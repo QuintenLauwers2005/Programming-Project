@@ -19,6 +19,9 @@
 .card {
   padding: 20px;
   width: 250px;
+  background-color: #e8e8e8;
+  border: 1px lightgray;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
   margin-bottom: 15px;
   border-radius: 8px;
   position: relative;

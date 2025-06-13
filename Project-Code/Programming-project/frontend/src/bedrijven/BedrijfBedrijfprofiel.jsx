@@ -101,6 +101,8 @@ export default function BedrijfBedrijfProfilePage() {
           cursor: 'pointer',
           fontWeight: 'bold'
         }}
+        onMouseOver={(e) => e.target.style.backgroundColor = '#0056b3'}
+        onMouseOut={(e) => e.target.style.backgroundColor = '#007bff'}
       >
         Aanpassen
       </button>
@@ -116,6 +118,8 @@ export default function BedrijfBedrijfProfilePage() {
           cursor: 'pointer',
           fontWeight: 'bold'
         }}
+        onMouseOver={(e) => e.target.style.backgroundColor = '#b02a37'}
+        onMouseOut={(e) => e.target.style.backgroundColor = '#dc3545'}
       >
         Uitloggen
       </button>
