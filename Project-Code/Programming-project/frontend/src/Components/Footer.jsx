@@ -9,8 +9,8 @@ function Footer() {
         {/* Contactgegevens */}
         <div className="footer-section">
           <h4>Contact</h4>
-          <p>info@careerlaunch.be</p>
-          <p>EhB - Erasmushogeschool Brussel</p>
+          <p>mail: info@careerlaunch.ehb.be</p>
+          <p>tel: 02 523 37 37</p>
         </div>
 
         {/* Navigatie */}
@@ -35,7 +35,7 @@ function Footer() {
       </div>
 
       <div className="footer-bottom">
-        <p>&copy; {new Date().getFullYear()} Career Launch – EhB. Alle rechten voorbehouden.</p>
+        <p>&copy; {new Date().getFullYear()} Career Launch – Erasmushogeschool Brussel. Alle rechten voorbehouden.</p>
       </div>
     </footer>
   );
