@@ -114,17 +114,25 @@ app.put('/api/vacatures/:id', (req, res) => {
 
 //vacatures verwijdfer
 
-app.delete('/api/vacatures/:id', async (req, res) => {
+app.delete('/api/vacatures/:id', (req, res) => {
   const { id } = req.params;
 
-  try {
-    await pool.query('DELETE FROM vacatures WHERE vacature_id = $1', [id]);
+  const sql = 'DELETE FROM vacature WHERE vacature_id = ?';
+
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error('Fout bij verwijderen vacature:', err);
+      return res.status(500).json({ error: 'Vacature kon niet worden verwijderd' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Vacature niet gevonden' });
+    }
+
     res.status(200).json({ message: 'Vacature verwijderd' });
-  } catch (error) {
-    console.error('Fout bij verwijderen vacature:', error);
-    res.status(500).json({ error: 'Vacature kon niet worden verwijderd' });
-  }
+  });
 });
+
 
 
 app.get('/api/vacatures/:id', (req, res) => {
