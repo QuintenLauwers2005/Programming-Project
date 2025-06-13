@@ -137,12 +137,23 @@ function StudentProfilePage() {
       <UploadForm />
 
       {/* Profiel Hoofding */}
-      <section style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>
+     
+     <section style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>
+      
+{studentData.profielFotoUrl != null ? (
   <img
     src={`http://localhost:5000${studentData.profielFotoUrl}`}
     alt={`Profiel van ${studentData.profielFotoUrl}`}
     style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', marginRight: '30px' }}
   />
+) : (
+  <img src="./blank-profile-picture.png" alt="No profile picture found" style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', marginRight: '30px' }}/>  // or whatever fallback you want
+)}
+
+
+    
+      
+  
 
   <div style={{ flex: 1 }}>
     <h2 style={{ margin: '0 0 10px 0', fontSize: '2em' }}>{studentData.name}</h2>
