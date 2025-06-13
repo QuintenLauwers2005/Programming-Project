@@ -46,37 +46,39 @@ export default function VacaturePage() {
       <main className="inhoud">
         <h1>Nieuwe vacature</h1>
 
-        <form onSubmit={handleSubmit}>
+<div className='nieuwevacature-container'>
+<form onSubmit={handleSubmit}>
           <section className="sectie">
-            <h2>Functie:</h2>
-            <input
-              className="functie-box"
-              type="text"
-              name="functie"
-              value={form.functie}
-              onChange={handleChange}
-              required
-            />
-          </section>
+  <h3>Functie:</h3>
+  <input
+    className="functie-box"
+    type="text"
+    name="functie"
+    value={form.functie}
+    onChange={handleChange}
+    required
+  />
+</section>
+
+<section className="sectie">
+  <h3>Contracttype:</h3>
+  <select
+    className="contracttype-box"
+    name="contract_type"
+    value={form.contract_type}
+    onChange={handleChange}
+    required
+  >
+    <option value="">-- Kies type --</option>
+    <option value="Stage">Stage</option>
+    <option value="Volltijds">Volltijds</option>
+    <option value="Deeltijds">Deeltijds</option>
+  </select>
+</section>
+
 
           <section className="sectie">
-            <h2>Contracttype:</h2>
-            <select
-              className="functie-box"
-              name="contract_type"
-              value={form.contract_type}
-              onChange={handleChange}
-              required
-            >
-              <option value="">-- Kies type --</option>
-              <option value="Stage">Stage</option>
-              <option value="Volltijds">Volltijds</option>
-              <option value="Deeltijds">Deeltijds</option>
-            </select>
-          </section>
-
-          <section className="sectie">
-            <h2>Synopsis:</h2>
+            <h3>Synopsis:</h3>
             <textarea
               className="tekst-box"
               name="synopsis"
@@ -88,6 +90,8 @@ export default function VacaturePage() {
 
           <button className="post-knop" type="submit">Post</button>
         </form>
+</div>
+        
       </main>
 
       <footer>
