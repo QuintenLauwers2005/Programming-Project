@@ -84,8 +84,7 @@ app.get('/api/vacatures', (req, res) => {
     if (err) return res.status(500).json({ error: err.message })
     res.json(results)
   })
-})
-
+});
 
 app.put('/api/vacatures/:id', (req, res) => {
   const { id } = req.params;
@@ -152,7 +151,7 @@ WHERE b.bedrijf_id = ${BedrijfID}`, (err, results) => {
     if (err) return res.status(500).json({ error: err.message })
     res.json(results)
   })
-})
+});
 
 // alle studenten ophalen
 app.get('/api/studenten', (req, res) => {
@@ -184,6 +183,28 @@ app.get('/api/studenten', (req, res) => {
     }));
 
     res.json(studenten);
+  });
+});
+
+app.post('/api/vacatures', (req, res) => {
+  const { functie, synopsis, contract_type, bedrijf_id } = req.body;
+
+  if (!functie || !synopsis || !contract_type || !bedrijf_id) {
+    return res.status(400).json({ error: 'Verplichte velden ontbreken' });
+  }
+
+  const sql = `
+    INSERT INTO vacature (functie, synopsis, contract_type, bedrijf_id)
+    VALUES (?, ?, ?, ?)
+  `;
+
+  db.query(sql, [functie, synopsis, contract_type, bedrijf_id], (err, result) => {
+    if (err) {
+      console.error('Fout bij toevoegen vacature:', err);
+      return res.status(500).json({ error: 'Vacature kon niet worden aangemaakt' });
+    }
+
+    res.status(201).json({ message: 'Vacature succesvol aangemaakt', vacature_id: result.insertId });
   });
 });
 
