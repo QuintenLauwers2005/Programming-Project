@@ -84,8 +84,8 @@ export default function Bedrijfsagenda() {
               <div>Status: {afspraak.status}</div>
 
               {/* Status toggle knop */}
-              <button onClick={() => toggleStatus(afspraak.id, afspraak.status)}>
-                {afspraak.status === 'bevestigd' ? '❌ Weigeren' : '✅ Bevestigen'}
+              <button className='weigenKnopAdmin' onClick={() => toggleStatus(afspraak.id, afspraak.status)}>
+                {afspraak.status === 'bevestigd' ? 'Weigeren' : 'Weigeren'}
               </button>
 
               {/* 
