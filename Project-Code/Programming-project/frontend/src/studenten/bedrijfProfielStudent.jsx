@@ -271,12 +271,35 @@ export default function BedrijfProfileStudent() {
         </div>
       )}
 
-      {/* Contact & Locatie Section */}
+      {/* Contact & Locatie Section */}      
       <section style={{ marginBottom: '30px', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
         <h3 style={{ borderBottom: '2px solid #ddd', paddingBottom: '10px', marginBottom: '20px', color: '#333' }}>Contact & Locatie</h3>
+        
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Adres:</strong> {companyData.locatie}</p>
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Vertegenwoordiger:</strong> {companyData.vertegenwoordiger}</p>
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Telefoon:</strong> {companyData.telefoon}</p>
+
+        <button
+          onClick={() => {
+            if (companyData.email) {
+              window.location.href = `mailto:${companyData.email}`;
+            } else {
+              alert("Er is geen contact e-mailadres beschikbaar voor dit bedrijf.");
+            }
+          }}
+          style={{
+            marginTop: '20px',
+            padding: '10px 20px',
+            backgroundColor: '#6c757d',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            fontSize: '1em'
+          }}
+        >
+          Contacteer via E-mail
+        </button>
       </section>
 
       <Footer />
