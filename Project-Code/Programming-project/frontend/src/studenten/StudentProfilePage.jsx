@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Components/StudentNavbar';
 import Footer from '../Components/Footer';
+import UploadForm from '../Components/Uploadform';
 
 function StudentProfilePage() {
   const [studentData, setStudentData] = useState(null);
@@ -35,7 +36,7 @@ function StudentProfilePage() {
       </header>
 
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
-      
+      <UploadForm />
 
       {/* Profiel Hoofding */}
       <section style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>
