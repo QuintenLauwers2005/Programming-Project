@@ -1,5 +1,4 @@
 .page {
-  background-color: #f5f5f5;
   padding: 20px;
   min-height: 100vh;
   display: flex;
@@ -18,9 +17,11 @@
 }
 
 .card {
-  background-color: #f2dcdc;
   padding: 20px;
   width: 250px;
+  background-color: #e8e8e8;
+  border: 1px lightgray;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
   margin-bottom: 15px;
   border-radius: 8px;
   position: relative;
@@ -93,4 +94,20 @@
 
 .modal button:hover {
   background-color: #005fa3;
+}
+
+.weigenKnopAdmin{
+  background-color:red ;
+  color: whitesmoke;
+  border:black;
+  border-width: 3px;
+  border-radius: 0.2rem;
+  margin-top: 15px;
+  padding: 3px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.weigenKnopAdmin:hover{
+  background-color: rgb(204, 1, 1);
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
 }

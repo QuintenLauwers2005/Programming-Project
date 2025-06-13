@@ -1,6 +1,5 @@
 .bedrijven-container {
   font-family: Arial, sans-serif;
-  padding: 20px;
 }
 
 .bedrijven-titel {
@@ -15,6 +14,7 @@
   gap: 10px;
   margin-bottom: 30px;
   justify-content: center;
+  text-align: center;
 }
 
 .filter-form input {
@@ -22,7 +22,7 @@
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 14px;
-  width: 200px;
+  max-width: 300px;
 }
 
 .loading-text,

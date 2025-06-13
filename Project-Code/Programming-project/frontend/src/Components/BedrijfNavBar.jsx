@@ -17,7 +17,7 @@ function Navbar(){
 
   // ⚠️ Pas deze aan op basis van je auth/opslagmethode
   const gebruikerId = localStorage.getItem("gebruiker_id") || 2; // test: bedrijf 2 (SAP)
-
+  const logo_link = localStorage.getItem('Bedrijf_Logo');
 const toggleNotifications = () => {
   setShowNotifications((prev) => {
     const next = !prev;
@@ -83,7 +83,13 @@ useRequireLogin("bedrijf");
         <Link to={homepagePath}>
           <Logo className="logo" />
         </Link>
-        <button className="login-btn" onClick={() => navigate('/BedrijfBedrijfProfilePage')}>{localStorage.getItem('Bedrijf_Logo')}</button>
+        <button className="login-btn" onClick={() => navigate('/BedrijfBedrijfProfilePage')}>
+          <img 
+                  src={`/${logo_link}`} 
+                  style={{ width: '55px', height: '40px', borderRadius: '8px', objectFit: 'cover' }} 
+                  alt="Logo" 
+                /></button>
+
         <div className="navigatie-button-popout">
           <button className="notificatie-btn" ref={buttonRef} onClick={toggleNotifications} style={{ position: 'relative' }}>
   🔔{meldingen.some(m => !m.gelezen) && (

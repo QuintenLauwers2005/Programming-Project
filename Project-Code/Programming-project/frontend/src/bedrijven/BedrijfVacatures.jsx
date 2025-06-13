@@ -16,34 +16,40 @@ export default function BedrijfVacatureLijst() {
   const [editVacature, setEditVacature] = useState(null);
   const bedrijfId = localStorage.getItem("gebruiker_id");
 
-  // Fetch vacatures
- useEffect(() => {
-  if (!bedrijfId) return;
+  // Vacatures ophalen
+  useEffect(() => {
+    if (!bedrijfId) return;
 
-  axios.get(`http://localhost:5000/api/vacatures/${bedrijfId}`)
-    .then((res) => {
-      setVacatures(res.data);
-      setFilteredVacatures(res.data);
-    })
-    .catch((err) => {
-      console.error('Fout bij ophalen vacatures:', err.message);
-    });
-}, [bedrijfId]);
+    axios.get(`http://localhost:5000/api/vacatures/${bedrijfId}`)
+      .then((res) => {
+        setVacatures(res.data);
+        setFilteredVacatures(res.data);
+      })
+      .catch((err) => {
+        console.error('Fout bij ophalen vacatures:', err.message);
+      });
+  }, [bedrijfId]);
 
-  // Filter logic
+  // Filters toepassen
   useEffect(() => {
     let filtered = vacatures;
 
     if (filters.bedrijf) {
-      filtered = filtered.filter(v => v.bedrijf.toLowerCase().includes(filters.bedrijf.toLowerCase()));
+      filtered = filtered.filter(v =>
+        v.bedrijf.toLowerCase().includes(filters.bedrijf.toLowerCase())
+      );
     }
 
     if (filters.functie) {
-      filtered = filtered.filter(v => v.functie.toLowerCase().includes(filters.functie.toLowerCase()));
+      filtered = filtered.filter(v =>
+        v.functie.toLowerCase().includes(filters.functie.toLowerCase())
+      );
     }
 
     if (filters.contractType) {
-      filtered = filtered.filter(v => v.contract_type.toLowerCase().includes(filters.contractType.toLowerCase()));
+      filtered = filtered.filter(v =>
+        v.contract_type.toLowerCase().includes(filters.contractType.toLowerCase())
+      );
     }
 
     setFilteredVacatures(filtered);
@@ -55,18 +61,35 @@ export default function BedrijfVacatureLijst() {
   };
 
   const handleEditClick = (vacature) => {
-    setEditVacature(vacature);
+    setEditVacature({ ...vacature });
     setShowEditModal(true);
   };
 
   const handleEditSave = () => {
-    axios.put(`http://localhost:5000/api/vacatures/${editVacature.vacature_id}`, editVacature)
+    if (!editVacature.functie || !editVacature.contract_type) {
+      alert("Gelieve functie en contracttype in te vullen.");
+      return;
+    }
+
+    axios.put(`http://localhost:5000/api/vacatures/${editVacature.vacature_id}`, {
+      functie: editVacature.functie,
+      contract_type: editVacature.contract_type,
+      synopsis: editVacature.synopsis
+    })
       .then(() => {
-        alert('Vacature bijgewerkt!');
+        alert('Vacature succesvol bijgewerkt!');
         setShowEditModal(false);
+
+        // Vacatures herladen
+        return axios.get(`http://localhost:5000/api/vacatures/${bedrijfId}`);
+      })
+      .then((res) => {
+        setVacatures(res.data);
+        setFilteredVacatures(res.data);
       })
       .catch((err) => {
-        alert('Fout bij bijwerken:', err.message);
+        console.error('Fout bij bijwerken:', err.message);
+        alert('Fout bij het opslaan van de vacature.');
       });
   };
 
@@ -97,14 +120,15 @@ export default function BedrijfVacatureLijst() {
           <input type="text" name="contractType" placeholder="Contracttype" value={filters.contractType} onChange={handleFilterChange} />
         </div>
 
+        {/* Vacaturelijst */}
         <div className="vacature-list">
           {filteredVacatures.map((vacature) => (
             <div key={vacature.vacature_id} className="vacature-card">
               <div className="logo-blok">
-                <img 
-                  src={`/${vacature.logo_link}`} 
-                  style={{ width: '80px', height: '80px', borderRadius: '8px', objectFit: 'cover' }} 
-                  alt="Logo" 
+                <img
+                  src={`/${vacature.logo_link}`}
+                  style={{ width: '80px', height: '80px', borderRadius: '8px', objectFit: 'cover' }}
+                  alt="Logo"
                 />
               </div>
               <div className="vacature-info">
@@ -122,25 +146,36 @@ export default function BedrijfVacatureLijst() {
         </div>
       </main>
 
+      {/* Bewerken modal */}
       {showEditModal && editVacature && (
         <div className="modal-overlay">
           <div className="modal">
             <h3>Vacature bewerken</h3>
+
             <label>Functie:</label>
             <input
+              type="text"
               value={editVacature.functie}
               onChange={(e) => setEditVacature({ ...editVacature, functie: e.target.value })}
             />
+
             <label>Contracttype:</label>
-            <input
+            <select
               value={editVacature.contract_type}
               onChange={(e) => setEditVacature({ ...editVacature, contract_type: e.target.value })}
-            />
-            <label>Beschrijving:</label>
+            >
+              <option value="">-- Kies type --</option>
+              <option value="Stage">Stage</option>
+              <option value="Volltijds">Volltijds</option>
+              <option value="Deeltijds">Deeltijds</option>
+            </select>
+
+            <label>Beschrijving (synopsis):</label>
             <textarea
               value={editVacature.synopsis}
               onChange={(e) => setEditVacature({ ...editVacature, synopsis: e.target.value })}
             />
+
             <div className="modal-buttons">
               <button onClick={handleEditSave}>Opslaan</button>
               <button onClick={() => setShowEditModal(false)}>Annuleren</button>

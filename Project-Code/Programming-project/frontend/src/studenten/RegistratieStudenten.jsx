@@ -51,11 +51,16 @@ export default function RegistratieStudentPage() {
     valideerWachtwoord(nieuwWachtwoord);
   };
 
+  const isValidEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
   const handleLogin = () => {
     navigate('/login');
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     const isWachtwoordGeldig = Object.values(wachtwoordValidatie).every(Boolean);
@@ -75,6 +80,12 @@ export default function RegistratieStudentPage() {
       !wachtwoord
     ) {
       setError('Vul alle gegevens in');
+      setSuccess(false);
+      return;
+    }
+
+    if (!isValidEmail(mail)) {
+      setError('Voer een geldig e-mailadres in.');
       setSuccess(false);
       return;
     }
@@ -104,7 +115,7 @@ export default function RegistratieStudentPage() {
         setSuccess(true);
         setError('');
         setTimeout(() => {
-        navigate('/login');
+          navigate('/login');
         }, 2000); 
       }
     } catch (err) {
@@ -156,11 +167,13 @@ export default function RegistratieStudentPage() {
           }}
           required
         />
+        
         <input
           type="email"
           placeholder="Email"
           value={mail}
           onChange={(e) => setMail(e.target.value)}
+          required
           style={{
             width: '100%',
             padding: '10px',
@@ -169,8 +182,8 @@ export default function RegistratieStudentPage() {
             borderRadius: '4px',
             boxSizing: 'border-box'
           }}
-          required
         />
+
         <input
           type="text"
           placeholder="Opleiding"

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Footer from './Components/Footer';
-import Navbar from './Components/StudentNavBar';
+import Footer from '../Components/Footer';
+import Navbar from '../Components/StudentNavbar';
 
 export default function RegistratiePage() {
   const navigate = useNavigate();
@@ -98,7 +98,7 @@ export default function RegistratiePage() {
               cursor: 'pointer'
             }}
           >
-            Registreer
+            Opslaan
           </button>
         </form>
        
