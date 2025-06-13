@@ -20,7 +20,7 @@ function HomePageAdmin() {
                  justifyContent: 'center', 
                  alignItems: 'center', 
                  flexDirection: 'column',
-                 boxShadow: '0 2px 6px rgba(0, 0, 0, 1)',
+                 boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)',
                  cursor: 'pointer',
                  transition: 'transform 0.2s, box-shadow 0.2s'
                 }}
@@ -45,7 +45,7 @@ function HomePageAdmin() {
                 justifyContent: 'center', 
                 alignItems: 'center', 
                 flexDirection: 'column',
-                boxShadow: '0 2px 6px rgba(0, 0, 0, 1)',
+                boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)',
                 cursor: 'pointer'
             }}
             onMouseEnter={(e) => {
@@ -69,7 +69,7 @@ function HomePageAdmin() {
                 justifyContent: 'center', 
                 alignItems: 'center', 
                 flexDirection: 'column',
-                boxShadow: '0 2px 6px rgba(0, 0, 0, 1)',
+                boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)',
                 cursor: 'pointer'
             }}
             onMouseEnter={(e) => {
@@ -93,7 +93,7 @@ function HomePageAdmin() {
                 justifyContent: 'center', 
                 alignItems: 'center', 
                 flexDirection: 'column',
-                boxShadow: '0 2px 6px rgba(0, 0, 0, 1)',
+                boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)',
                 cursor: 'pointer'
             }}
             onMouseEnter={(e) => {
