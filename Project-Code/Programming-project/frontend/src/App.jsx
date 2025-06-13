@@ -30,6 +30,7 @@ import StudentVacatureLijst from './studenten/VacatureLijstStudenten';
 import Bedrijfsagenda from './bedrijven/BedrijfsAgenda';
 import BedrijfBedrijfProfilePage from './bedrijven/BedrijfBedrijfprofiel';
 import BedrijfVacatureLijst from './bedrijven/BedrijfVacatures';
+import StudentInstellingen from './studenten/StudentInstellingen';
 
 
 
@@ -69,7 +70,8 @@ function App() {
         <Route path="/BedrijfAgenda" element={<Bedrijfsagenda />} />
         <Route path="/BedrijfBedrijfProfilePage" element={<BedrijfBedrijfProfilePage />} />
         <Route path="/BedrijfVacaturelijst" element={<BedrijfVacatureLijst />} />
-        
+        <Route path="/StudentInstellingen" element={<StudentInstellingen />} />
+
 
 
 

@@ -31,21 +31,45 @@ function StudentProfilePage() {
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
       <header style={{ marginBottom: '50px' }}>
         <Navbar />
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
-          <button
-            onClick={handleLogout}
-            style={{
-              backgroundColor: '#dc3545',
-              color: 'white',
-              border: 'none',
-              padding: '10px 15px',
-              borderRadius: '5px',
-              cursor: 'pointer'
-            }}
-          >
-            Uitloggen
-          </button>
-        </div>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '10px' }}>
+  <button
+    onClick={() => navigate('/StudentInstellingen')}
+    style={{
+      backgroundColor: '#007bff',
+      color: 'white',
+      border: 'none',
+      padding: '10px 20px',
+      borderRadius: '5px',
+      cursor: 'pointer',
+      fontWeight: 'bold',
+      transition: 'background-color 0.3s ease'
+    }}
+    onMouseOver={(e) => e.target.style.backgroundColor = '#0056b3'}
+    onMouseOut={(e) => e.target.style.backgroundColor = '#007bff'}
+  >
+    Aanpassen
+  </button>
+
+  <button
+    onClick={handleLogout}
+    style={{
+      backgroundColor: '#dc3545',
+      color: 'white',
+      border: 'none',
+      padding: '10px 20px',
+      borderRadius: '5px',
+      cursor: 'pointer',
+      fontWeight: 'bold',
+      transition: 'background-color 0.3s ease'
+    }}
+    onMouseOver={(e) => e.target.style.backgroundColor = '#b02a37'}
+    onMouseOut={(e) => e.target.style.backgroundColor = '#dc3545'}
+  >
+    Uitloggen
+  </button>
+
+</div>
+
       </header>
 
       {/* Profiel Hoofding */}
