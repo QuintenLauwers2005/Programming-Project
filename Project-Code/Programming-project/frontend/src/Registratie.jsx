@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Components/Navbar';
+import Footer from './Components/Footer';
 
 export default function RegistratiePage() {
   const navigate = useNavigate();
@@ -70,10 +71,8 @@ export default function RegistratiePage() {
         </p>
       </section>
 
-      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px' }}>
-        <h5>Contact</h5>
-        <p>info@careerlaunch.be</p>
-        <p>EhB - Erasmushogeschool Brussel</p>
+      <footer>
+       <Footer />
       </footer>
     </div>
   );

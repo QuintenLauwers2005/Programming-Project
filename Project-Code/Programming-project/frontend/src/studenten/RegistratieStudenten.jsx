@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Components/Navbar';
+import Footer from '../Components/Footer';
 import eyeIconPath from '../Assets/eye-empty.svg';
 import eyeSlashIconPath from '../Assets/eye-off.svg';
 import axios from 'axios';
@@ -244,7 +245,7 @@ export default function RegistratieStudentPage() {
           }}
           required
         />
-        <div style={{ 
+          <div style={{ 
             position: 'relative', 
             width: '100%', 
             marginBottom: '15px'
@@ -332,10 +333,8 @@ export default function RegistratieStudentPage() {
         </button>
       </section>
 
-      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px' }}>
-        <h5>Contact</h5>
-        <p>info@careerlaunch.be</p>
-        <p>EhB - Erasmushogeschool Brussel</p>
+      <footer>
+       <Footer />
       </footer>
     </div>
   );
