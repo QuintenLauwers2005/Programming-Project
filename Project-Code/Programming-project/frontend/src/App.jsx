@@ -33,7 +33,6 @@ import BedrijfVacatureLijst from './bedrijven/BedrijfVacatures';
 import StudentInstellingen from './studenten/StudentInstellingen';
 
 
-
 function App() {
   return (
     <Router>

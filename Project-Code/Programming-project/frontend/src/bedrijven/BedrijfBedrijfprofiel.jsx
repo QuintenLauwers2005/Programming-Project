@@ -63,33 +63,66 @@ export default function BedrijfBedrijfProfilePage() {
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
       <Navbar />
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
-          <button
-            onClick={handleLogout}
-            style={{
-              backgroundColor: '#dc3545',
-              color: 'white',
-              border: 'none',
-              padding: '10px 15px',
-              borderRadius: '5px',
-              cursor: 'pointer'
-            }}
-          >
-            Uitloggen
-          </button>
-        </div>
-      <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee', marginTop:'70px' }}>
-        <img 
-          src={`/${companyData.logo_link}`}       
-          alt={`Logo van ${companyData.naam}`}
-          style={{ width: '150px', height: '150px', borderRadius: '8px', objectFit: 'cover', marginRight: '30px' }} 
-        />
-        <div>
-          <h2 style={{ margin: '0 0 10px 0', fontSize: '2em', color: '#007bff' }}>{companyData.naam}</h2>
-          <p style={{ margin: '0 0 5px 0', color: '#333', fontSize: '1.1em' }}>{companyData.vertegenwoordiger}</p>
-          <p style={{ color: '#007bff', fontSize: '1em' }}>{companyData.telefoon}</p>
-        </div>
-      </section>
+      
+<section style={{
+  display: 'flex',
+  alignItems: 'flex-start',
+  marginBottom: '40px',
+  paddingBottom: '20px',
+  borderBottom: '1px solid #eee',
+  marginTop: '70px'
+}}>
+  <img
+    src={`/${companyData.logo_link}`}
+    alt={`Logo van ${companyData.naam}`}
+    style={{
+      width: '150px',
+      height: '150px',
+      borderRadius: '8px',
+      objectFit: 'cover',
+      marginRight: '30px'
+    }}
+  />
+
+  <div style={{ flex: 1 }}>
+    <h2 style={{ margin: '0 0 10px 0', fontSize: '2em', color: '#007bff' }}>{companyData.naam}</h2>
+    <p style={{ margin: '0 0 5px 0', color: '#333', fontSize: '1.1em' }}>{companyData.vertegenwoordiger}</p>
+    <p style={{ color: '#007bff', fontSize: '1em', marginBottom: '20px' }}>{companyData.telefoon}</p>
+
+    <div style={{ display: 'flex', gap: '10px' }}>
+      <button
+        onClick={() => navigate('/bedrijf-instellingen')}
+        style={{
+          backgroundColor: '#007bff',
+          color: 'white',
+          border: 'none',
+          padding: '10px 20px',
+          borderRadius: '5px',
+          cursor: 'pointer',
+          fontWeight: 'bold'
+        }}
+      >
+        Aanpassen
+      </button>
+
+      <button
+        onClick={handleLogout}
+        style={{
+          backgroundColor: '#dc3545',
+          color: 'white',
+          border: 'none',
+          padding: '10px 20px',
+          borderRadius: '5px',
+          cursor: 'pointer',
+          fontWeight: 'bold'
+        }}
+      >
+        Uitloggen
+      </button>
+    </div>
+  </div>
+</section>
+
 
       <section style={{ marginBottom: '30px' }}>
         <h3 style={{ borderBottom: '2px solid #ddd', paddingBottom: '10px', marginBottom: '20px', color: '#333' }}>Openstaande Vacatures & Stages</h3>
