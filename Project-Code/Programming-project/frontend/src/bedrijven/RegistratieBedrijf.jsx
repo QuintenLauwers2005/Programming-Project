@@ -49,6 +49,11 @@ export default function RegistratieBedrijfPage() {
     valideerWachtwoord(nieuwWachtwoord);
   };
 
+  const isValidEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
   const handleLogin = () => {
     navigate('/login');
   };
@@ -66,6 +71,18 @@ export default function RegistratieBedrijfPage() {
     }
     if (!isWachtwoordGeldig) {
       setError("Je wachtwoord voldoet niet aan alle eisen.");
+      return;
+    }
+
+        if (!isValidEmail(mail)) {
+      setError('Voer een geldig e-mailadres in.');
+      setSuccess(false);
+      return;
+    }
+
+    if (wachtwoord.length <= 5) {
+      setError('Gebruik een langere wachtwoord');
+      setSuccess(false);
       return;
     }
     
@@ -92,7 +109,7 @@ export default function RegistratieBedrijfPage() {
         <form>
           <input
             type="text"
-            placeholder="Bedrijfsnaam"
+            placeholder="Bedrijfsnaam *"
             value={bedrijfsnaam}
             onChange={(e) => setBedrijfsnaam(e.target.value)}
             style={{
@@ -107,7 +124,7 @@ export default function RegistratieBedrijfPage() {
           />
           <input
             type="number"
-            placeholder="Telefoonnummer"
+            placeholder="Telefoonnummer *"
             value={telefoonnummer}
             onChange={(e) => setTelefoonnummer(e.target.value)}
             style={{
@@ -122,7 +139,7 @@ export default function RegistratieBedrijfPage() {
           />
           <input
             type="text"
-            placeholder="Locatie"
+            placeholder="Locatie *"
             value={locatie}
             onChange={(e) => setLocatie(e.target.value)}
             style={{
@@ -137,7 +154,7 @@ export default function RegistratieBedrijfPage() {
           />
           <input
             type="email"
-            placeholder="Email"
+            placeholder="Email *"
             value={mail}
             onChange={(e) => setMail(e.target.value)}
             style={{
@@ -152,7 +169,7 @@ export default function RegistratieBedrijfPage() {
           />
           <input
             type="text"
-            placeholder="Vertegenwoordiger"
+            placeholder="Vertegenwoordiger *"
             value={vertegenwoordiger}
             onChange={(e) => setVertegenwoordiger(e.target.value)}
             style={{
@@ -172,7 +189,7 @@ export default function RegistratieBedrijfPage() {
           }}>
             <input
               type={passwordVisible ? 'text' : 'password'}
-              placeholder="Wachtwoord"
+              placeholder="Wachtwoord *"
               value={wachtwoord}
               onChange={handleWachtwoordChange}
               onFocus={() => setShowValidation(true)}
