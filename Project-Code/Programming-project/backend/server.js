@@ -300,6 +300,33 @@ app.get('/api/bedrijf/:id', (req, res) => {
   });
 });
 
+// PUT: Bedrijf bijwerken
+app.put('/api/bedrijf/:id', (req, res) => {
+  const bedrijfId = req.params.id;
+  const { naam, locatie, vertegenwoordiger, telefoon, url } = req.body;
+
+  const sql = `
+    UPDATE bedrijf 
+    SET naam = ?, locatie = ?, vertegenwoordiger = ?, telefoon = ?, url = ?
+    WHERE bedrijf_id = ?
+  `;
+
+  const values = [naam, locatie, vertegenwoordiger, telefoon, url, bedrijfId];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error('Fout bij bijwerken bedrijf:', err);
+      return res.status(500).json({ error: 'Databasefout' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Bedrijf niet gevonden' });
+    }
+
+    res.json({ message: 'Bedrijf succesvol bijgewerkt' });
+  });
+});
+
 
 app.get('/api/HomePageAantalen', (req, res) => {
   const sql = `
