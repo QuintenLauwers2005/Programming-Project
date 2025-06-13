@@ -23,6 +23,7 @@ import AdminStudentInstellingen from './Admin/AdminStudentInstellingen'
 import RegistratieStudentPage from './studenten/RegistratieStudenten';
 import StudentHomepage from './studenten/StudentHomepage';
 import AdminBedrijfInstellingen from './Admin/AdminBedrijfInstellingen'
+import BedrijfInstellingen from './bedrijven/BedrijfInstellingen'
 import AgendaStudenten from './studenten/AgendaStudenten';
 import BedrijfProfileStudent from './studenten/bedrijfProfielStudent';
 import StudentBedrijvenLijst from './studenten/bedrijvenpagestudent';
@@ -62,6 +63,7 @@ function App() {
         <Route path="/HomePageStudent" element={<StudentHomepage />} />
         <Route path="/admin/bedrijf/:id/profiel" element={<AdminBedrijfProfiel/>} />
         <Route path="/admin/bedrijf/:id/instellingen" element={<AdminBedrijfInstellingen />} />
+        <Route path="/BedrijfsInstellingen/:id" element={<BedrijfInstellingen />} />
         <Route path="/AgendaStudenten" element={<AgendaStudenten />} />
         <Route path="/BedrijfProfileStudent/:id" element={<BedrijfProfileStudent />} />
         <Route path="/StudentBedrijvenLijst" element={<StudentBedrijvenLijst />} />
