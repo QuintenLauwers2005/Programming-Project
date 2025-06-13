@@ -86,6 +86,37 @@ app.get('/api/vacatures', (req, res) => {
   })
 })
 
+app.put('/api/vacatures/:id', async (req, res) => {
+  const { id } = req.params;
+  const { functie, contract_type, synopsis } = req.body;
+
+  try {
+    const result = await pool.query(
+      'UPDATE vacatures SET functie = $1, contract_type = $2, synopsis = $3 WHERE vacature_id = $4 RETURNING *',
+      [functie, contract_type, synopsis, id]
+    );
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Fout bij updaten vacature:', error);
+    res.status(500).json({ error: 'Vacature kon niet worden aangepast' });
+  }
+});
+
+//vacatures verwijdfer
+
+app.delete('/api/vacatures/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await pool.query('DELETE FROM vacatures WHERE vacature_id = $1', [id]);
+    res.status(200).json({ message: 'Vacature verwijderd' });
+  } catch (error) {
+    console.error('Fout bij verwijderen vacature:', error);
+    res.status(500).json({ error: 'Vacature kon niet worden verwijderd' });
+  }
+});
+
+
 // alle studenten ophalen
 app.get('/api/studenten', (req, res) => {
   const sql = `

@@ -5,6 +5,8 @@ import Navbar from '../Components/AdminNavBar';
 import Footer from '../Components/Footer';
 
 export default function AdminVacatureLijst() {
+  const [editMode, setEditMode] = useState(false);
+  const [editData, setEditData] = useState({ functie: '', contract_type: '', synopsis: '' });
   const [vacatures, setVacatures] = useState([]);
   const [filteredVacatures, setFilteredVacatures] = useState([]);
   const [selectedVacature, setSelectedVacature] = useState(null);
@@ -56,44 +58,78 @@ export default function AdminVacatureLijst() {
     setFilteredVacatures(filtered);
   }, [filters, vacatures]);
 
-  // Handle selecting a vacature and showing the modal
-  const handleSelectVacature = (vacature) => {
+ 
+
+  // Open modal om vacature te bewerken
+  const handleEditVacature = (vacature) => {
     setSelectedVacature(vacature);
+    setEditData({
+      functie: vacature.functie,
+      contract_type: vacature.contract_type,
+      synopsis: vacature.synopsis
+    });
+    setEditMode(true);
     setShowModal(true);
   };
 
-  // Handle form submission
+  // Verwijder vacature
+  const handleDeleteVacature = (id) => {
+    if (window.confirm('Weet je zeker dat je deze vacature wilt verwijderen?')) {
+      axios.delete(`http://localhost:5000/api/vacatures/${id}`)
+        .then(() => {
+          alert('Vacature verwijderd');
+          setVacatures(prev => prev.filter(v => v.vacature_id !== id));
+          setFilteredVacatures(prev => prev.filter(v => v.vacature_id !== id));
+          setShowModal(false);
+        })
+        .catch(err => {
+          alert('Verwijderen mislukt');
+          console.error(err);
+        });
+    }
+  };
+
+  // Update vacature
+  const handleUpdateVacature = () => {
+    axios.put(`http://localhost:5000/api/vacatures/${selectedVacature.vacature_id}`, editData)
+      .then((res) => {
+        alert('Vacature aangepast');
+        const updated = vacatures.map(v => v.vacature_id === res.data.vacature_id ? res.data : v);
+        setVacatures(updated);
+        setFilteredVacatures(updated);
+        setShowModal(false);
+        setEditMode(false);
+      })
+      .catch(err => {
+        alert('Fout bij bewerken');
+        console.error(err);
+      });
+  };
+
+  // Bevestig tijdstip reserveren
   const handleConfirm = () => {
     if (!selectedTime) {
       alert('Kies een tijdstip');
       return;
     }
 
-    // Store the selected date and time
-    const selectedData = {
-      vacatureId: selectedVacature.vacature_id,
-      time: selectedTime
-    };
-
-    // Save to localStorage or send to backend
-    // For now, just redirect to Agenda with query params
     axios.post('http://localhost:5000/api/speeddate', {
-    student_id: 1,
-    bedrijf_id: selectedVacature.bedrijf_id,
-    tijdstip: selectedTime + ':00',
-    locatie: 'Aula 1', 
-    status: 'bevestigd'
+      student_id: 1,
+      bedrijf_id: selectedVacature.bedrijf_id,
+      tijdstip: selectedTime + ':00',
+      locatie: 'Aula 1', 
+      status: 'bevestigd'
     })
     .then(() => {
       alert('Afspraak succesvol vastgelegd!');
       setShowModal(false);
-      })
-      .catch(err => {
+    })
+    .catch(err => {
       alert(err.response?.data?.error || 'Er ging iets mis bij het reserveren.');
-      });
-
-    
+    });
   };
+
+  // Genereer tijd opties
   const generateTimeOptions = () => {
     const options = [];
     for (let hour = 8; hour < 19; hour++) {
@@ -104,15 +140,9 @@ export default function AdminVacatureLijst() {
     }
     return options;
   };
-  const handleOpenModal = (vacature) => {
-    setSelectedVacature(vacature);
-    setSelectedTime('');
-    setShowModal(true);
-  };
 
   return (
     <div className="pagina">
-      {/* Header with Navbar */}
       <header>
         <Navbar />
       </header>
@@ -120,7 +150,6 @@ export default function AdminVacatureLijst() {
       <main className="inhoud">
         <h2>Vacatures</h2>
 
-        {/* Filter Form */}
         <div className="filter-form">
           <input
             type="text"
@@ -146,56 +175,68 @@ export default function AdminVacatureLijst() {
         </div>
 
         <section className="enhanced-box">
-  <div className="vacature-wrapper">
-    <div className="vacature-list">
-      {filteredVacatures.map((vacature) => (
-        <div key={vacature.vacature_id} className="vacature-card">
-          <div className="logo-blok">
-            <img
-              src={`/${vacature.logo_link}`}
-              alt={`logo van ${vacature.bedrijf}`}
-              style={{
-                width: '80px',
-                height: '80px',
-                borderRadius: '8px',
-                objectFit: 'cover'
-              }}
-            />
+          <div className="vacature-wrapper">
+            <div className="vacature-list">
+              {filteredVacatures.map((vacature) => (
+                <div key={vacature.vacature_id} className="vacature-card">
+                  <div className="logo-blok">
+                    <img
+                      src={`/${vacature.logo_link}`}
+                      alt={`logo van ${vacature.bedrijf}`}
+                      style={{
+                        width: '80px',
+                        height: '80px',
+                        borderRadius: '8px',
+                        objectFit: 'cover'
+                      }}
+                    />
+                  </div>
+                  <div className="vacature-info">
+                    <p className="bedrijf">{vacature.bedrijf}</p>
+                    <p className="beschrijving">{vacature.synopsis}</p>
+                    <p className="functie">
+                      Functie: {vacature.functie}
+                      <br />
+                      Contract: {vacature.contract_type}
+                    </p>
+                    <button
+                      onClick={() => handleEditVacature(vacature)}
+                      style={{ 
+                        marginLeft: '10px', 
+                        backgroundColor: '#ffc107', 
+                        color: 'white', 
+                        border: 'none', 
+                        padding: '6px 12px', 
+                        borderRadius: '5px', 
+                        cursor: 'pointer' 
+                      }}
+                    >
+                      Bewerken
+                    </button>
+                    <button
+                      onClick={() => handleDeleteVacature(vacature.vacature_id)}
+                      style={{
+                        marginLeft: '10px',
+                        backgroundColor: '#dc3545',
+                        color: 'white',
+                        border: 'none',
+                        padding: '6px 12px',
+                        borderRadius: '5px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Verwijderen
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="vacature-info">
-            <p className="bedrijf">{vacature.bedrijf}</p>
-            <p className="beschrijving">{vacature.synopsis}</p>
-            <p className="functie">
-              Functie: {vacature.functie}
-              <br />
-              Contract: {vacature.contract_type}
-            </p>
-            <button
-              onClick={() => handleOpenModal(vacature)}
-              style={{
-                padding: '6px 12px',
-                backgroundColor: '#007bff',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer',
-                fontSize: '0.9em'
-              }}
-            >
-              Reserveer gesprek
-            </button>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
-
+        </section>
 
         <button className="toonmeer-btn" onClick={() => alert('Toon meer geklikt!')}>Toon meer</button>
       </main>
 
-      {/* Modal for selecting time */}
       {showModal && (
         <div style={{
           position: 'fixed',
@@ -211,51 +252,106 @@ export default function AdminVacatureLijst() {
             width: '300px',
             boxShadow: '0 2px 10px rgba(0,0,0,0.3)'
           }}>
-            <h3>Kies een tijdstip</h3>
-            <label style={{ display: 'block', margin: '10px 0 5px' }}>Tijdstip:</label>
-            <select
-              value={selectedTime}
-              onChange={e => setSelectedTime(e.target.value)}
-              style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
-            >
-              <option value="">Selecteer tijd</option>
-              {generateTimeOptions()}
-            </select>
+            {editMode ? (
+              <>
+                <h3>Vacature Bewerken</h3>
+                <label style={{ display: 'block', margin: '10px 0 5px' }}>Functie:</label>
+                <input
+                  type="text"
+                  value={editData.functie}
+                  onChange={(e) => setEditData({ ...editData, functie: e.target.value })}
+                  style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
+                />
+                <label style={{ display: 'block', margin: '10px 0 5px' }}>Contract Type:</label>
+                <input
+                  type="text"
+                  value={editData.contract_type}
+                  onChange={(e) => setEditData({ ...editData, contract_type: e.target.value })}
+                  style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
+                />
+                <label style={{ display: 'block', margin: '10px 0 5px' }}>Beschrijving:</label>
+                <textarea
+                  value={editData.synopsis}
+                  onChange={(e) => setEditData({ ...editData, synopsis: e.target.value })}
+                  style={{ width: '100%', padding: '8px', boxSizing: 'border-box', minHeight: '80px' }}
+                />
+                <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                  <button
+                    onClick={handleUpdateVacature}
+                    style={{
+                      backgroundColor: '#28a745',
+                      color: 'white',
+                      border: 'none',
+                      padding: '8px 16px',
+                      borderRadius: '5px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Opslaan
+                  </button>
+                  <button
+                    onClick={() => { setShowModal(false); setEditMode(false); }}
+                    style={{
+                      backgroundColor: '#dc3545',
+                      color: 'white',
+                      border: 'none',
+                      padding: '8px 16px',
+                      borderRadius: '5px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Annuleren
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <h3>Kies een tijdstip</h3>
+                <label style={{ display: 'block', margin: '10px 0 5px' }}>Tijdstip:</label>
+                <select
+                  value={selectedTime}
+                  onChange={e => setSelectedTime(e.target.value)}
+                  style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
+                >
+                  <option value="">Selecteer tijd</option>
+                  {generateTimeOptions()}
+                </select>
 
-            <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-              <button
-                onClick={handleConfirm}
-                style={{
-                  backgroundColor: '#28a745',
-                  color: 'white',
-                  border: 'none',
-                  padding: '8px 16px',
-                  borderRadius: '5px',
-                  cursor: 'pointer'
-                }}
-              >
-                Bevestigen
-              </button>
-              <button
-                onClick={() => setShowModal(false)}
-                style={{
-                  backgroundColor: '#dc3545',
-                  color: 'white',
-                  border: 'none',
-                  padding: '8px 16px',
-                  borderRadius: '5px',
-                  cursor: 'pointer'
-                }}
-              >
-                Annuleren
-              </button>
-            </div>
+                <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                  <button
+                    onClick={handleConfirm}
+                    style={{
+                      backgroundColor: '#28a745',
+                      color: 'white',
+                      border: 'none',
+                      padding: '8px 16px',
+                      borderRadius: '5px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Bevestigen
+                  </button>
+                  <button
+                    onClick={() => setShowModal(false)}
+                    style={{
+                      backgroundColor: '#dc3545',
+                      color: 'white',
+                      border: 'none',
+                      padding: '8px 16px',
+                      borderRadius: '5px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Annuleren
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
-      <footer>
-       <Footer />
-      </footer>
+
+      <Footer />
     </div>
   );
 }
