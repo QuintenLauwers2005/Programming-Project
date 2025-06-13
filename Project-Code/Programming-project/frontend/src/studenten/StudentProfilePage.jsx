@@ -139,8 +139,8 @@ function StudentProfilePage() {
       {/* Profiel Hoofding */}
       <section style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>
   <img
-    src={studentData.profielFotoUrl}
-    alt={`Profiel van ${studentData.name}`}
+    src={`http://localhost:5000${studentData.profielFotoUrl}`}
+    alt={`Profiel van ${studentData.profielFotoUrl}`}
     style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', marginRight: '30px' }}
   />
 
