@@ -31,60 +31,58 @@ function StudentProfilePage() {
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
       <header style={{ marginBottom: '50px' }}>
         <Navbar />
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '10px' }}>
-  <button
-    onClick={() => navigate('/StudentInstellingen')}
-    style={{
-      backgroundColor: '#007bff',
-      color: 'white',
-      border: 'none',
-      padding: '10px 20px',
-      borderRadius: '5px',
-      cursor: 'pointer',
-      fontWeight: 'bold',
-      transition: 'background-color 0.3s ease'
-    }}
-    onMouseOver={(e) => e.target.style.backgroundColor = '#0056b3'}
-    onMouseOut={(e) => e.target.style.backgroundColor = '#007bff'}
-  >
-    Aanpassen
-  </button>
-
-  <button
-    onClick={handleLogout}
-    style={{
-      backgroundColor: '#dc3545',
-      color: 'white',
-      border: 'none',
-      padding: '10px 20px',
-      borderRadius: '5px',
-      cursor: 'pointer',
-      fontWeight: 'bold',
-      transition: 'background-color 0.3s ease'
-    }}
-    onMouseOver={(e) => e.target.style.backgroundColor = '#b02a37'}
-    onMouseOut={(e) => e.target.style.backgroundColor = '#dc3545'}
-  >
-    Uitloggen
-  </button>
-
-</div>
-
       </header>
 
       {/* Profiel Hoofding */}
-      <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>
-        <img
-          src={studentData.profielFotoUrl}
-          alt={`Profiel van ${studentData.name}`}
-          style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', marginRight: '30px' }}
-        />
-        <div>
-          <h2 style={{ margin: '0 0 10px 0', fontSize: '2em' }}>{studentData.name}</h2>
-          <p style={{ margin: '0 0 5px 0', color: '#333', fontSize: '1.1em' }}>{studentData.opleiding}</p>
-          <p style={{ margin: '0', color: '#555' }}>{studentData.email}</p>
-        </div>
-      </section>
+      <section style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>
+  <img
+    src={studentData.profielFotoUrl}
+    alt={`Profiel van ${studentData.name}`}
+    style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', marginRight: '30px' }}
+  />
+
+  <div style={{ flex: 1 }}>
+    <h2 style={{ margin: '0 0 10px 0', fontSize: '2em' }}>{studentData.name}</h2>
+    <p style={{ margin: '0 0 5px 0', color: '#333', fontSize: '1.1em' }}>{studentData.opleiding}</p>
+    <p style={{ margin: '0 20px 15px 0', color: '#555' }}>{studentData.email}</p>
+
+    {/* Knoppen */}
+    <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+      <button
+        onClick={() => navigate('/StudentInstellingen')}
+        style={{
+          backgroundColor: '#007bff',
+          color: 'white',
+          border: 'none',
+          padding: '10px 20px',
+          borderRadius: '5px',
+          cursor: 'pointer',
+          fontWeight: 'bold'
+        }}
+        onMouseOver={(e) => e.target.style.backgroundColor = '#0056b3'}
+        onMouseOut={(e) => e.target.style.backgroundColor = '#007bff'}
+      >
+        Aanpassen
+      </button>
+      <button
+        onClick={handleLogout}
+        style={{
+          backgroundColor: '#dc3545',
+          color: 'white',
+          border: 'none',
+          padding: '10px 20px',
+          borderRadius: '5px',
+          cursor: 'pointer',
+          fontWeight: 'bold'
+        }}
+        onMouseOver={(e) => e.target.style.backgroundColor = '#b02a37'}
+        onMouseOut={(e) => e.target.style.backgroundColor = '#dc3545'}
+      >
+        Verwijder Account
+      </button>
+    </div>
+  </div>
+</section>
 
       {/* Over Mij */}
       <section style={{ marginBottom: '30px', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
