@@ -3,18 +3,20 @@ import axios from 'axios';
 import '../Components/VacatureLijst.css';
 import Navbar from '../Components/StudentNavbar';
 import Footer from '../Components/Footer';
+import { useNavigate } from 'react-router-dom';
 
 export default function StudentVacatureLijst() {
-const [vacatures, setVacatures] = useState([]);
-  const [filteredVacatures, setFilteredVacatures] = useState([]);
-  const [selectedVacature, setSelectedVacature] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedTime, setSelectedTime] = useState('');
-  const [filters, setFilters] = useState({
-    bedrijf: '',
-    functie: '',
-    contractType: ''
-  });
+  const navigate = useNavigate();
+  const [vacatures, setVacatures] = useState([]);
+    const [filteredVacatures, setFilteredVacatures] = useState([]);
+    const [selectedVacature, setSelectedVacature] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedTime, setSelectedTime] = useState('');
+    const [filters, setFilters] = useState({
+      bedrijf: '',
+      functie: '',
+      contractType: ''
+    });
 
   // Fetch vacatures from API
   useEffect(() => {
@@ -152,7 +154,13 @@ const [vacatures, setVacatures] = useState([]);
             />
           </div>
           <div className="vacature-info">
-            <p className="bedrijf">{vacature.bedrijf}</p>
+            <p 
+              className="bedrijf" 
+              style={{ cursor: 'pointer', color: '#007bff', textDecoration: 'underline' }}
+              onClick={() => navigate(`/BedrijfProfileStudent/${vacature.bedrijf_id}`)}
+            >
+              {vacature.bedrijf}
+            </p>
             <p className="beschrijving">{vacature.synopsis}</p>
             <p className="functie">
               Functie: {vacature.functie}
