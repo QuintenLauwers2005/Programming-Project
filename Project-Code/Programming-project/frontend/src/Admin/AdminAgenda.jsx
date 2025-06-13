@@ -9,7 +9,7 @@ export default function AdminAgenda() {
   const [cancelId, setCancelId] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/afspraken')
+    fetch('http://localhost:5000/api/afspraken/all')
       .then(res => res.json())
       .then(data => {
         setAfspraken(data);
