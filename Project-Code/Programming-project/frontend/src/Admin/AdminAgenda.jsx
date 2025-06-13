@@ -17,7 +17,7 @@ export default function AdminAgenda() {
       .catch(err => {
         console.error('Fout bij ophalen van afspraken:', err);
       });
-  }, []);
+  }, []); 
 
   const handleCancelConfirm = (id) => {
     setCancelId(id);
