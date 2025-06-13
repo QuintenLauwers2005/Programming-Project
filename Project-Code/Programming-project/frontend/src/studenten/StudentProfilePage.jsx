@@ -78,7 +78,7 @@ function StudentProfilePage() {
         onMouseOver={(e) => e.target.style.backgroundColor = '#b02a37'}
         onMouseOut={(e) => e.target.style.backgroundColor = '#dc3545'}
       >
-        Verwijder Account
+        Uitloggen
       </button>
     </div>
   </div>
