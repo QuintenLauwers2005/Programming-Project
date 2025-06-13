@@ -6,9 +6,14 @@ const port = 5000
 const multer = require('multer');
 const path = require('path');
 require('dotenv').config();
+const fs = require('fs');
+
+const multer = require('multer');
+const path = require('path');
 
 app.use(cors())
 app.use(express.json())
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // serve images
 
 // aanpassen als de database verandert
 /*const db = mysql.createConnection({
@@ -845,5 +850,70 @@ app.post('/api/bedrijvenToevoegen', (req, res) => {
     });
   });
 });
+
+
+
+
+// 1. Set up Multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, 'uploads/'),
+  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname),
+});
+
+const fileFilter = (req, file, cb) => {
+  const allowed = /jpeg|jpg|png|gif/;
+  const isValid = allowed.test(file.mimetype);
+  isValid ? cb(null, true) : cb(new Error('Only images allowed'));
+};
+
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
+});
+
+// 2. Upload Route with old file cleanup
+app.post('/api/upload', upload.single('image'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+
+  const imagePath = `/uploads/${req.file.filename}`;
+  const userId = req.body.userId;
+
+  if (!userId) return res.status(400).json({ error: 'Missing userId' });
+
+  // Step 1: Get existing profiel_foto_url from student
+  const selectQuery = 'SELECT profiel_foto_url FROM student WHERE student_id = ?';
+
+  db.query(selectQuery, [userId], (selectErr, results) => {
+    if (selectErr) {
+      console.error('MySQL SELECT error:', selectErr);
+      return res.status(500).json({ error: 'Could not fetch existing image' });
+    }
+
+    const oldImage = results[0]?.profiel_foto_url;
+
+    // Step 2: Delete old image if it exists
+    if (oldImage) {
+      const oldImagePath = path.join(__dirname, oldImage);
+      fs.unlink(oldImagePath, (unlinkErr) => {
+        if (unlinkErr && unlinkErr.code !== 'ENOENT') {
+          console.warn('Failed to delete previous image:', unlinkErr.message);
+        }
+      });
+    }
+
+    // Step 3: Save new path to DB
+    const updateQuery = 'UPDATE student SET profiel_foto_url = ? WHERE student_id = ?';
+    db.query(updateQuery, [imagePath, userId], (updateErr) => {
+      if (updateErr) {
+        console.error('MySQL UPDATE error:', updateErr);
+        return res.status(500).json({ error: 'Failed to update image in DB' });
+      }
+
+      res.json({ imageUrl: imagePath });
+    });
+  });
+});
+app.listen(5000, () => console.log('Backend running on http://localhost:5000'));
 
 
