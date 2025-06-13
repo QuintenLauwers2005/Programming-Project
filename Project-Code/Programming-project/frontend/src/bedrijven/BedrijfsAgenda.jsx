@@ -70,9 +70,6 @@ export default function Bedrijfsagenda() {
     <div>
       <Navbar notificatie={notificatie} />
       <div className="page">
-        <button className="top-button" onClick={() => setShowInfo(true)}>
-          Hoe speeddate reserveren?
-        </button>
 
         {afspraken.length > 0 ? (
           afspraken.map(afspraak => (
