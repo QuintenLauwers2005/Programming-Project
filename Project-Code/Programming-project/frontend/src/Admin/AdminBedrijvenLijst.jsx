@@ -52,7 +52,7 @@ export default function AdminBedrijvenLijst() {
   });
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
+    <div style={{ fontFamily: 'Arial, sans-serif' }}>
       <header>
        <Navbar />
       </header>
