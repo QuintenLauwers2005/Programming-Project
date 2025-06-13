@@ -3,9 +3,11 @@ import axios from 'axios';
 import '../Components/VacatureLijst.css';
 import Navbar from '../Components/AdminNavBar';
 import Footer from '../Components/Footer';
+import { useNavigate } from 'react-router-dom';
 
 export default function AdminVacatureLijst() {
   const [vacatures, setVacatures] = useState([]);
+  const navigate = useNavigate();
   const [filteredVacatures, setFilteredVacatures] = useState([]);
   const [selectedVacature, setSelectedVacature] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -35,6 +37,11 @@ export default function AdminVacatureLijst() {
       ...filters,
       [name]: value
     });
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();         // Verwijder gebruiker_id en andere data
+    navigate('/login');           // Navigeer naar loginpagina
   };
 
   // Apply filters
@@ -115,6 +122,21 @@ export default function AdminVacatureLijst() {
       {/* Header with Navbar */}
       <header>
         <Navbar />
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+          <button
+            onClick={handleLogout}
+            style={{
+              backgroundColor: '#dc3545',
+              color: 'white',
+              border: 'none',
+              padding: '10px 15px',
+              borderRadius: '5px',
+              cursor: 'pointer'
+            }}
+          >
+            Uitloggen
+          </button>
+        </div>
       </header>
 
       <main className="inhoud">
