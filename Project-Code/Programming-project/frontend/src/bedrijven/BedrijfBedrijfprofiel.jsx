@@ -107,6 +107,23 @@ export default function BedrijfBedrijfProfilePage() {
         Aanpassen
       </button>
 
+       <button
+        onClick={() => navigate('/VacaturePage')}
+        style={{
+          backgroundColor: '#007bff',
+          color: 'white',
+          border: 'none',
+          padding: '10px 20px',
+          borderRadius: '5px',
+          cursor: 'pointer',
+          fontWeight: 'bold'
+        }}
+        onMouseOver={(e) => e.target.style.backgroundColor = '#0056b3'}
+        onMouseOut={(e) => e.target.style.backgroundColor = '#007bff'}
+      >
+        vacature aanmaken
+      </button>
+
       <button
         onClick={handleLogout}
         style={{
@@ -123,6 +140,7 @@ export default function BedrijfBedrijfProfilePage() {
       >
         Uitloggen
       </button>
+
     </div>
   </div>
 </section>
