@@ -20,7 +20,7 @@ export default function BedrijfVacatureLijst() {
  useEffect(() => {
   if (!bedrijfId) return;
 
-  axios.get(`http://localhost:5000/api/vacatures/bedrijf/${bedrijfId}`)
+  axios.get(`http://localhost:5000/api/vacatures/${bedrijfId}`)
     .then((res) => {
       setVacatures(res.data);
       setFilteredVacatures(res.data);

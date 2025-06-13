@@ -1,11 +1,11 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from "../Components/BedrijfNavBar";
 import Footer from '../Components/Footer';
 
 export default function BedrijfBedrijfProfilePage() {
-  const { id } = useParams();
+  const id = localStorage.getItem('gebruiker_id');
   const navigate = useNavigate();
   const [companyData, setCompanyData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -38,6 +38,11 @@ export default function BedrijfBedrijfProfilePage() {
       }
     }
     return options;
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();         // Verwijder gebruiker_id en andere data
+    navigate('/login');           // Navigeer naar loginpagina
   };
 
   const handleOpenModal = (vacature) => {
@@ -93,7 +98,21 @@ export default function BedrijfBedrijfProfilePage() {
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
       <Navbar />
-
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+          <button
+            onClick={handleLogout}
+            style={{
+              backgroundColor: '#dc3545',
+              color: 'white',
+              border: 'none',
+              padding: '10px 15px',
+              borderRadius: '5px',
+              cursor: 'pointer'
+            }}
+          >
+            Uitloggen
+          </button>
+        </div>
       <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee', marginTop:'70px' }}>
         <img 
           src={`/${companyData.logo_link}`}       

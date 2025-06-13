@@ -86,6 +86,7 @@ app.get('/api/vacatures', (req, res) => {
   })
 })
 
+
 app.put('/api/vacatures/:id', async (req, res) => {
   const { id } = req.params;
   const { functie, contract_type, synopsis } = req.body;
@@ -116,6 +117,25 @@ app.delete('/api/vacatures/:id', async (req, res) => {
   }
 });
 
+
+app.get('/api/vacatures/:id', (req, res) => {
+  const BedrijfID = req.params.id;
+  db.query(` SELECT 
+  v.vacature_id, 
+  b.naam AS bedrijf, 
+  v.functie, 
+  v.contract_type, 
+  v.synopsis, 
+  v.open, 
+  b.logo_link, 
+  b.bedrijf_id
+FROM vacature v
+JOIN bedrijf b ON v.bedrijf_id = b.bedrijf_id
+WHERE b.bedrijf_id = ${BedrijfID}`, (err, results) => {
+    if (err) return res.status(500).json({ error: err.message })
+    res.json(results)
+  })
+})
 
 // alle studenten ophalen
 app.get('/api/studenten', (req, res) => {
