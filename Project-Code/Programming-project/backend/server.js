@@ -87,21 +87,30 @@ app.get('/api/vacatures', (req, res) => {
 })
 
 
-app.put('/api/vacatures/:id', async (req, res) => {
+app.put('/api/vacatures/:id', (req, res) => {
   const { id } = req.params;
   const { functie, contract_type, synopsis } = req.body;
 
-  try {
-    const result = await pool.query(
-      'UPDATE vacatures SET functie = $1, contract_type = $2, synopsis = $3 WHERE vacature_id = $4 RETURNING *',
-      [functie, contract_type, synopsis, id]
-    );
-    res.json(result.rows[0]);
-  } catch (error) {
-    console.error('Fout bij updaten vacature:', error);
-    res.status(500).json({ error: 'Vacature kon niet worden aangepast' });
-  }
+  const sql = `
+    UPDATE vacature 
+    SET functie = ?, contract_type = ?, synopsis = ? 
+    WHERE vacature_id = ?
+  `;
+
+  db.query(sql, [functie, contract_type, synopsis, id], (err, result) => {
+    if (err) {
+      console.error('Fout bij updaten vacature:', err);
+      return res.status(500).json({ error: 'Vacature kon niet worden aangepast' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Vacature niet gevonden' });
+    }
+
+    res.json({ message: 'Vacature succesvol bijgewerkt' });
+  });
 });
+
 
 //vacatures verwijdfer
 
