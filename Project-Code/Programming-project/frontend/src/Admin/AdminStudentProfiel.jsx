@@ -61,6 +61,7 @@ const { id } = useParams(); // inplaats van 1, gebruiken we dit, anders altijd z
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Opleiding:</strong> {studentData.opleiding}</p>
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Instelling:</strong> {studentData.instelling}</p>
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Verwacht afstudeerjaar:</strong> {studentData.afstudeerjaar}</p>
+        <p style={{ margin: '10px 0', color: '#555' }}><strong>linkedIn:</strong> {studentData.linkedinurl}</p>
       </section>
 
       {/* Vaardigheden */}

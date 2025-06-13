@@ -5,7 +5,7 @@ import Navbar from '../Components/AdminNavBar';
 import Footer from '../Components/Footer';
 
 export default function AdminStudentInstellingen() {
-  const { id } = useParams(); // haalt student-id uit de URL
+  const { id } = useParams(); // student id uit URL
   const [student, setStudent] = useState(null);
   const [form, setForm] = useState({
     voornaam: '',
@@ -16,22 +16,23 @@ export default function AdminStudentInstellingen() {
     linkedin: ''
   });
 
-  
-
   useEffect(() => {
+    // studentgegevens ophalen bij component mount of id wijziging
     axios.get(`http://localhost:5000/api/student/${id}`)
       .then((res) => {
         setStudent(res.data);
-        const [firstName, ...lastNameParts] = res.data.name.split(' ');
-        const lastName = lastNameParts.join(' ');
+        const fullName = res.data.name || '';
+        const [voornaam, ...rest] = fullName.trim().split(' ');
+        const naam = rest.join(' '); // vang "De Smet", "van den Berg", enz.
         setForm({
-          voornaam: firstName || '',
-          naam: lastName || '',
+          voornaam: voornaam || '',
+          naam: naam || '',
           email: res.data.email || '',
           adres: res.data.adres || '',
           specialisatie: res.data.specialisatie || '',
-          linkedin: res.data.linkedin || ''
+          linkedin: res.data.linkedin_url || ''
         });
+
       })
       .catch((err) => {
         console.error("Fout bij ophalen studentgegevens:", err);
@@ -43,15 +44,20 @@ export default function AdminStudentInstellingen() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    axios.put(`http://localhost:5000/api/student/${id}`, form)
-      .then(() => {
-        alert("Gegevens succesvol bijgewerkt!");
-      })
-      .catch((err) => {
-        console.error("Fout bij updaten student:", err);
-      });
-  };
+  e.preventDefault();
+
+  axios.put(`http://localhost:5000/api/student/${id}`, {
+    ...form,
+    linkedin_url: form.linkedin  // voeg correcte veldnaam toe
+  })
+    .then(() => {
+      alert("Gegevens succesvol bijgewerkt!");
+    })
+    .catch((err) => {
+      console.error("Fout bij updaten student:", err);
+      alert("Er is een fout opgetreden bij het bijwerken van de gegevens.");
+    });
+};
 
   if (!student) return <p>Studentgegevens laden...</p>;
 
@@ -65,22 +71,22 @@ export default function AdminStudentInstellingen() {
       </section>
 
       <form onSubmit={handleSubmit} style={{ maxWidth: '500px', margin: '0 auto' }}>
-        <input 
+        <input
           name="voornaam"
           type="text"
           placeholder="voornaam"
           value={form.voornaam}
           onChange={handleChange}
           style={inputStyle}
-           />
-          <input 
+        />
+        <input
           name="naam"
           type="text"
           placeholder="naam"
           value={form.naam}
           onChange={handleChange}
           style={inputStyle}
-           />
+        />
         <input
           name="email"
           type="email"

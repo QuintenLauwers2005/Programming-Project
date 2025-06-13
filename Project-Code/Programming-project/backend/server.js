@@ -231,7 +231,8 @@ app.get('/api/student/:id', (req, res) => {
       s.opleidingsjaar,
       s.profiel_foto_url,
       v.id AS vaardigheid_id,
-      v.naam AS vaardigheid_naam
+      v.naam AS vaardigheid_naam,
+      s.linkedin_url
     FROM student s
     LEFT JOIN student_vaardigheid sv ON s.student_id = sv.student_id
     LEFT JOIN vaardigheid v ON sv.vaardigheid_id = v.id
@@ -257,6 +258,7 @@ app.get('/api/student/:id', (req, res) => {
       afstudeerjaar: results[0].opleidingsjaar,
       bio: results[0].bio,
       profielFotoUrl: results[0].profiel_foto_url,
+      linkedinurl: results[0].linkedin_url,
       vaardigheden: []
     };
 
@@ -375,6 +377,32 @@ app.put('/api/bedrijf/:id', (req, res) => {
   });
 });
 
+// PUT: student bijwerken
+app.put('/api/student/:id', (req, res) => {
+  const studentId = req.params.id;
+  const { voornaam, naam, email, adres, specialisatie, linkedin } = req.body;
+
+  const sql = `
+    UPDATE student 
+    SET voornaam = ?, naam = ?, email = ?, adres = ?, specialisatie = ?, linkedin_url = ?
+    WHERE student_id = ?
+  `;
+
+  const values = [voornaam, naam, email, adres, specialisatie, linkedin, studentId];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error('Fout bij bijwerken student:', err);
+      return res.status(500).json({ error: 'Databasefout' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'student niet gevonden' });
+    }
+
+    res.json({ message: 'student succesvol bijgewerkt' });
+  });
+});
 
 app.get('/api/HomePageAantalen', (req, res) => {
   const sql = `
@@ -851,5 +879,6 @@ app.post('/api/upload', upload.single('image'), (req, res) => {
     });
   });
 });
+app.listen(5000, () => console.log('Backend running on http://localhost:5000'));
 
 

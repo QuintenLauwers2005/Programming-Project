@@ -70,18 +70,12 @@ export default function RegistratieStudentPage() {
       return;
     }
     
-    if (
-      !Voornaam ||
-      !naamAchternaam ||
-      !mail ||
-      !opleiding ||
-      !specialisatie ||
-      !opleidingsjaar ||
-      !adres ||
-      !wachtwoord
-    ) {
-      setError('Vul alle gegevens in');
-      setSuccess(false);
+    if (!Voornaam || !naamAchternaam || !mail || !opleiding || !specialisatie || !opleidingsjaar || !adres || !wachtwoord) {
+      setError('Vul alle verplichte velden in');
+      return;
+    }
+    if (!isWachtwoordGeldig) {
+      setError("Je wachtwoord voldoet niet aan alle eisen.");
       return;
     }
 
@@ -139,7 +133,7 @@ export default function RegistratieStudentPage() {
       <section style={{ maxWidth: '400px', margin: '0 auto', padding: '20px' }}>
         <input
           type="text"
-          placeholder="Voornaam"
+          placeholder="Voornaam *"
           value={Voornaam}
           onChange={(e) => setVoornaam(e.target.value)}
           style={{
@@ -155,7 +149,7 @@ export default function RegistratieStudentPage() {
 
         <input
           type="text"
-          placeholder="Achternaam"
+          placeholder="Achternaam *"
           value={naamAchternaam}
           onChange={(e) => setNaamAchternaam(e.target.value)}
           style={{
@@ -171,7 +165,7 @@ export default function RegistratieStudentPage() {
         
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Email *"
           value={mail}
           onChange={(e) => setMail(e.target.value)}
           required
@@ -187,7 +181,7 @@ export default function RegistratieStudentPage() {
 
         <input
           type="text"
-          placeholder="Opleiding"
+          placeholder="Opleiding *"
           value={opleiding}
           onChange={(e) => setOpleiding(e.target.value)}
           style={{
@@ -202,7 +196,7 @@ export default function RegistratieStudentPage() {
         />
         <input
           type="text"
-          placeholder="Specialisatie"
+          placeholder="Specialisatie *"
           value={specialisatie}
           onChange={(e) => setSpecialisatie(e.target.value)}
           style={{
@@ -217,7 +211,7 @@ export default function RegistratieStudentPage() {
         />
         <input
           type="number"
-          placeholder="Opleidingsjaar"
+          placeholder="Opleidingsjaar *"
           value={opleidingsjaar}
           onChange={(e) => setOpleidingsjaar(e.target.value)}
           style={{
@@ -232,7 +226,7 @@ export default function RegistratieStudentPage() {
         />
         <input
           type="text"
-          placeholder="Adres"
+          placeholder="Adres *"
           value={adres}
           onChange={(e) => setAdres(e.target.value)}
           style={{
@@ -252,7 +246,7 @@ export default function RegistratieStudentPage() {
           }}>
             <input
               type={passwordVisible ? 'text' : 'password'}
-              placeholder="Wachtwoord"
+              placeholder="Wachtwoord *"
               value={wachtwoord}
               onChange={handleWachtwoordChange}
               onFocus={() => setShowValidation(true)}

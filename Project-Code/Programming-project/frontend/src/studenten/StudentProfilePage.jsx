@@ -210,6 +210,8 @@ function StudentProfilePage() {
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Opleiding:</strong> {studentData.opleiding}</p>
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Instelling:</strong> {studentData.instelling}</p>
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Verwacht afstudeerjaar:</strong> {studentData.afstudeerjaar}</p>
+        <p style={{ margin: '10px 0', color: '#555' }}><strong>Linkedin:</strong> {studentData.linkedinurl}</p>
+        
       </section>
 
       {/* Vaardigheden */}
