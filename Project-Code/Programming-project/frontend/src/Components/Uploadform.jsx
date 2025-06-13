@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './UploadForm.css';
 
 function UploadForm() {
   const [file, setFile] = useState(null);
@@ -35,17 +36,25 @@ function UploadForm() {
     }
   };
 
-  return (
+
+    return (
     <div>
-      <form onSubmit={handleUpload}>
-        <input type="file" accept="image/*" onChange={handleChange} />
-        <button type="submit">Upload</button>
+      <form onSubmit={handleUpload} className="upload-container">
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleChange}
+          className="upload-input"
+        />
+        <button type="submit" className="upload-button">Upload</button>
       </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      {error && <p className="upload-error">{error}</p>}
+
       {imageUrl && (
-        <div>
-          <p>Uploaded Image:</p>
-          <img src={imageUrl} alt="Uploaded" style={{ width: 200 }} />
+        <div className="upload-preview">
+          <p>Geüploade foto:</p>
+          <img src={imageUrl} alt="Upload preview" />
         </div>
       )}
     </div>
