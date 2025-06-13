@@ -550,6 +550,33 @@ app.get('/api/afspraken/bedrijf/:bedrijfId', (req, res) => {
   });
 });
 
+// alle afspraken opvragen. voor admin agenda
+app.get('/api/afspraken/all', (req, res) => {
+  const sql = `
+    SELECT 
+      s.speeddate_id AS id,
+      s.tijdstip AS time,
+      st.voornaam,
+      st.naam,
+      s.locatie,
+      b.naam AS bedrijf_naam,
+      s.status
+    FROM speeddate s
+    LEFT JOIN student st ON s.student_id = st.student_id
+    JOIN bedrijf b ON s.bedrijf_id = b.bedrijf_id
+    ORDER BY s.tijdstip;
+  `;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Database fout:', err);
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(results);
+  });
+});
+
+
 app.get('/api/afspraken', (req, res) => {
   const gebruikerId = req.query.gebruiker_id;  // gebruiker_id vanuit query
 
@@ -576,7 +603,7 @@ app.get('/api/afspraken', (req, res) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(results);
   });
-});
+}); 
 
 app.delete('/api/speeddate/:id', (req, res) => {
   const speeddateId = req.params.id;

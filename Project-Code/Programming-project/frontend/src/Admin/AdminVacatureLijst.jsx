@@ -221,32 +221,11 @@ export default function AdminVacatureLijst() {
                       <br />
                       Contract: {vacature.contract_type}
                     </p>
-                    <button
-                      onClick={() => handleEditVacature(vacature)}
-                      style={{ 
-                        marginLeft: '10px', 
-                        backgroundColor: '#ffc107', 
-                        color: 'white', 
-                        border: 'none', 
-                        padding: '6px 12px', 
-                        borderRadius: '5px', 
-                        cursor: 'pointer' 
-                      }}
-                    >
+                    <button className="bewerken-btn" onClick={() => handleEditVacature(vacature)}>
                       Bewerken
                     </button>
-                    <button
-                      onClick={() => handleDeleteVacature(vacature.vacature_id)}
-                      style={{
-                        marginLeft: '10px',
-                        backgroundColor: '#dc3545',
-                        color: 'white',
-                        border: 'none',
-                        padding: '6px 12px',
-                        borderRadius: '5px',
-                        cursor: 'pointer'
-                      }}
-                    >
+                    <button className="verwijder-btn"
+                      onClick={() => handleDeleteVacature(vacature.vacature_id)}>
                       Verwijderen
                     </button>
                   </div>
