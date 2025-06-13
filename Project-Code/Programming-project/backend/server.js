@@ -576,7 +576,7 @@ app.get('/api/afspraken', (req, res) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(results);
   });
-});
+}); 
 
 app.delete('/api/speeddate/:id', (req, res) => {
   const speeddateId = req.params.id;
