@@ -62,7 +62,7 @@ export default function AdminStudentInstellingen() {
   if (!student) return <p>Studentgegevens laden...</p>;
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
+    <div style={{ fontFamily: 'Arial, sans-serif' }}>
       <Navbar />
 
       <section style={{ margin: '30px 0', textAlign: 'center' }}>
