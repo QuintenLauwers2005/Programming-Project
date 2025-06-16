@@ -842,8 +842,27 @@ app.post('/api/bedrijvenToevoegen', async (req, res) => {
   }
 });
 
+app.get('/api/speeddate-config', (req, res) => {
+  db.query('SELECT beginuur, einduur FROM speeddate_config LIMIT 1', (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results[0]);
+  });
+});
 
 
+app.put('/api/speeddate-config', (req, res) => {
+  const { beginuur, einduur } = req.body;
+
+  if (!beginuur || !einduur) {
+    return res.status(400).json({ error: 'Begin- en einduur zijn verplicht.' });
+  }
+
+  const sql = `UPDATE speeddate_config SET beginuur = ?, einduur = ? WHERE config_id = 1`;
+  db.query(sql, [beginuur, einduur], (err) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ message: 'Speeddate-uren succesvol bijgewerkt' });
+  });
+});
 
 
 // 1. Set up Multer
