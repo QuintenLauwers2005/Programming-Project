@@ -88,7 +88,8 @@ useRequireLogin("admin");
         <Link to={homepagePath}>
           <Logo className="logo" />
         </Link>
-        <button
+       
+          <button
             onClick={handleLogout}
             style={{
               backgroundColor: '#dc3545',
@@ -105,8 +106,7 @@ useRequireLogin("admin");
           >
             Uitloggen
           </button>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
-        </div>
+       
         <div className="navigatie-button-popout">
           <button className="notificatie-btn" ref={buttonRef} onClick={toggleNotifications} style={{ position: 'relative' }}>
   🔔{meldingen.some(m => !m.gelezen) && (
