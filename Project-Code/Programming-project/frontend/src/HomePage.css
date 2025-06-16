@@ -221,7 +221,7 @@ main {
   margin-top: 4rem;
 }
 
-@media (max-width: 450px) {
+@media (max-width: 768px) {
 
   main {
     padding: 1rem;

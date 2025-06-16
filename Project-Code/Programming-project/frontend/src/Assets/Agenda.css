@@ -162,7 +162,7 @@
   background-color: #2a2a7a;
 }
 
-@media (max-width: 450px) {
+@media (max-width: 768px) {
   .page {
     padding: 10px;
   }

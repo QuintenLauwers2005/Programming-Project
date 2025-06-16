@@ -140,7 +140,7 @@
 }
 
 
-@media (max-width: 450px) {
+@media (max-width: 768px) {
 
   .nav-bar-desktop {
     display: none;
