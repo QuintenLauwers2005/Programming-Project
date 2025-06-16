@@ -64,3 +64,23 @@
   font-size: 0.85rem;
   color: #aaa;
 }
+
+@media (max-width: 450px) {
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-section {
+    text-align: center;
+  }
+
+  .social-icons {
+    justify-content: center;
+  }
+
+  .footer-section ul {
+    display: inline-block;
+    text-align: center;
+  }
+}

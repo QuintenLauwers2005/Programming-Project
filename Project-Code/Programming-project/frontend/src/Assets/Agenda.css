@@ -1,3 +1,5 @@
+/* src/Assets/Agenda.css */
+
 .page {
   padding: 20px;
   min-height: 100vh;
@@ -20,7 +22,7 @@
   padding: 20px;
   width: 250px;
   background-color: #e8e8e8;
-  border: 1px lightgray;
+  border: 1px solid lightgray;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
   margin-bottom: 15px;
   border-radius: 8px;
@@ -96,21 +98,21 @@
   background-color: #005fa3;
 }
 
-.weigenKnopAdmin{
+.weigenKnopAdmin {
   background-color:red ;
   color: whitesmoke;
-  border:black;
-  border-width: 3px;
+  border: 3px solid black;
   border-radius: 0.2rem;
   margin-top: 15px;
   padding: 3px;
   box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 
-.weigenKnopAdmin:hover{
+.weigenKnopAdmin:hover {
   background-color: rgb(204, 1, 1);
   box-shadow: 0 0 10px rgba(0,0,0,0.6);
 }
+
 .time-settings {
   margin: 30px 0;
   padding: 20px;
@@ -120,7 +122,6 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* Flexbox layout */
 .time-settings-row {
   display: flex;
   gap: 20px;
@@ -154,12 +155,30 @@
   font-weight: bold;
   font-size: 1em;
   transition: background-color 0.2s ease;
+  margin-left: 10px;
 }
 
-.save-button{
-  margin-left: 10px;
-  
-}
 .time-settings .save-button:hover {
   background-color: #2a2a7a;
+}
+
+@media (max-width: 450px) {
+  .page {
+    padding: 10px;
+  }
+  .card {
+    width: 95%;
+  }
+  .time {
+    font-size: 1.3rem;
+  }
+  .company {
+    font-size: 1rem;
+  }
+  .modal {
+    padding: 20px;
+  }
+  .modal h3 {
+    font-size: 1.2rem;
+  }
 }
