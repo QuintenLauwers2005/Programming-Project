@@ -72,8 +72,7 @@ app.post('/api/login', (req, res) => {
     const gebruiker = results[0];
 
     try {
-      const isMatch = true;
-      //await bcrypt.compare(password, gebruiker.wachtwoord)
+      const isMatch = await bcrypt.compare(password, gebruiker.wachtwoord);
 
       if (!isMatch) {
         return res.status(401).json({ error: 'Wachtwoord is incorrect' });
