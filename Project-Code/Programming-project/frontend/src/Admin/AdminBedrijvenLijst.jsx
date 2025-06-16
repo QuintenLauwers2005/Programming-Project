@@ -6,7 +6,6 @@ import Navbar from '../Components/AdminNavBar';
 import Footer from '../Components/Footer';
 import '../Components/BedrijfPage.css';
 
-
 export default function AdminBedrijvenLijst() {
   const navigate = useNavigate();
   const [bedrijven, setBedrijven] = useState([]);
@@ -16,6 +15,7 @@ export default function AdminBedrijvenLijst() {
     locatie: '',
     vertegenwoordiger: ''
   });
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     axios.get('http://localhost:5000/api/bedrijven')
@@ -31,12 +31,19 @@ export default function AdminBedrijvenLijst() {
       });
   }, []);
 
-
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters({
       ...filters,
       [name]: value
+    });
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      naam: '',
+      locatie: '',
+      vertegenwoordiger: ''
     });
   };
 
@@ -52,75 +59,133 @@ export default function AdminBedrijvenLijst() {
     );
   });
 
+  const displayedBedrijven = showAll ? filteredBedrijven : filteredBedrijven.slice(0, 8);
+  const hasMoreResults = filteredBedrijven.length > 8;
+
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif' }}>
+    <div className="bedrijven-container">
       <header>
-       <Navbar />
+        <Navbar />
       </header>
 
-      <h2 style={{ textAlign: 'center', fontSize: '28px', margin: '40px 0 20px', fontWeight: 'bold' }}>Bedrijven</h2>
-
-      {/* Filter Form */}
-      <div className="filter-form" style={{ display: 'flex', gap: '10px', marginBottom: '30px', justifyContent: 'center' }}>
-        <input type="text" name="naam" placeholder="Naam" value={filters.naam} onChange={handleFilterChange} />
-        <input type="text" name="locatie" placeholder="Locatie" value={filters.locatie} onChange={handleFilterChange} />
-        <input type="text" name="vertegenwoordiger" placeholder="Vertegenwoordiger" value={filters.vertegenwoordiger} onChange={handleFilterChange} />
-      </div>
-
-      {loading ? (
-        <p style={{ textAlign: 'center' }}>Laden...</p>
-      ) : (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center' }}>
-          {filteredBedrijven.map((bedrijf) => (
-            <div
-              key={bedrijf.id}
-              onClick={() => navigate(`/admin/bedrijf/${bedrijf.id}/profiel`)}
-              style={{
-                cursor: 'pointer',
-                width: '200px',
-                backgroundColor: '#f9f9f9',
-                borderRadius: '8px',
-                padding: '20px',
-                boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-                transition: 'transform 0.2s',
-                textAlign: 'center'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-              onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-            >
-              <div style={{
-                width: '100%',
-                height: '75px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginBottom: '15px',
-                borderRadius: '6px'
-              }}>
-                <img
-                  src={`http://localhost:5000${bedrijf.logo_link}`}
-                  alt={`${bedrijf.naam} logo`}
-                  style={{
-                    maxWidth: '75px',
-                    maxHeight: '60px',
-                    objectFit: 'contain'
-                  }}
-                />
-              </div>
-              <p style={{ fontSize: '18px', fontWeight: 'bold' }}>{bedrijf.naam}</p>
-            </div>
-          ))}
+      <main>
+        <h1 className="bedrijven-titel">Bedrijven Overzicht</h1>
+        
+        {/* Verbeterde Filter Sectie */}
+        <div className="filter-section">
+          <div className="filter-form">
+            <input 
+              type="text" 
+              name="naam" 
+              placeholder="🔍 Zoek op naam..." 
+              value={filters.naam} 
+              onChange={handleFilterChange}
+              className="filter-input"
+            />
+            <input 
+              type="text" 
+              name="locatie" 
+              placeholder="📍 Locatie..." 
+              value={filters.locatie} 
+              onChange={handleFilterChange}
+              className="filter-input"
+            />
+            <input 
+              type="text" 
+              name="vertegenwoordiger" 
+              placeholder="👤 Vertegenwoordiger..." 
+              value={filters.vertegenwoordiger} 
+              onChange={handleFilterChange}
+              className="filter-input"
+            />
+            {(filters.naam || filters.locatie || filters.vertegenwoordiger) && (
+              <button 
+                onClick={clearFilters}
+                className="clear-filters-btn"
+                title="Filters wissen"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+          
+          {/* Resultaten teller */}
+          <div className="results-info">
+            {filteredBedrijven.length} bedrijf{filteredBedrijven.length !== 1 ? 'en' : ''} gevonden
+          </div>
         </div>
-      )}
 
-      <button className="toonmeer-btn" onClick={() => alert('Toon meer geklikt!')}>
-        Toon meer
-      </button>
+        {loading ? (
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p className="loading-text">Bedrijven laden...</p>
+          </div>
+        ) : filteredBedrijven.length === 0 ? (
+          <div className="geen-resultaten">
+            <div className="no-results-icon">🏢</div>
+            <h3>Geen bedrijven gevonden</h3>
+            <p>Probeer je zoekfilters aan te passen</p>
+          </div>
+        ) : (
+          <>
+            <div className="bedrijven-grid">
+              {displayedBedrijven.map((bedrijf) => (
+                <div
+                  key={bedrijf.id}
+                  onClick={() => navigate(`/admin/bedrijf/${bedrijf.id}/profiel`)}
+                  className="bedrijf-card"
+                >
+                  <div className="bedrijf-logo">
+                    <img
+                      src={`http://localhost:5000${bedrijf.logo_link}`}
+                      alt={`${bedrijf.naam} logo`}
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
+                    />
+                    <div 
+                      className="logo-fallback"
+                      style={{ display: 'none' }}
+                    >
+                      🏢
+                    </div>
+                  </div>
+                  <p className="bedrijf-naam">{bedrijf.naam}</p>
+                  {bedrijf.locatie && (
+                    <p className="bedrijf-locatie">📍 {bedrijf.locatie}</p>
+                  )}
+                  {bedrijf.vertegenwoordiger && (
+                    <p className="bedrijf-vertegenwoordiger">👤 {bedrijf.vertegenwoordiger}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {hasMoreResults && !showAll && (
+              <button 
+                className="toonmeer-btn" 
+                onClick={() => setShowAll(true)}
+              >
+                Toon alle {filteredBedrijven.length} bedrijven
+              </button>
+            )}
+
+            {showAll && hasMoreResults && (
+              <button 
+                className="toonmeer-btn" 
+                onClick={() => setShowAll(false)}
+              >
+                Toon minder
+              </button>
+            )}
+          </>
+        )}
+      </main>
 
       <footer>
-       <Footer />
+        <Footer />
       </footer>
     </div>
   );
-
 }
