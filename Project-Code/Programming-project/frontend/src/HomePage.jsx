@@ -31,7 +31,7 @@ function HomePage() {
 
       <main>
         {/* Hero */}
-        <section className="hero">
+        <section id = 'Home' className="hero">
           <h1>Hoe goed schat jij jouw kansen in?</h1>
           <p>
             Wil je een indrukwekkend bedrijf dat perfect bij jouw interesses past? Of ben je nieuwsgierig naar andere sectoren? De Career Launch is jouw kans om te ontdekken wat bij jou past en je netwerk uit te breiden!
