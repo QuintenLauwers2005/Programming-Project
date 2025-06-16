@@ -144,7 +144,13 @@ function StudentProfilePage() {
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Opleiding:</strong> {studentData.opleiding}</p>
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Instelling:</strong> {studentData.instelling}</p>
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Verwacht afstudeerjaar:</strong> {studentData.afstudeerjaar}</p>
-        <p style={{ margin: '10px 0', color: '#555' }}><strong>Linkedin:</strong> {studentData.linkedinurl}</p>
+        <p style={{ margin: '10px 0', color: '#555' }}>
+  <strong>LinkedIn:</strong>{' '}
+  <a href={studentData.linkedinurl} target="_blank" rel="noopener noreferrer" style={{ color: '#0077b5', textDecoration: 'underline' }}>
+    {studentData.linkedinurl}
+  </a>
+</p>
+
         
       </section>
 
