@@ -90,24 +90,7 @@ useRequireLogin("admin");
         </Link>
 
         {/* Rechter sectie met beide buttons */}
-        <div className="right-section" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <button
-              onClick={handleLogout}
-              className="logout-btn"
-              style={{
-                backgroundColor: '#dc3545',
-                color: 'white',
-                border: 'none',
-                padding: '10px 15px',
-                borderRadius: '5px',
-                cursor: 'pointer'
-              }}
-              onMouseOver={(e) => e.target.style.backgroundColor = '#b02a37'}
-              onMouseOut={(e) => e.target.style.backgroundColor = '#dc3545'}
-            >
-              Uitloggen
-            </button>
-
+        <div className="right-section" style={{ display: 'flex', alignItems: 'center', gap: '5px', marginRight: '30px' }}>
           <div className="navigatie-button-popout" style={{ position: 'relative' }}>
             <button className="notificatie-btn" ref={buttonRef} onClick={toggleNotifications} style={{ position: 'relative' }}>
     🔔{meldingen.some(m => !m.gelezen) && (
@@ -135,6 +118,23 @@ useRequireLogin("admin");
             
             )}
           </div>
+
+          <button
+              onClick={handleLogout}
+              className="logout-btn"
+              style={{
+                backgroundColor: '#dc3545',
+                color: 'white',
+                border: 'none',
+                padding: '10px 15px',
+                borderRadius: '5px',
+                cursor: 'pointer'
+              }}
+              onMouseOver={(e) => e.target.style.backgroundColor = '#b02a37'}
+              onMouseOut={(e) => e.target.style.backgroundColor = '#dc3545'}
+            >
+              Uitloggen
+            </button>
         </div>
       </div>
 
