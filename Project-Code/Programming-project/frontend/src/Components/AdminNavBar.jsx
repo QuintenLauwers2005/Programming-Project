@@ -72,7 +72,6 @@ function Navbar() {
               <button className="notificatie-btn" onClick={() => setShowNotifications(p => !p)}>
                 🔔
                 {meldingen.some(m => !m.gelezen) && <span className="notif-indicator"></span>}
-                <span className="btn-text">&nbsp;Meldingen</span>
               </button>
               {showNotifications && (
                 <div className="notif-popout" ref={popoutRef}>
@@ -103,9 +102,6 @@ function Navbar() {
 
       {isMenuOpen && (
         <div className="mobile-menu-overlay">
-          <button className="close-btn" onClick={() => setIsMenuOpen(false)}>
-            <CloseIcon />
-          </button>
           <nav className="mobile-menu-links">
             <button onClick={() => handleMenuLinkClick('/HomePageAdmin')}>Home</button>
             <button onClick={() => handleMenuLinkClick('/AdminAgenda')}>Speeddates</button>
