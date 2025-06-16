@@ -88,47 +88,53 @@ useRequireLogin("admin");
         <Link to={homepagePath}>
           <Logo className="logo" />
         </Link>
-       
-          <button
-            onClick={handleLogout}
-            style={{
-              backgroundColor: '#dc3545',
-              color: 'white',
-              border: 'none',
-              padding: '10px 15px',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              display:'flex',
-              justifyContent: 'flex-end'
-            }}
-            onMouseOver={(e) => e.target.style.backgroundColor = '#b02a37'}
-            onMouseOut={(e) => e.target.style.backgroundColor = '#dc3545'}
-          >
-            Uitloggen
-          </button>
-       
-        <div className="navigatie-button-popout">
-          <button className="notificatie-btn" ref={buttonRef} onClick={toggleNotifications} style={{ position: 'relative' }}>
-  🔔{meldingen.some(m => !m.gelezen) && (
-              <span
-                style={{position: 'absolute',top: 0,right: 0,width: '10px',
-                height: '10px',backgroundColor: 'red', borderRadius: '50%',border: '2px solid white',}}></span>)}</button>
 
-          {showNotifications && (
-            <div className="notif-popout" ref={popoutRef}>
-              <ul>
-                {meldingen.length === 0 && <li>(Geen meldingen)</li>}
-                {meldingen.map(melding => (
-              <li key={melding.melding_id} className="melding-item">
-                <span>{melding.gelezen ? "✅" : "🔔"} {melding.boodschap}</span>
-                <br />
-                <small>{new Date(melding.datum).toLocaleString()}</small>
-                <button className="melding-delete" onClick={() => verwijderMelding(melding.melding_id)}>❌</button>
-              </li>
-            ))}
-              </ul>
-            </div>
-          )}
+        {/* Rechter sectie met beide buttons */}
+        <div className="right-section" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <button
+              onClick={handleLogout}
+              className="logout-btn"
+              style={{
+                backgroundColor: '#dc3545',
+                color: 'white',
+                border: 'none',
+                padding: '10px 15px',
+                borderRadius: '5px',
+                cursor: 'pointer'
+              }}
+              onMouseOver={(e) => e.target.style.backgroundColor = '#b02a37'}
+              onMouseOut={(e) => e.target.style.backgroundColor = '#dc3545'}
+            >
+              Uitloggen
+            </button>
+
+          <div className="navigatie-button-popout" style={{ position: 'relative' }}>
+            <button className="notificatie-btn" ref={buttonRef} onClick={toggleNotifications} style={{ position: 'relative' }}>
+    🔔{meldingen.some(m => !m.gelezen) && (
+                <span
+                  style={{position: 'relative',top: 0,right: 0,width: '10px',
+                  height: '10px',backgroundColor: 'red', borderRadius: '50%',border: '2px solid white',}}></span>)}
+            </button>
+
+                
+            {showNotifications && (
+              <div className="notif-popout" ref={popoutRef}>
+                <ul>
+                  {meldingen.length === 0 && <li>(Geen meldingen)</li>}
+                  {meldingen.map(melding => (
+                <li key={melding.melding_id} className="melding-item">
+                  <span>{melding.gelezen ? "✅" : "🔔"} {melding.boodschap}</span>
+                  <br />
+                  <small>{new Date(melding.datum).toLocaleString()}</small>
+                  <button className="melding-delete" onClick={() => verwijderMelding(melding.melding_id)}>❌</button>
+                </li>
+              
+              ))}
+                </ul>
+              </div>
+            
+            )}
+          </div>
         </div>
       </div>
 
