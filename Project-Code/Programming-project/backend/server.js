@@ -853,7 +853,7 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  const allowed = /jpeg|jpg|png|gif/;
+  const allowed = /jpeg|jpg|png|gif|pdf/;
   const isValid = allowed.test(file.mimetype);
   isValid ? cb(null, true) : cb(new Error('Only images allowed'));
 };
@@ -861,7 +861,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
 });
 
 // 2. Upload Route with old file cleanup
@@ -909,3 +909,61 @@ app.post('/api/upload', upload.single('image'), (req, res) => {
 app.listen(5000, () => console.log('Backend running on http://localhost:5000'));
 
 
+
+// POST route to upload CV and remove old one
+app.post('/api/upload-cv', upload.single('cv'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+
+  const userId = req.body.userId;
+  const newPath = `/uploads/${req.file.filename}`;
+
+  // Step 1: Get old CV path
+  const getOldQuery = 'SELECT cv_link FROM student WHERE student_id = ?';
+  db.query(getOldQuery, [userId], (err, results) => {
+    if (err) {
+      console.error('Error fetching old CV:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+
+    const oldPath = results[0]?.cv_link;
+
+    // Step 2: Delete old file if it exists
+    if (oldPath) {
+      const fullPath = path.join(__dirname, oldPath);
+      fs.unlink(fullPath, (unlinkErr) => {
+        if (unlinkErr && unlinkErr.code !== 'ENOENT') {
+          console.error('Error deleting old file:', unlinkErr);
+        }
+      });
+    }
+
+    // Step 3: Update DB with new path
+    const updateQuery = 'UPDATE student SET cv_link = ? WHERE student_id = ?';
+    db.query(updateQuery, [newPath, userId], (err) => {
+      if (err) {
+        console.error('Error updating DB:', err);
+        return res.status(500).json({ error: 'Database update failed' });
+      }
+
+      res.json({ cv_link: newPath });
+    });
+  });
+});
+
+app.get('/api/student/:id/cv', (req, res) => {
+  const studentId = req.params.id;
+
+  const query = 'SELECT cv_link FROM student WHERE student_id = ?';
+  db.query(query, [studentId], (err, results) => {
+    if (err) {
+      console.error('Error fetching cv_link:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+
+    res.json({ cv_link: results[0].cv_link });
+  });
+});

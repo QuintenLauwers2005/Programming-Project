@@ -46,7 +46,7 @@ function UploadForm() {
           onChange={handleChange}
           className="upload-input"
         />
-        <button type="submit" className="upload-button">Upload</button>
+        <button type="submit" className="upload-button">Upload Profielfoto</button>
       </form>
 
       {error && <p className="upload-error">{error}</p>}
