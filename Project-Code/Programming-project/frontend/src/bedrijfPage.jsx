@@ -4,6 +4,7 @@ import axios from 'axios';
 import Navbar from './Components/Navbar';
 import Footer from './Components/Footer';
 import './Components/BedrijfPage.css'; // 👈 CSS import
+const backendUrl = 'http://localhost:5000';
 
 export default function BedrijvenLijst() {
   const navigate = useNavigate();
@@ -63,7 +64,7 @@ export default function BedrijvenLijst() {
               >
                 <div className="bedrijf-logo">
                   <img
-                    src={`/${bedrijf.logo_link}`}
+                    src={`${backendUrl}${bedrijf.logo_link}`}
                     alt={`${bedrijf.naam} logo`}
                   />
                 </div>

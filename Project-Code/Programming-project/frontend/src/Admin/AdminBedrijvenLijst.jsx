@@ -5,6 +5,7 @@ import Logo from '../Components/Logo';
 import Navbar from '../Components/AdminNavBar';
 import Footer from '../Components/Footer';
 import '../Components/BedrijfPage.css';
+const backendUrl = 'http://localhost:5000';
 
 export default function AdminBedrijvenLijst() {
   const navigate = useNavigate();
@@ -97,7 +98,7 @@ export default function AdminBedrijvenLijst() {
                 borderRadius: '6px'
               }}>
                 <img
-                  src={`/${bedrijf.logo_link}`}
+                  src={`${backendUrl}${bedrijf.logo_link}`}
                   alt={`${bedrijf.naam} logo`}
                   style={{
                     maxWidth: '75px',

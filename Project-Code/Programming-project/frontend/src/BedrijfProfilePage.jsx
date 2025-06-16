@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from "./Components/Navbar";
 import Footer from './Components/Footer';
+const backendUrl = 'http://localhost:5000';
 
 export default function BedrijfProfilePage() {
   const { id } = useParams();
@@ -104,7 +105,7 @@ export default function BedrijfProfilePage() {
 
       <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee', marginTop:'70px' }}>
         <img 
-          src={`/${companyData.logo_link}`}       
+          src={`${backendUrl}${companyData.logo_link}`}       
           alt={`Logo van ${companyData.naam}`}
           style={{ width: '150px', height: '150px', borderRadius: '8px', objectFit: 'cover', marginRight: '30px' }} 
         />
