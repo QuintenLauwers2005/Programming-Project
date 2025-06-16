@@ -49,6 +49,11 @@ const toggleNotifications = () => {
     .catch(err => console.error("Meldingen ophalen mislukt:", err));
 }, [gebruikerId]);
 
+const handleLogout = () => {
+    localStorage.clear();         // Verwijder gebruiker_id en andere data
+    navigate('/login');           // Navigeer naar loginpagina
+  };
+
 useEffect(() => {
   if (showNotifications) {
     document.addEventListener("mousedown", handleClickOutside);
@@ -83,7 +88,25 @@ useRequireLogin("admin");
         <Link to={homepagePath}>
           <Logo className="logo" />
         </Link>
-        <button className="login-btn">{localStorage.getItem('naam')}</button>
+        <button
+            onClick={handleLogout}
+            style={{
+              backgroundColor: '#dc3545',
+              color: 'white',
+              border: 'none',
+              padding: '10px 15px',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              display:'flex',
+              justifyContent: 'flex-end'
+            }}
+            onMouseOver={(e) => e.target.style.backgroundColor = '#b02a37'}
+            onMouseOut={(e) => e.target.style.backgroundColor = '#dc3545'}
+          >
+            Uitloggen
+          </button>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+        </div>
         <div className="navigatie-button-popout">
           <button className="notificatie-btn" ref={buttonRef} onClick={toggleNotifications} style={{ position: 'relative' }}>
   🔔{meldingen.some(m => !m.gelezen) && (
