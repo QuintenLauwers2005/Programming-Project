@@ -6,9 +6,11 @@ import Navbar from '../Components/AdminNavBar'
 import Footer from '../Components/Footer';
 
 function AdminStudentProfiel() {
-const navigate = useNavigate();
-const [studentData, setStudentData] = useState(null);
-const { id } = useParams(); // inplaats van 1, gebruiken we dit, anders altijd zelfde student te zien
+  const navigate = useNavigate();
+  const [studentData, setStudentData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { id } = useParams(); // inplaats van 1, gebruiken we dit, anders altijd zelfde student te zien
 
   useEffect(() => {
     axios.get(`http://localhost:5000/api/student/${id}`)
@@ -17,16 +19,40 @@ const { id } = useParams(); // inplaats van 1, gebruiken we dit, anders altijd z
       })
       .catch(err => {
         console.error('Fout bij ophalen student:', err.message);
+        setError('Kon student niet ophalen');
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [id]);
 
-  if (!studentData) return <div style={{ textAlign: 'center' }}><h2>Studentgegevens laden...</h2></div>;
+  if (loading) {
+    return <div style={{ textAlign: 'center' }}><h2>Laden...</h2></div>;
+  }
+
+  if (error) {
+    return (
+      <div style={{ textAlign: 'center', color: 'red' }}>
+        <h2>{error}</h2>
+        <button onClick={() => navigate('/admin/studenten')} style={{ marginTop: '10px' }}>Terug naar studentenlijst</button>
+      </div>
+    );
+  }
+
+  if (!studentData) {
+    return (
+      <div style={{ textAlign: 'center' }}>
+        <h2>Geen student gevonden</h2>
+        <button onClick={() => navigate('/admin/studenten')} style={{ marginTop: '10px' }}>Terug naar studentenlijst</button>
+      </div>
+    );
+  }
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
+    <div style={{ fontFamily: 'Arial, sans-serif' }}>
       <Navbar />
       
-      <div style={{ padding: '0 50px' }}>
+      <div style={{ padding: '0 70px' }}>
         {/* Profiel Hoofding */}
         <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee', marginTop:'70px' }}>
           <img 
@@ -67,22 +93,26 @@ const { id } = useParams(); // inplaats van 1, gebruiken we dit, anders altijd z
         {/* Vaardigheden */}
         <section style={{ marginBottom: '30px' }}>
           <h3 style={{ borderBottom: '2px solid #ddd', paddingBottom: '10px', marginBottom: '20px', color: '#333' }}>Vaardigheden</h3>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-            {studentData.vaardigheden.map((vaardigheid) => (
-              <span 
-                key={vaardigheid.id || vaardigheid.naam}
-                style={{ 
-                  backgroundColor: '#007bff', 
-                  color: 'white', 
-                  padding: '8px 15px', 
-                  borderRadius: '20px', 
-                  fontSize: '0.9em' 
-                }}
-              >
-                {vaardigheid.naam}
-              </span>
-            ))}
-          </div>
+          {studentData.vaardigheden && studentData.vaardigheden.length > 0 ? (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+              {studentData.vaardigheden.map((vaardigheid) => (
+                <span 
+                  key={vaardigheid.id || vaardigheid.naam}
+                  style={{ 
+                    backgroundColor: '#007bff', 
+                    color: 'white', 
+                    padding: '8px 15px', 
+                    borderRadius: '20px', 
+                    fontSize: '0.9em' 
+                  }}
+                >
+                  {vaardigheid.naam}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <p style={{ color: '#777' }}>Geen vaardigheden opgegeven.</p>
+          )}
         </section>
 
         {/* Opleiding & Contact */}
