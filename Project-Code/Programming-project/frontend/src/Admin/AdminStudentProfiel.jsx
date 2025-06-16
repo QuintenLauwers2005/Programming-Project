@@ -99,7 +99,6 @@ const { id } = useParams(); // inplaats van 1, gebruiken we dit, anders altijd z
        <Footer />
       </footer>
     </div>
-    </div>
   );
 }
 
