@@ -72,7 +72,6 @@ function Navbar() {
               <button className="notificatie-btn" onClick={() => setShowNotifications(p => !p)}>
                 🔔
                 {meldingen.some(m => !m.gelezen) && <span className="notif-indicator"></span>}
-                <span className="btn-text">&nbsp;Meldingen</span>
               </button>
               {showNotifications && (
                 <div className="notif-popout" ref={popoutRef}>

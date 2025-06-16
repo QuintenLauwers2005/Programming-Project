@@ -48,7 +48,7 @@ function Navbar() {
         <div className="top-bar-right">
           <div ref={buttonRef} className="navigatie-button-popout">
             <button className="notificatie-btn" onClick={() => setShowNotifications(p => !p)}>
-              🔔<span className="btn-text">&nbsp;Meldingen</span>
+              🔔
             </button>
             {showNotifications && (
               <div className="notif-popout" ref={popoutRef}>
