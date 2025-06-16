@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../Components/Footer';
 import Navbar from '../Components/StudentNavbar';
+import UploadForm from '../Components/Uploadform';
+import CvUpload from '../Components/CvUpload';
 
 export default function RegistratiePage() {
   const navigate = useNavigate();
@@ -18,9 +20,15 @@ export default function RegistratiePage() {
         <p>
            Je kan hier jouw gegevens aanpassen.
         </p>
+        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+         <UploadForm />
+         <CvUpload />
+        </div>
       </section>
 
       <section style={{ maxWidth: '400px', margin: '0 auto', padding: '20px' }}>
+
+
         <form>
 
           <input

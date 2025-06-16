@@ -3,12 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Components/StudentNavbar';
 import Footer from '../Components/Footer';
-import UploadForm from '../Components/Uploadform';
+
 
 function StudentProfilePage() {
   const [studentData, setStudentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+   const [cvLink, setCvLink] = useState('');
 
   const studentId = localStorage.getItem('gebruiker_id');
   const navigate = useNavigate();
@@ -32,6 +33,19 @@ function StudentProfilePage() {
       });
   }, [studentId]);
 
+   useEffect(() => {
+  const userId = localStorage.getItem('gebruiker_id');
+
+  axios.get(`http://localhost:5000/api/student/${userId}/cv`)
+    .then((res) => {
+      setCvLink(res.data.cv_link);
+    })
+    .catch((err) => {
+      console.error(err);
+      setCvLink(null);
+    });
+}, []);
+
 
   if (loading) return <p>Studentgegevens laden...</p>;
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
@@ -44,7 +58,17 @@ function StudentProfilePage() {
 
 
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
-      <UploadForm />
+
+{cvLink && (
+  <a
+    href={`http://localhost:5000${cvLink}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="cv-download-link"
+  >
+    Bekijk CV (PDF)
+  </a>
+)}
 
       {/* Profiel Hoofding */}
      
