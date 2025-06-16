@@ -149,11 +149,11 @@
 font-size: 1.75rem;
   font-weight: 700;
   font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
-  color: #0d185a; /* Dark navy blue */
+  color: #202c6f; /* Dark navy blue */
   letter-spacing: 0.5px;
   text-transform: uppercase;
   text-shadow:
-    0 0 3px rgba(39, 104, 203, 0.2),
+    0 0 4px rgba(39, 104, 203, 0.2),
     0 0 8px rgba(112, 135, 238, 0.15),
     0 0 8px rgba(18, 48, 180, 0.15);
 
