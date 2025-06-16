@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Logo from '../Components/Logo';
 import Navbar from '../Components/StudentNavbar';
 import Footer from '../Components/Footer';
 import '../Components/BedrijfPage.css';
@@ -97,7 +96,7 @@ export default function StudentBedrijvenLijst() {
                 borderRadius: '6px'
               }}>
                 <img
-                  src={`/${bedrijf.logo_link}`}
+                  src={`http://localhost:5000${bedrijf.logo_link}`}
                   alt={`${bedrijf.naam} logo`}
                   style={{
                     maxWidth: '75px',

@@ -24,13 +24,16 @@ export default function AdminStudentInstellingen() {
         const fullName = res.data.name || '';
         const [voornaam, ...rest] = fullName.trim().split(' ');
         const naam = rest.join(' '); // vang "De Smet", "van den Berg", enz.
+        console.log("Studentdata binnengekomen:", res.data);
+
         setForm({
           voornaam: voornaam || '',
           naam: naam || '',
           email: res.data.email || '',
           adres: res.data.adres || '',
           specialisatie: res.data.specialisatie || '',
-          linkedin: res.data.linkedin_url || ''
+          linkedin: res.data.linkedinurl || '',
+          
         });
 
       })

@@ -44,6 +44,7 @@ function CvUpload() {
   };
 
   return (
+    <div>
     <form onSubmit={handleUpload} className="upload-container">
       <input type="file" accept="application/pdf" onChange={handleCvChange} className="upload-input" />
       <button type="submit" className="upload-button">Upload CV</button>
@@ -52,7 +53,7 @@ function CvUpload() {
 
      
     </form>
-  
+  </div>
   );
 }
 
