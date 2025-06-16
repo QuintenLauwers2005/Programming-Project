@@ -49,8 +49,9 @@ export default function AdminBedrijfProfiel() {
   return (
     <div style={{ fontFamily: 'Arial, sans-serif'}}>
       <Navbar />
-
-      <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee', marginTop:'70px' }}>
+      
+      <div style={{ padding: '0 70px' }}>
+        <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee', marginTop:'70px' }}>
         <img 
           src={`/${companyData.logo_link}`}       
           alt={`Logo van ${companyData.naam}`}
@@ -121,6 +122,7 @@ export default function AdminBedrijfProfiel() {
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Vertegenwoordiger:</strong> {companyData.vertegenwoordiger}</p>
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Telefoon:</strong> {companyData.telefoon}</p>
       </section>
+      </div>
 
       <footer>
        <Footer />
