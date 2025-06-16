@@ -7,6 +7,7 @@ const multer = require('multer');
 const path = require('path');
 require('dotenv').config();
 const fs = require('fs');
+const bcrypt = require('bcryptjs');
 
 app.use(cors())
 app.use(express.json())
@@ -61,7 +62,7 @@ app.post('/api/login', (req, res) => {
     WHERE g.email = ?
   `;
 
-  db.query(sql, [email], (err, results) => {
+  db.query(sql, [email], async (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
 
     if (results.length === 0) {
@@ -70,20 +71,27 @@ app.post('/api/login', (req, res) => {
 
     const gebruiker = results[0];
 
-    // Hier kun je wachtwoord hashing toevoegen als je dat gebruikt
-    if (gebruiker.wachtwoord !== password) {
-      return res.status(401).json({ error: 'Wachtwoord is incorrect' });
-    }
+    try {
+      const isMatch = await bcrypt.compare(password, gebruiker.wachtwoord);
 
-    res.json({
-      message: 'Login succesvol',
-      gebruiker_id: gebruiker.gebruiker_id,
-      rol: gebruiker.rol,
-      naam: gebruiker.rol === 'student' ? gebruiker.student_naam : null,
-      logo_link: gebruiker.rol === 'bedrijf' ? gebruiker.bedrijf_logo : null
-    });
+      if (!isMatch) {
+        return res.status(401).json({ error: 'Wachtwoord is incorrect' });
+      }
+
+      res.json({
+        message: 'Login succesvol',
+        gebruiker_id: gebruiker.gebruiker_id,
+        rol: gebruiker.rol,
+        naam: gebruiker.rol === 'student' ? gebruiker.student_naam : null,
+        logo_link: gebruiker.rol === 'bedrijf' ? gebruiker.bedrijf_logo : null
+      });
+
+    } catch (compareErr) {
+      return res.status(500).json({ error: 'Fout bij wachtwoordverificatie: ' + compareErr.message });
+    }
   });
 });
+
 
 
 //vacatures ophalen
@@ -713,7 +721,8 @@ app.get('/api/meldingen/:gebruikerId', (req, res) => {
 });
 
 
-app.post('/api/studentenToevoegen', (req, res) => {
+
+app.post('/api/studentenToevoegen', async (req, res) => {
   const {
     voornaam,
     naam,
@@ -725,45 +734,55 @@ app.post('/api/studentenToevoegen', (req, res) => {
     adres
   } = req.body;
 
-  // Voeg eerst toe aan gebruiker
-  const insertGebruikerSql = `
-    INSERT INTO gebruiker (email, wachtwoord, rol)
-    VALUES (?, ?, 'student')
-  `;
+  try {
+    // Wachtwoord hashen
+    const hashedPassword = await bcrypt.hash(wachtwoord, 10);
 
-  db.query(insertGebruikerSql, [email, wachtwoord], (err, result) => {
-    if (err) return res.status(500).json({ error: 'Fout bij toevoegen gebruiker: ' + err.message });
-
-    const gebruikerId = result.insertId;
-
-    // Voeg toe aan student
-    const insertStudentSql = `
-      INSERT INTO student (
-        student_id, voornaam, naam, opleiding, specialisatie, opleidingsjaar, adres, email
-      )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    // Voeg gebruiker toe met gehashte wachtwoord
+    const insertGebruikerSql = `
+      INSERT INTO gebruiker (email, wachtwoord, rol)
+      VALUES (?, ?, 'student')
     `;
 
-    const values = [
-      gebruikerId,
-      voornaam,
-      naam,
-      opleiding,
-      specialisatie,
-      opleidingsjaar,
-      adres,
-      email
-    ];
+    db.query(insertGebruikerSql, [email, hashedPassword], (err, result) => {
+      if (err) return res.status(500).json({ error: 'Fout bij toevoegen gebruiker: ' + err.message });
 
-    db.query(insertStudentSql, values, (err2) => {
-      if (err2) return res.status(500).json({ error: 'Fout bij toevoegen student: ' + err2.message });
+      const gebruikerId = result.insertId;
 
-      res.status(201).json({ message: 'Student en gebruiker succesvol toegevoegd.', gebruiker_id: gebruikerId });
+      // Voeg toe aan studententabel
+      const insertStudentSql = `
+        INSERT INTO student (
+          student_id, voornaam, naam, opleiding, specialisatie, opleidingsjaar, adres, email
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `;
+
+      const values = [
+        gebruikerId,
+        voornaam,
+        naam,
+        opleiding,
+        specialisatie,
+        opleidingsjaar,
+        adres,
+        email
+      ];
+
+      db.query(insertStudentSql, values, (err2) => {
+        if (err2) return res.status(500).json({ error: 'Fout bij toevoegen student: ' + err2.message });
+
+        res.status(201).json({
+          message: 'Student en gebruiker succesvol toegevoegd.',
+          gebruiker_id: gebruikerId
+        });
+      });
     });
-  });
+  } catch (err) {
+    res.status(500).json({ error: 'Interne serverfout bij hashing: ' + err.message });
+  }
 });
 
-app.post('/api/bedrijvenToevoegen', (req, res) => {
+app.post('/api/bedrijvenToevoegen', async (req, res) => {
   const {
     naam,
     adres,
@@ -773,48 +792,56 @@ app.post('/api/bedrijvenToevoegen', (req, res) => {
     wachtwoord
   } = req.body;
 
-  // 1. Voeg gebruiker toe met rol 'bedrijf'
-  const insertGebruikerSql = `
-    INSERT INTO gebruiker (email, wachtwoord, rol)
-    VALUES (?, ?, 'bedrijf')
-  `;
+  try {
+    // Wachtwoord hashen
+    const hashedPassword = await bcrypt.hash(wachtwoord, 10);
 
-  db.query(insertGebruikerSql, [email, wachtwoord], (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: 'Fout bij toevoegen gebruiker: ' + err.message });
-    }
-
-    const gebruikerId = result.insertId;
-
-    // 2. Voeg bedrijf toe
-    const insertBedrijfSql = `
-      INSERT INTO bedrijf (
-        bedrijf_id, naam, locatie, vertegenwoordiger, telefoon, logo_link
-      )
-      VALUES (?, ?, ?, ?, ?, ?)
+    // Voeg gebruiker toe met gehashte wachtwoord
+    const insertGebruikerSql = `
+      INSERT INTO gebruiker (email, wachtwoord, rol)
+      VALUES (?, ?, 'bedrijf')
     `;
 
-    const values = [
-      gebruikerId,   // bedrijf_id = zelfde als gebruiker_id
-      naam,
-      adres,
-      vertegenwoordiger,
-      telefoon,
-      'logo_'+naam
-    ];
-
-    db.query(insertBedrijfSql, values, (err2) => {
-      if (err2) {
-        return res.status(500).json({ error: 'Fout bij toevoegen bedrijf: ' + err2.message });
+    db.query(insertGebruikerSql, [email, hashedPassword], (err, result) => {
+      if (err) {
+        return res.status(500).json({ error: 'Fout bij toevoegen gebruiker: ' + err.message });
       }
 
-      res.status(201).json({
-        message: 'Bedrijf en gebruiker succesvol toegevoegd.',
-        gebruiker_id: gebruikerId
+      const gebruikerId = result.insertId;
+
+      // Voeg bedrijf toe
+      const insertBedrijfSql = `
+        INSERT INTO bedrijf (
+          bedrijf_id, naam, locatie, vertegenwoordiger, telefoon, logo_link
+        )
+        VALUES (?, ?, ?, ?, ?, ?)
+      `;
+
+      const values = [
+        gebruikerId,
+        naam,
+        adres,
+        vertegenwoordiger,
+        telefoon,
+        'logo_' + naam
+      ];
+
+      db.query(insertBedrijfSql, values, (err2) => {
+        if (err2) {
+          return res.status(500).json({ error: 'Fout bij toevoegen bedrijf: ' + err2.message });
+        }
+
+        res.status(201).json({
+          message: 'Bedrijf en gebruiker succesvol toegevoegd.',
+          gebruiker_id: gebruikerId
+        });
       });
     });
-  });
+  } catch (err) {
+    res.status(500).json({ error: 'Interne serverfout bij hashing: ' + err.message });
+  }
 });
+
 
 
 
