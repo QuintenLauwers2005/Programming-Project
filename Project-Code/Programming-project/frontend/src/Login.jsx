@@ -5,7 +5,7 @@ import axios from 'axios';
 import eyeIconPath from './Assets/eye-empty.svg';
 import eyeSlashIconPath from './Assets/eye-off.svg';
 import Footer from './Components/Footer';
-
+import './login.css';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -34,7 +34,6 @@ export default function LoginPage() {
       localStorage.setItem('gebruiker_id', gebruiker_id);
       localStorage.setItem('rol', rol);
 
-      // Naam alleen opslaan als die bestaat (dus bij studenten)
       if (naam) {
         localStorage.setItem('naam', naam);
         localStorage.removeItem('Bedrijf_Logo')
@@ -51,7 +50,7 @@ export default function LoginPage() {
           if(localStorage.getItem('rol') === 'bedrijf')
         navigate('/BedrijfHomePage');
       if(localStorage.getItem('rol') === 'admin')
-        navigate('/HomePageAdmin');// ga naar home na logins
+        navigate('/HomePageAdmin');
       }, 100);
 
     } catch (err) {
@@ -63,7 +62,6 @@ export default function LoginPage() {
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif' }}>
-      {/* Navbar */}
       <header>
         <Navbar />
       </header>
@@ -128,7 +126,6 @@ export default function LoginPage() {
                   justifyContent: 'center'
                 }}
               >
-                {/* Gebruik de geïmporteerde SVG-bestanden in een <img> tag */}
                 <img 
                   src={passwordVisible ? eyeSlashIconPath : eyeIconPath} 
                   alt="Wachtwoord zichtbaarheid wisselen" 

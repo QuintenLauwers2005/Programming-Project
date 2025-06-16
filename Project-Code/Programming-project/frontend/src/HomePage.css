@@ -220,3 +220,62 @@ main {
   text-align: center;
   margin-top: 4rem;
 }
+
+@media (max-width: 450px) {
+
+  main {
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .enhanced-box {
+    padding: 1.5rem;
+  }
+
+  .stats {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .stat {
+    width: 90%;
+  }
+
+  .map-card iframe {
+    height: 300px;
+  }
+
+  .why-circles-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .studentenverklaring blockquote {
+    padding-left: 1.5rem;
+  }
+
+  .studentenverklaring blockquote::before {
+    font-size: 2.5rem;
+  }
+
+  .faq-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .faq-blok {
+    width: 90%;
+    min-width: unset;
+    height: auto;
+    padding: 1.5rem;
+  }
+}

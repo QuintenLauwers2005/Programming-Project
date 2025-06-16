@@ -152,21 +152,6 @@ export default function AdminVacatureLijst() {
     <div className="pagina">
       <header>
         <Navbar />
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
-          <button
-            onClick={handleLogout}
-            style={{
-              backgroundColor: '#dc3545',
-              color: 'white',
-              border: 'none',
-              padding: '10px 15px',
-              borderRadius: '5px',
-              cursor: 'pointer'
-            }}
-          >
-            Uitloggen
-          </button>
-        </div>
       </header>
 
       <main className="inhoud">

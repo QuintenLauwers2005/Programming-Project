@@ -59,16 +59,6 @@ function StudentProfilePage() {
 
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
 
-{cvLink && (
-  <a
-    href={`http://localhost:5000${cvLink}`}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="cv-download-link"
-  >
-    Bekijk CV (PDF)
-  </a>
-)}
 
       {/* Profiel Hoofding */}
      
@@ -150,6 +140,7 @@ function StudentProfilePage() {
     {studentData.linkedinurl}
   </a>
 </p>
+ <p style={{ margin: '10px 0', color: '#555' }}><strong>Opleiding:</strong> <a href={`http://localhost:5000${cvLink}`} target="_blank" rel="noopener noreferrer" className="cv-download-link">Bekijk CV (PDF)</a></p>
 
         
       </section>
