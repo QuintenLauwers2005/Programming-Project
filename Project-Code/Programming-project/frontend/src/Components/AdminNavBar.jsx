@@ -103,9 +103,6 @@ function Navbar() {
 
       {isMenuOpen && (
         <div className="mobile-menu-overlay">
-          <button className="close-btn" onClick={() => setIsMenuOpen(false)}>
-            <CloseIcon />
-          </button>
           <nav className="mobile-menu-links">
             <button onClick={() => handleMenuLinkClick('/HomePageAdmin')}>Home</button>
             <button onClick={() => handleMenuLinkClick('/AdminAgenda')}>Speeddates</button>
