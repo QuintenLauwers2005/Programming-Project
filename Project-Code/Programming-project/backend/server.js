@@ -643,13 +643,13 @@ app.delete('/api/speeddate/:id', (req, res) => {
 
 app.put('/api/speeddate/:id/status', (req, res) => {
   const speeddateId = req.params.id;
-  const { status } = req.body;
+  const { status, locatie } = req.body;
 
   console.log('PUT /api/speeddate/:id/status', { speeddateId, status });
 
-  const updateSql = `UPDATE speeddate SET status = ? WHERE speeddate_id = ?`;
+  const updateSql = `UPDATE speeddate SET status = ?, locatie = ? WHERE speeddate_id = ?` ;
 
-  db.query(updateSql, [status, speeddateId], (err, result) => {
+  db.query(updateSql, [status, locatie, speeddateId], (err, result) => {
     if (err) {
       console.error('SQL error bij update status:', err);
       return res.status(500).json({ error: err.message });

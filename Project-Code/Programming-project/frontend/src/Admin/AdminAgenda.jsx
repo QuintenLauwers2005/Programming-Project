@@ -9,6 +9,39 @@ export default function AdminAgenda() {
   const [cancelId, setCancelId] = useState(null);
   const [tijdConfig, setTijdConfig] = useState({ beginuur: '', einduur: '' });
   const [formData, setFormData] = useState({ beginuur: '', einduur: '' });
+  const [locatieEdits, setLocatieEdits] = useState({});
+
+  //functie om locatie toe te passen
+  const handleLocatieChange = (id, value) => {
+  setLocatieEdits(prev => ({ ...prev, [id]: value }));
+};
+
+const handleLocatieSave = (id) => {
+  const nieuweLocatie = locatieEdits[id];
+  if (!nieuweLocatie) return;
+
+  fetch(`http://localhost:5000/api/speeddate/${id}/status`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ locatie: nieuweLocatie })
+  })
+    .then(res => {
+      if (!res.ok) throw new Error('Fout bij opslaan');
+      return res.json();
+    })
+    .then(() => {
+      setAfspraken(prev =>
+        prev.map(app => app.id === id ? { ...app, locatie: nieuweLocatie } : app)
+      );
+      alert('Locatie bijgewerkt');
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Fout bij opslaan van locatie.');
+    });
+};
+
+
 
   useEffect(() => {
     // Afspraken ophalen
@@ -107,7 +140,17 @@ export default function AdminAgenda() {
               <div className="company">
                 {afspraak.voornaam} {afspraak.naam} — {afspraak.bedrijf_naam}
               </div>
-              <div className="room">{afspraak.locatie}</div>
+              <div className="lokaal">
+               <input
+                type="text"
+                value={locatieEdits[afspraak.id] ?? afspraak.locatie}
+                onChange={(e) => handleLocatieChange(afspraak.id, e.target.value)}
+                style={{ padding: '4px', width: '150px' }}
+              />
+              <button onClick={() => handleLocatieSave(afspraak.id)} className="save-button">
+                Opslaan
+              </button>
+              </div>
               <button
                 className="cancel-button"
                 onClick={() => handleCancelConfirm(afspraak.id)}
