@@ -83,7 +83,7 @@ export default function VacatureLijst() {
                 <div key={vacature.vacature_id} className="vacature-card">
                   <div className="logo-blok">
                     <img
-                      src={`/${vacature.logo_link}`}
+                      src={`http://localhost:5000${vacature.logo_link}`}
                       alt={`logo van ${vacature.bedrijf}`}
                       style={{
                         width: '80px',

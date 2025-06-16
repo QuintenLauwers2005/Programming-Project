@@ -1,93 +1,308 @@
-.bedrijven-container {
-  font-family: Arial, sans-serif;
-}
+ Voeg deze CSS toe aan je bestaande BedrijfPage.css bestand */
 
-.bedrijven-titel {
-  text-align: center;
-  font-size: 28px;
-  margin: 40px 0 20px;
-  font-weight: bold;
+/* Verbeterde filter sectie */
+.filter-section {
+  margin-bottom: 40px;
+  padding: 0 20px;
 }
 
 .filter-form {
   display: flex;
-  gap: 10px;
-  margin-bottom: 30px;
+  gap: 12px;
+  margin-bottom: 20px;
   justify-content: center;
-  text-align: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-.filter-form input {
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+.filter-input {
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
   font-size: 14px;
-  max-width: 300px;
+  max-width: 220px;
+  min-width: 180px;
+  transition: all 0.3s ease;
+  background-color: #fff;
 }
 
-.loading-text,
+.filter-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.filter-input::placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+.clear-filters-btn {
+  padding: 12px 16px;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  min-width: 45px;
+}
+
+.clear-filters-btn:hover {
+  background-color: #ff5252;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3);
+}
+
+.clear-filters-btn:active {
+  transform: translateY(0);
+}
+
+/* Resultaten info */
+.results-info {
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #f8f9fa;
+  border-radius: 20px;
+  display: inline-block;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Loading verbeteringen */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Geen resultaten verbetering */
 .geen-resultaten {
   text-align: center;
+  padding: 60px 20px;
+  color: #666;
+}
+
+.no-results-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+  opacity: 0.7;
+}
+
+.geen-resultaten h3 {
+  margin: 0 0 10px 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.geen-resultaten p {
+  margin: 0;
+  font-size: 16px;
   color: #888;
 }
 
-.bedrijven-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-}
-
+/* Verbeterde bedrijf cards */
 .bedrijf-card {
   cursor: pointer;
-  width: 200px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
+  width: 220px;
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.bedrijf-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #007bff, #0056b3);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
 }
 
 .bedrijf-card:hover {
-  transform: scale(1.02);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
-.bedrijf-logo {
+.bedrijf-card:hover::before {
+  transform: scaleX(1);
+}
+
+.bedrijf-card:active {
+  transform: translateY(-2px);
+}
+
+/* Logo fallback styling */
+.logo-fallback {
   width: 100%;
   height: 75px;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 32px;
+  color: #007bff;
+  background-color: #f8f9ff;
+  border-radius: 8px;
   margin-bottom: 15px;
 }
 
-.bedrijf-logo img {
-  max-width: 75px;
-  max-height: 60px;
-  object-fit: contain;
+/* Bedrijf info styling */
+.bedrijf-locatie,
+.bedrijf-vertegenwoordiger {
+  font-size: 13px;
+  color: #666;
+  margin: 5px 0;
+  padding: 4px 8px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  display: inline-block;
 }
 
 .bedrijf-naam {
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 600;
+  color: #333;
+  margin: 15px 0 10px 0;
+  line-height: 1.3;
 }
 
+/* Verbeterde grid responsiviteit */
+.bedrijven-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  justify-content: center;
+  padding: 0 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Verbeterde toon meer button */
 .toonmeer-btn {
   width: 100%;
-  padding: 16px;
-  color: #5d5d5d;
-  border: 2px solid #ccc;
-  background-color: #f6f6f6;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 1rem;
-  margin-top: 30px;
-  font-weight: bold;
+  max-width: 400px;
+  padding: 16px 24px;
+  color: #333;
+  border: 2px solid #007bff;
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.1);
+  border-radius: 12px;
+  margin: 40px auto 0;
+  font-weight: 600;
   font-size: 16px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+.toonmeer-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 123, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.toonmeer-btn:hover {
+  background: linear-gradient(145deg, #007bff, #0056b3);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3);
+}
+
+.toonmeer-btn:hover::before {
+  left: 100%;
 }
 
 .toonmeer-btn:active {
-  transform: translateY(4px);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+}
+
+/* Responsive design verbeteringen */
+@media (max-width: 768px) {
+  .filter-form {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .filter-input {
+    max-width: 100%;
+    min-width: 250px;
+  }
+  
+  .bedrijven-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 0 16px;
+  }
+  
+  .bedrijf-card {
+    width: 100%;
+  }
+  
+  .bedrijven-titel {
+    font-size: 24px;
+    margin: 20px 0 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-input {
+    min-width: 200px;
+  }
+  
+  .bedrijven-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+@media (max-width: 780px) {
+  .filter-form {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .filter-form input {
+    width: 70%;
+    max-width: none;
+  }
 }
