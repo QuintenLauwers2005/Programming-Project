@@ -44,7 +44,7 @@ function Navbar() {
     <div className='navbar-container'>
       <div className="top-bar">
         <Link to="/" className="logo-link"><Logo /></Link>
-
+          <div className='career-launchName'>Career-launch</div>
         <div className="top-bar-right">
           <div ref={buttonRef} className="navigatie-button-popout">
             <button className="notificatie-btn" onClick={() => setShowNotifications(p => !p)}>
