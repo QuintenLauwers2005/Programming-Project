@@ -74,30 +74,9 @@ export default function AdminBedrijvenLijst() {
         {/* Verbeterde Filter Sectie */}
         <div className="filter-section">
           <div className="filter-form">
-            <input 
-              type="text" 
-              name="naam" 
-              placeholder="🔍 Zoek op naam..." 
-              value={filters.naam} 
-              onChange={handleFilterChange}
-              className="filter-input"
-            />
-            <input 
-              type="text" 
-              name="locatie" 
-              placeholder="📍 Locatie..." 
-              value={filters.locatie} 
-              onChange={handleFilterChange}
-              className="filter-input"
-            />
-            <input 
-              type="text" 
-              name="vertegenwoordiger" 
-              placeholder="👤 Vertegenwoordiger..." 
-              value={filters.vertegenwoordiger} 
-              onChange={handleFilterChange}
-              className="filter-input"
-            />
+            <input type="text" name="naam" placeholder="Naam" value={filters.naam} onChange={handleFilterChange} />
+            <input type="text" name="locatie" placeholder="Locatie" value={filters.locatie} onChange={handleFilterChange} />
+            <input type="text" name="vertegenwoordiger" placeholder="Vertegenwoordiger" value={filters.vertegenwoordiger} onChange={handleFilterChange} />
             {(filters.naam || filters.locatie || filters.vertegenwoordiger) && (
               <button 
                 onClick={clearFilters}
@@ -107,11 +86,6 @@ export default function AdminBedrijvenLijst() {
                 ✕
               </button>
             )}
-          </div>
-          
-          {/* Resultaten teller */}
-          <div className="results-info">
-            {filteredBedrijven.length} bedrijf{filteredBedrijven.length !== 1 ? 'en' : ''} gevonden
           </div>
         </div>
 
