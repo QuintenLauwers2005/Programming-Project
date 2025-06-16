@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import '../Components/VacatureLijst.css';
 import Navbar from '../Components/AdminNavBar';
@@ -9,55 +9,66 @@ export default function AdminVacatureLijst() {
   const [editMode, setEditMode] = useState(false);
   const [editData, setEditData] = useState({ functie: '', contract_type: '', synopsis: '' });
   const [vacatures, setVacatures] = useState([]);
-  const navigate = useNavigate();
   const [filteredVacatures, setFilteredVacatures] = useState([]);
   const [selectedVacature, setSelectedVacature] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedTime, setSelectedTime] = useState('');
-  const [filters, setFilters] = useState({
-    bedrijf: '',
-    functie: '',
-    contractType: ''
-  });
+  const [filters, setFilters] = useState({ bedrijf: '', functie: '', contractType: '' });
+  const navigate = useNavigate();
 
-  // Fetch vacatures from API
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/vacatures')
-      .then((res) => {    
-        setVacatures(res.data);
-        setFilteredVacatures(res.data);
+  // Paginering en lazy loading
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const limit = 2;
+
+  const fetchVacatures = useCallback((page) => {
+    setLoadingMore(true);
+    axios.get(`http://localhost:5000/api/vacatures?page=${page}&limit=${limit}`)
+      .then((res) => {
+        if (res.data.length < limit) setHasMore(false);
+        setVacatures(prev => [...prev, ...res.data]);
       })
       .catch((err) => {
         console.error('Fout bij ophalen vacatures:', err.message);
+      })
+      .finally(() => {
+        setLoadingMore(false);
       });
   }, []);
 
-  // Handle filter change
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters({
-      ...filters,
-      [name]: value
-    });
-  };
+  useEffect(() => {
+    fetchVacatures(page);
+  }, [page, fetchVacatures]);
 
-  const handleLogout = () => {
-    localStorage.clear();         // Verwijder gebruiker_id en andere data
-    navigate('/login');           // Navigeer naar loginpagina
-  };
+  // Lazy loading bij scrollen
+  useEffect(() => {
+    const handleScroll = () => {
+      if (loadingMore || !hasMore) return;
 
-  // Apply filters
+      const scrollPosition = window.innerHeight + window.scrollY;
+      const threshold = document.documentElement.offsetHeight - 100;
+
+      if (scrollPosition >= threshold) {
+        setPage(prevPage => prevPage + 1);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [loadingMore, hasMore]);
+
+  // Filteren lokaal
   useEffect(() => {
     let filtered = vacatures;
 
     if (filters.bedrijf) {
       filtered = filtered.filter(v => v.bedrijf.toLowerCase().includes(filters.bedrijf.toLowerCase()));
     }
-
     if (filters.functie) {
       filtered = filtered.filter(v => v.functie.toLowerCase().includes(filters.functie.toLowerCase()));
     }
-
     if (filters.contractType) {
       filtered = filtered.filter(v => v.contract_type.toLowerCase().includes(filters.contractType.toLowerCase()));
     }
@@ -65,9 +76,16 @@ export default function AdminVacatureLijst() {
     setFilteredVacatures(filtered);
   }, [filters, vacatures]);
 
- 
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters({ ...filters, [name]: value });
+  };
 
-  // Open modal om vacature te bewerken
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/login');
+  };
+
   const handleEditVacature = (vacature) => {
     setSelectedVacature(vacature);
     setEditData({
@@ -79,14 +97,14 @@ export default function AdminVacatureLijst() {
     setShowModal(true);
   };
 
-  // Verwijder vacature
   const handleDeleteVacature = (id) => {
     if (window.confirm('Weet je zeker dat je deze vacature wilt verwijderen?')) {
       axios.delete(`http://localhost:5000/api/vacatures/${id}`)
         .then(() => {
           alert('Vacature verwijderd');
-          setVacatures(prev => prev.filter(v => v.vacature_id !== id));
-          setFilteredVacatures(prev => prev.filter(v => v.vacature_id !== id));
+          const updated = vacatures.filter(v => v.vacature_id !== id);
+          setVacatures(updated);
+          setFilteredVacatures(updated);
           setShowModal(false);
         })
         .catch(err => {
@@ -96,7 +114,6 @@ export default function AdminVacatureLijst() {
     }
   };
 
-  // Update vacature
   const handleUpdateVacature = () => {
     axios.put(`http://localhost:5000/api/vacatures/${selectedVacature.vacature_id}`, editData)
       .then((res) => {
@@ -113,7 +130,6 @@ export default function AdminVacatureLijst() {
       });
   };
 
-  // Bevestig tijdstip reserveren
   const handleConfirm = () => {
     if (!selectedTime) {
       alert('Kies een tijdstip');
@@ -124,19 +140,18 @@ export default function AdminVacatureLijst() {
       student_id: 1,
       bedrijf_id: selectedVacature.bedrijf_id,
       tijdstip: selectedTime + ':00',
-      locatie: 'Aula 1', 
+      locatie: 'Aula 1',
       status: 'bevestigd'
     })
-    .then(() => {
-      alert('Afspraak succesvol vastgelegd!');
-      setShowModal(false);
-    })
-    .catch(err => {
-      alert(err.response?.data?.error || 'Er ging iets mis bij het reserveren.');
-    });
+      .then(() => {
+        alert('Afspraak succesvol vastgelegd!');
+        setShowModal(false);
+      })
+      .catch(err => {
+        alert(err.response?.data?.error || 'Er ging iets mis bij het reserveren.');
+      });
   };
 
-  // Genereer tijd opties
   const generateTimeOptions = () => {
     const options = [];
     for (let hour = 8; hour < 19; hour++) {
@@ -150,35 +165,15 @@ export default function AdminVacatureLijst() {
 
   return (
     <div className="pagina">
-      <header>
-        <Navbar />
-      </header>
+      <header><Navbar /></header>
 
       <main className="inhoud">
         <h2>Vacatures</h2>
 
         <div className="filter-form">
-          <input
-            type="text"
-            name="bedrijf"
-            placeholder="Bedrijf"
-            value={filters.bedrijf}
-            onChange={handleFilterChange}
-          />
-          <input
-            type="text"
-            name="functie"
-            placeholder="Functie"
-            value={filters.functie}
-            onChange={handleFilterChange}
-          />
-          <input
-            type="text"
-            name="contractType"
-            placeholder="Contracttype"
-            value={filters.contractType}
-            onChange={handleFilterChange}
-          />
+          <input type="text" name="bedrijf" placeholder="Bedrijf" value={filters.bedrijf} onChange={handleFilterChange} />
+          <input type="text" name="functie" placeholder="Functie" value={filters.functie} onChange={handleFilterChange} />
+          <input type="text" name="contractType" placeholder="Contracttype" value={filters.contractType} onChange={handleFilterChange} />
         </div>
 
         <section className="enhanced-box">
@@ -190,146 +185,64 @@ export default function AdminVacatureLijst() {
                     <img
                       src={`/${vacature.logo_link}`}
                       alt={`logo van ${vacature.bedrijf}`}
-                      style={{
-                        width: '80px',
-                        height: '80px',
-                        borderRadius: '8px',
-                        objectFit: 'cover'
-                      }}
+                      style={{ width: '80px', height: '80px', borderRadius: '8px', objectFit: 'cover' }}
                     />
                   </div>
                   <div className="vacature-info">
                     <p className="bedrijf">{vacature.bedrijf}</p>
                     <p className="beschrijving">{vacature.synopsis}</p>
                     <p className="functie">
-                      Functie: {vacature.functie}
-                      <br />
+                      Functie: {vacature.functie}<br />
                       Contract: {vacature.contract_type}
                     </p>
-                    <button className="bewerken-btn" onClick={() => handleEditVacature(vacature)}>
-                      Bewerken
-                    </button>
-                    <button className="verwijder-btn"
-                      onClick={() => handleDeleteVacature(vacature.vacature_id)}>
-                      Verwijderen
-                    </button>
+                    <button className="bewerken-btn" onClick={() => handleEditVacature(vacature)}>Bewerken</button>
+                    <button className="verwijder-btn" onClick={() => handleDeleteVacature(vacature.vacature_id)}>Verwijderen</button>
                   </div>
                 </div>
               ))}
+              {loadingMore && <p>Laden...</p>}
+              {!hasMore && <p>Geen vacatures meer</p>}
             </div>
           </div>
         </section>
-
-        <button className="toonmeer-btn" onClick={() => alert('Toon meer geklikt!')}>Toon meer</button>
       </main>
 
       {showModal && (
         <div style={{
-          position: 'fixed',
-          top: 0, left: 0, right: 0, bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.5)',
-          display: 'flex', justifyContent: 'center', alignItems: 'center',
-          zIndex: 1000,
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex',
+          justifyContent: 'center', alignItems: 'center', zIndex: 1000
         }}>
           <div style={{
-            backgroundColor: 'white',
-            padding: '20px',
-            borderRadius: '8px',
-            width: '300px',
+            backgroundColor: 'white', padding: '20px',
+            borderRadius: '8px', width: '300px',
             boxShadow: '0 2px 10px rgba(0,0,0,0.3)'
           }}>
             {editMode ? (
               <>
                 <h3>Vacature Bewerken</h3>
-                <label style={{ display: 'block', margin: '10px 0 5px' }}>Functie:</label>
-                <input
-                  type="text"
-                  value={editData.functie}
-                  onChange={(e) => setEditData({ ...editData, functie: e.target.value })}
-                  style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
-                />
-                <label style={{ display: 'block', margin: '10px 0 5px' }}>Contract Type:</label>
-                <input
-                  type="text"
-                  value={editData.contract_type}
-                  onChange={(e) => setEditData({ ...editData, contract_type: e.target.value })}
-                  style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
-                />
-                <label style={{ display: 'block', margin: '10px 0 5px' }}>Beschrijving:</label>
-                <textarea
-                  value={editData.synopsis}
-                  onChange={(e) => setEditData({ ...editData, synopsis: e.target.value })}
-                  style={{ width: '100%', padding: '8px', boxSizing: 'border-box', minHeight: '80px' }}
-                />
+                <label>Functie:</label>
+                <input type="text" value={editData.functie} onChange={(e) => setEditData({ ...editData, functie: e.target.value })} />
+                <label>Contract Type:</label>
+                <input type="text" value={editData.contract_type} onChange={(e) => setEditData({ ...editData, contract_type: e.target.value })} />
+                <label>Beschrijving:</label>
+                <textarea value={editData.synopsis} onChange={(e) => setEditData({ ...editData, synopsis: e.target.value })} />
                 <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-                  <button
-                    onClick={handleUpdateVacature}
-                    style={{
-                      backgroundColor: '#28a745',
-                      color: 'white',
-                      border: 'none',
-                      padding: '8px 16px',
-                      borderRadius: '5px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Opslaan
-                  </button>
-                  <button
-                    onClick={() => { setShowModal(false); setEditMode(false); }}
-                    style={{
-                      backgroundColor: '#dc3545',
-                      color: 'white',
-                      border: 'none',
-                      padding: '8px 16px',
-                      borderRadius: '5px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Annuleren
-                  </button>
+                  <button onClick={handleUpdateVacature} style={{ backgroundColor: '#28a745', color: 'white' }}>Opslaan</button>
+                  <button onClick={() => { setShowModal(false); setEditMode(false); }} style={{ backgroundColor: '#dc3545', color: 'white' }}>Annuleren</button>
                 </div>
               </>
             ) : (
               <>
                 <h3>Kies een tijdstip</h3>
-                <label style={{ display: 'block', margin: '10px 0 5px' }}>Tijdstip:</label>
-                <select
-                  value={selectedTime}
-                  onChange={e => setSelectedTime(e.target.value)}
-                  style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
-                >
+                <label>Tijdstip:</label>
+                <select value={selectedTime} onChange={e => setSelectedTime(e.target.value)}>
                   <option value="">Selecteer tijd</option>
                   {generateTimeOptions()}
                 </select>
-
                 <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-                  <button
-                    onClick={handleConfirm}
-                    style={{
-                      backgroundColor: '#28a745',
-                      color: 'white',
-                      border: 'none',
-                      padding: '8px 16px',
-                      borderRadius: '5px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Bevestigen
-                  </button>
-                  <button
-                    onClick={() => setShowModal(false)}
-                    style={{
-                      backgroundColor: '#dc3545',
-                      color: 'white',
-                      border: 'none',
-                      padding: '8px 16px',
-                      borderRadius: '5px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Annuleren
-                  </button>
+                  <button onClick={handleConfirm} style={{ backgroundColor: '#28a745', color: 'white' }}>Bevestigen</button>
+                  <button onClick={() => setShowModal(false)} style={{ backgroundColor: '#dc3545', color: 'white' }}>Annuleren</button>
                 </div>
               </>
             )}
