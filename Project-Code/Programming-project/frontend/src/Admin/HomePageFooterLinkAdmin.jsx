@@ -1,22 +1,17 @@
-// HomePage.jsx
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import Navbar from '../Components/BedrijfNavBar'
+import React from 'react'
+import { useNavigate } from 'react-router-dom';
+import Navbar from '../Components/AdminNavBar';
 import Footer from '../Components/Footer';
-import '../HomePage.css';
 
-function BedrijfHomePage() {
-
-  const [stats, setStats] = useState(null) // for your numbers from SQL
+function HomePageFooterLinkAdmin() {
+  const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
-  const [activeFaqIndex, setActiveFaqIndex] = useState(null);
 
   useEffect(() => {
-    // Replace this URL with your actual backend API endpoint that returns your stats
-    axios.get('http://localhost:5000/api/HomePageAantalen') 
+    axios.get('http://localhost:5000/api/HomePageAantalen')
       .then(response => {
-        setStats(response.data)  // assume response.data is { bedrijven: 30, vacatures: 150, studenten: 200 }
+        setStats(response.data)  // verwacht { bedrijf_aantal, vacature_aantal, student_aantal }
         setLoading(false)
       })
       .catch(err => {
@@ -44,9 +39,18 @@ function BedrijfHomePage() {
 
         {/* Statistieken */}
         <section className="stats">
-          <div className="stat"><strong>{loading ? '...' : error ? '✖' : stats?.bedrijf_aantal}</strong><br />Bedrijven</div>
-          <div className="stat"><strong>{loading ? '...' : error ? '✖' : stats?.vacature_aantal}</strong><br />Vacatures</div>
-          <div className="stat"><strong>{loading ? '...' : error ? '✖' : stats?.student_aantal}</strong><br />Studenten</div>
+          <div className="stat">
+            <strong>{loading ? '...' : error ? '✖' : stats?.bedrijf_aantal}</strong><br />
+            Bedrijven
+          </div>
+          <div className="stat">
+            <strong>{loading ? '...' : error ? '✖' : stats?.vacature_aantal}</strong><br />
+            Vacatures
+          </div>
+          <div className="stat">
+            <strong>{loading ? '...' : error ? '✖' : stats?.student_aantal}</strong><br />
+            Studenten
+          </div>
         </section>
 
         {/* Praktisch */}
@@ -157,5 +161,4 @@ function BedrijfHomePage() {
 
   
 }
-
-export default BedrijfHomePage;
+export default HomePageFooterLinkAdmin;
