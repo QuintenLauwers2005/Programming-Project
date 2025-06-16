@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function StudentVacatureLijst() {
   const navigate = useNavigate();
+
   const [vacatures, setVacatures] = useState([]);
   const [filteredVacatures, setFilteredVacatures] = useState([]);
   const [selectedVacature, setSelectedVacature] = useState(null);
@@ -22,19 +23,32 @@ export default function StudentVacatureLijst() {
     einduur: '18:00:00'
   });
 
-  // Vacatures ophalen
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/vacatures')
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const limit = 2;
+
+  // Vacatures ophalen met paginering
+  const fetchVacatures = (pageNum = 1) => {
+    axios.get(`http://localhost:5000/api/vacatures?page=${pageNum}&limit=${limit}`)
       .then((res) => {
-        setVacatures(res.data);
-        setFilteredVacatures(res.data);
+        if (res.data.length < limit) {
+          setHasMore(false); // Geen volgende pagina meer
+        }
+        if (pageNum === 1) {
+          setVacatures(res.data);
+        } else {
+          setVacatures(prev => [...prev, ...res.data]);
+        }
       })
       .catch((err) => {
         console.error('Fout bij ophalen vacatures:', err.message);
       });
+  };
+
+  useEffect(() => {
+    fetchVacatures(1);
   }, []);
 
-  // Tijdsconfiguratie ophalen
   useEffect(() => {
     axios.get('http://localhost:5000/api/speeddate-config')
       .then((res) => {
@@ -45,7 +59,7 @@ export default function StudentVacatureLijst() {
       });
   }, []);
 
-  // Filters toepassen
+  // Filters toepassen op de volledige lijst
   useEffect(() => {
     let filtered = vacatures;
 
@@ -63,6 +77,29 @@ export default function StudentVacatureLijst() {
 
     setFilteredVacatures(filtered);
   }, [filters, vacatures]);
+
+  // Scroll event om nieuwe pagina te laden
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const fullHeight = document.documentElement.scrollHeight;
+
+      if (scrollTop + windowHeight + 100 >= fullHeight && hasMore) {
+        setPage(prevPage => prevPage + 1);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [hasMore]);
+
+  // Nieuwe pagina vacatures ophalen als page verandert
+  useEffect(() => {
+    if (page === 1) return; // Eerste pagina al geladen bij init
+
+    fetchVacatures(page);
+  }, [page]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -205,9 +242,11 @@ export default function StudentVacatureLijst() {
           </div>
         </section>
 
-        <button className="toonmeer-btn" onClick={() => alert('Toon meer geklikt!')}>
-          Toon meer
-        </button>
+        {!hasMore && (
+          <div style={{ textAlign: 'center', marginTop: '1rem', color: '#555' }}>
+            Geen vacatures meer om te laden
+          </div>
+        )}
       </main>
 
       {showModal && (
