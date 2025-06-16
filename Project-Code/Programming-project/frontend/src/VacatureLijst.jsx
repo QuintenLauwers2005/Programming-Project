@@ -1,54 +1,42 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './Components/VacatureLijst.css';
 import Navbar from './Components/Navbar';
 import Footer from './Components/Footer';
 
 export default function VacatureLijst() {
   const [vacatures, setVacatures] = useState([]);
   const [filteredVacatures, setFilteredVacatures] = useState([]);
-  const [selectedVacature, setSelectedVacature] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedTime, setSelectedTime] = useState('');
   const [filters, setFilters] = useState({
     bedrijf: '',
     functie: '',
     contractType: ''
   });
 
-  // Fetch vacatures from API
+  const [showModal, setShowModal] = useState(false);
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const [selectedVacature, setSelectedVacature] = useState(null);
+  const navigate = useNavigate();
+  
+
   useEffect(() => {
     axios.get('http://localhost:5000/api/vacatures')
-      .then((res) => {    
+      .then(res => {
         setVacatures(res.data);
         setFilteredVacatures(res.data);
       })
-      .catch((err) => {
-        console.error('Fout bij ophalen vacatures:', err.message);
-      });
+      .catch(err => console.error('Fout bij ophalen vacatures:', err.message));
   }, []);
 
-  // Handle filter change
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters({
-      ...filters,
-      [name]: value
-    });
-  };
-
-  // Apply filters
   useEffect(() => {
     let filtered = vacatures;
 
     if (filters.bedrijf) {
       filtered = filtered.filter(v => v.bedrijf.toLowerCase().includes(filters.bedrijf.toLowerCase()));
     }
-
     if (filters.functie) {
       filtered = filtered.filter(v => v.functie.toLowerCase().includes(filters.functie.toLowerCase()));
     }
-
     if (filters.contractType) {
       filtered = filtered.filter(v => v.contract_type.toLowerCase().includes(filters.contractType.toLowerCase()));
     }
@@ -56,184 +44,167 @@ export default function VacatureLijst() {
     setFilteredVacatures(filtered);
   }, [filters, vacatures]);
 
-
-  // Handle form submission
-  const handleConfirm = () => {
-    if (!selectedTime) {
-      alert('Kies een tijdstip');
-      return;
-    }
-
-    // Save to localStorage or send to backend
-    // For now, just redirect to Agenda with query params
-    axios.post('http://localhost:5000/api/speeddate', {
-    student_id: localStorage.getItem("gebruiker_id"),
-    bedrijf_id: selectedVacature.bedrijf_id,
-    tijdstip: selectedTime + ':00',
-    locatie: 'Aula 1', 
-    status: 'bevestigd'
-    })
-    .then(() => {
-      alert('Afspraak succesvol vastgelegd!');
-      setShowModal(false);
-      })
-      .catch(err => {
-      alert(err.response?.data?.error || 'Er ging iets mis bij het reserveren.');
-      });
-
-    
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters(prev => ({ ...prev, [name]: value }));
   };
-  const generateTimeOptions = () => {
-    const options = [];
-    for (let hour = 8; hour < 19; hour++) {
-      for (let minute = 0; minute < 60; minute += 10) {
-        const time = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
-        options.push(<option key={time} value={time}>{time}</option>);
-      }
-    }
-    return options;
-  };
+
   const handleOpenModal = (vacature) => {
-    setSelectedVacature(vacature);
-    setSelectedTime('');
-    setShowModal(true);
+    const isLoggedIn = localStorage.getItem("gebruiker_id");
+    if (!isLoggedIn) {
+      setShowLoginPopup(true);
+    } else {
+      setSelectedVacature(vacature);
+      setShowModal(true);
+    }
   };
+
+
 
   return (
     <div className="pagina">
-      {/* Header with Navbar */}
-      <header>
-        <Navbar />
-      </header>
+      <header><Navbar /></header>
 
       <main className="inhoud">
         <h2>Vacatures</h2>
 
-        {/* Filter Form */}
+        {/* Filters */}
         <div className="filter-form">
-          <input
-            type="text"
-            name="bedrijf"
-            placeholder="Bedrijf"
-            value={filters.bedrijf}
-            onChange={handleFilterChange}
-          />
-          <input
-            type="text"
-            name="functie"
-            placeholder="Functie"
-            value={filters.functie}
-            onChange={handleFilterChange}
-          />
-          <input
-            type="text"
-            name="contractType"
-            placeholder="Contracttype"
-            value={filters.contractType}
-            onChange={handleFilterChange}
-          />
+          <input type="text" name="bedrijf" placeholder="Bedrijf" value={filters.bedrijf} onChange={handleFilterChange} />
+          <input type="text" name="functie" placeholder="Functie" value={filters.functie} onChange={handleFilterChange} />
+          <input type="text" name="contractType" placeholder="Contracttype" value={filters.contractType} onChange={handleFilterChange} />
         </div>
 
+        {/* Vacature Cards */}
         <section className="enhanced-box">
-  <div className="vacature-wrapper">
-    <div className="vacature-list">
-      {filteredVacatures.map((vacature) => (
-        <div key={vacature.vacature_id} className="vacature-card">
-          <div className="logo-blok">
-            <img
-              src={`/${vacature.logo_link}`}
-              alt={`logo van ${vacature.bedrijf}`}
-              style={{
-                width: '80px',
-                height: '80px',
-                borderRadius: '8px',
-                objectFit: 'cover'
-              }}
-            />
+          <div className="vacature-wrapper">
+            <div className="vacature-list">
+              {filteredVacatures.map((vacature) => (
+                <div key={vacature.vacature_id} className="vacature-card">
+                  <div className="logo-blok">
+                    <img
+                      src={`/${vacature.logo_link}`}
+                      alt={`logo van ${vacature.bedrijf}`}
+                      style={{
+                        width: '80px',
+                        height: '80px',
+                        borderRadius: '8px',
+                        objectFit: 'cover'
+                      }}
+                    />
+                  </div>
+                  <div className="vacature-info">
+                    <p className="bedrijf">{vacature.bedrijf}</p>
+                    <p className="beschrijving">{vacature.synopsis}</p>
+                    <p className="functie">
+                      Functie: {vacature.functie}<br />
+                      Contract: {vacature.contract_type}
+                    </p>
+                    <button className="bewerken-btn" onClick={() => handleOpenModal(vacature)}>
+                      Reserveer gesprek
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="vacature-info">
-            <p className="bedrijf">{vacature.bedrijf}</p>
-            <p className="beschrijving">{vacature.synopsis}</p>
-            <p className="functie">
-              Functie: {vacature.functie}
-              <br />
-              Contract: {vacature.contract_type}
-            </p>
-            <button className="bewerken-btn" onClick={() => handleOpenModal(vacature)}>
-              Reserveer gesprek
-            </button>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
-
+        </section>
 
         <button className="toonmeer-btn" onClick={() => alert('Toon meer geklikt!')}>Toon meer</button>
       </main>
 
-      {/* Modal for selecting time */}
+      {/* Tijdkiezer Modal */}
       {showModal && (
+  <div style={{
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100vw',
+    height: '100vh',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000
+  }}>
+    <div style={{
+      backgroundColor: '#fff',
+      padding: '20px',
+      borderRadius: '10px',
+      width: '90%',
+      maxWidth: '400px',
+      boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
+      textAlign: 'center'
+    }}>
+      <h3>Kies een tijdstip</h3>
+      
+      <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
+        
+      </div>
+    </div>
+  </div>
+)}
+
+
+      {/* Login popup */}
+      {showLoginPopup && (
         <div style={{
           position: 'fixed',
           top: 0, left: 0, right: 0, bottom: 0,
           backgroundColor: 'rgba(0,0,0,0.5)',
           display: 'flex', justifyContent: 'center', alignItems: 'center',
-          zIndex: 1000,
+          zIndex: 1100,
         }}>
           <div style={{
             backgroundColor: 'white',
             padding: '20px',
             borderRadius: '8px',
-            width: '300px',
-            boxShadow: '0 2px 10px rgba(0,0,0,0.3)'
+            width: '320px',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
+            textAlign: 'center'
           }}>
-            <h3>Kies een tijdstip</h3>
-            <label style={{ display: 'block', margin: '10px 0 5px' }}>Tijdstip:</label>
-            <select
-              value={selectedTime}
-              onChange={e => setSelectedTime(e.target.value)}
-              style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
-            >
-              <option value="">Selecteer tijd</option>
-              {generateTimeOptions()}
-            </select>
-
-            <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+            <h3>Inloggen vereist</h3>
+            <p>Je moet ingelogd zijn om een gesprek te reserveren.</p>
+            <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between' }}>
               <button
-                onClick={handleConfirm}
+                onClick={() => setShowLoginPopup(false)}
                 style={{
-                  backgroundColor: '#28a745',
+                  backgroundColor: '#6c757d',
                   color: 'white',
                   border: 'none',
                   padding: '8px 16px',
                   borderRadius: '5px',
-                  cursor: 'pointer'
-                }}
-              >
-                Bevestigen
-              </button>
-              <button
-                onClick={() => setShowModal(false)}
-                style={{
-                  backgroundColor: '#dc3545',
-                  color: 'white',
-                  border: 'none',
-                  padding: '8px 16px',
-                  borderRadius: '5px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  flex: 1,
+                  marginRight: '10px'
                 }}
               >
                 Annuleren
+              </button>
+              <button
+                onClick={() => {
+                  setShowLoginPopup(false);
+                  navigate('/login');  
+                }}
+                style={{
+                  backgroundColor: '#007bff',
+                  color: 'white',
+                  border: 'none',
+                  padding: '8px 16px',
+                  borderRadius: '5px',
+                  cursor: 'pointer',
+                  flex: 1
+                }}
+              >
+                Inloggen
               </button>
             </div>
           </div>
         </div>
       )}
-      <footer>
-       <Footer />
-      </footer>
+
+
+      <footer><Footer /></footer>
     </div>
   );
 }
