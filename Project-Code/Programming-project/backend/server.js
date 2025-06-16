@@ -7,6 +7,7 @@ const multer = require('multer');
 const path = require('path');
 require('dotenv').config();
 const fs = require('fs');
+const bcrypt = require('bcryptjs');
 
 app.use(cors())
 app.use(express.json())
@@ -61,7 +62,7 @@ app.post('/api/login', (req, res) => {
     WHERE g.email = ?
   `;
 
-  db.query(sql, [email], (err, results) => {
+  db.query(sql, [email], async (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
 
     if (results.length === 0) {
@@ -70,20 +71,27 @@ app.post('/api/login', (req, res) => {
 
     const gebruiker = results[0];
 
-    // Hier kun je wachtwoord hashing toevoegen als je dat gebruikt
-    if (gebruiker.wachtwoord !== password) {
-      return res.status(401).json({ error: 'Wachtwoord is incorrect' });
-    }
+    try {
+      const isMatch = await bcrypt.compare(password, gebruiker.wachtwoord);
 
-    res.json({
-      message: 'Login succesvol',
-      gebruiker_id: gebruiker.gebruiker_id,
-      rol: gebruiker.rol,
-      naam: gebruiker.rol === 'student' ? gebruiker.student_naam : null,
-      logo_link: gebruiker.rol === 'bedrijf' ? gebruiker.bedrijf_logo : null
-    });
+      if (!isMatch) {
+        return res.status(401).json({ error: 'Wachtwoord is incorrect' });
+      }
+
+      res.json({
+        message: 'Login succesvol',
+        gebruiker_id: gebruiker.gebruiker_id,
+        rol: gebruiker.rol,
+        naam: gebruiker.rol === 'student' ? gebruiker.student_naam : null,
+        logo_link: gebruiker.rol === 'bedrijf' ? gebruiker.bedrijf_logo : null
+      });
+
+    } catch (compareErr) {
+      return res.status(500).json({ error: 'Fout bij wachtwoordverificatie: ' + compareErr.message });
+    }
   });
 });
+
 
 
 //vacatures ophalen
@@ -231,7 +239,8 @@ app.get('/api/student/:id', (req, res) => {
       s.opleidingsjaar,
       s.profiel_foto_url,
       v.id AS vaardigheid_id,
-      v.naam AS vaardigheid_naam
+      v.naam AS vaardigheid_naam,
+      s.linkedin_url
     FROM student s
     LEFT JOIN student_vaardigheid sv ON s.student_id = sv.student_id
     LEFT JOIN vaardigheid v ON sv.vaardigheid_id = v.id
@@ -257,6 +266,7 @@ app.get('/api/student/:id', (req, res) => {
       afstudeerjaar: results[0].opleidingsjaar,
       bio: results[0].bio,
       profielFotoUrl: results[0].profiel_foto_url,
+      linkedinurl: results[0].linkedin_url,
       vaardigheden: []
     };
 
@@ -711,7 +721,8 @@ app.get('/api/meldingen/:gebruikerId', (req, res) => {
 });
 
 
-app.post('/api/studentenToevoegen', (req, res) => {
+
+app.post('/api/studentenToevoegen', async (req, res) => {
   const {
     voornaam,
     naam,
@@ -723,98 +734,135 @@ app.post('/api/studentenToevoegen', (req, res) => {
     adres
   } = req.body;
 
-  // Voeg eerst toe aan gebruiker
-  const insertGebruikerSql = `
-    INSERT INTO gebruiker (email, wachtwoord, rol)
-    VALUES (?, ?, 'student')
-  `;
+  try {
+    // Wachtwoord hashen
+    const hashedPassword = await bcrypt.hash(wachtwoord, 10);
 
-  db.query(insertGebruikerSql, [email, wachtwoord], (err, result) => {
-    if (err) return res.status(500).json({ error: 'Fout bij toevoegen gebruiker: ' + err.message });
-
-    const gebruikerId = result.insertId;
-
-    // Voeg toe aan student
-    const insertStudentSql = `
-      INSERT INTO student (
-        student_id, voornaam, naam, opleiding, specialisatie, opleidingsjaar, adres, email
-      )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    // Voeg gebruiker toe met gehashte wachtwoord
+    const insertGebruikerSql = `
+      INSERT INTO gebruiker (email, wachtwoord, rol)
+      VALUES (?, ?, 'student')
     `;
 
-    const values = [
-      gebruikerId,
-      voornaam,
-      naam,
-      opleiding,
-      specialisatie,
-      opleidingsjaar,
-      adres,
-      email
-    ];
+    db.query(insertGebruikerSql, [email, hashedPassword], (err, result) => {
+      if (err) return res.status(500).json({ error: 'Fout bij toevoegen gebruiker: ' + err.message });
 
-    db.query(insertStudentSql, values, (err2) => {
-      if (err2) return res.status(500).json({ error: 'Fout bij toevoegen student: ' + err2.message });
+      const gebruikerId = result.insertId;
 
-      res.status(201).json({ message: 'Student en gebruiker succesvol toegevoegd.', gebruiker_id: gebruikerId });
+      // Voeg toe aan studententabel
+      const insertStudentSql = `
+        INSERT INTO student (
+          student_id, voornaam, naam, opleiding, specialisatie, opleidingsjaar, adres, email
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `;
+
+      const values = [
+        gebruikerId,
+        voornaam,
+        naam,
+        opleiding,
+        specialisatie,
+        opleidingsjaar,
+        adres,
+        email
+      ];
+
+      db.query(insertStudentSql, values, (err2) => {
+        if (err2) return res.status(500).json({ error: 'Fout bij toevoegen student: ' + err2.message });
+
+        res.status(201).json({
+          message: 'Student en gebruiker succesvol toegevoegd.',
+          gebruiker_id: gebruikerId
+        });
+      });
     });
-  });
+  } catch (err) {
+    res.status(500).json({ error: 'Interne serverfout bij hashing: ' + err.message });
+  }
 });
 
-app.post('/api/bedrijvenToevoegen', (req, res) => {
+app.post('/api/bedrijvenToevoegen', async (req, res) => {
   const {
     naam,
-    locatie,
+    adres,
     vertegenwoordiger,
     telefoon,
     email,
     wachtwoord
   } = req.body;
 
-  // 1. Voeg gebruiker toe met rol 'bedrijf'
-  const insertGebruikerSql = `
-    INSERT INTO gebruiker (email, wachtwoord, rol)
-    VALUES (?, ?, 'bedrijf')
-  `;
+  try {
+    // Wachtwoord hashen
+    const hashedPassword = await bcrypt.hash(wachtwoord, 10);
 
-  db.query(insertGebruikerSql, [email, wachtwoord], (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: 'Fout bij toevoegen gebruiker: ' + err.message });
-    }
-
-    const gebruikerId = result.insertId;
-
-    // 2. Voeg bedrijf toe
-    const insertBedrijfSql = `
-      INSERT INTO bedrijf (
-        bedrijf_id, naam, locatie, vertegenwoordiger, telefoon, logo_link
-      )
-      VALUES (?, ?, ?, ?, ?, ?)
+    // Voeg gebruiker toe met gehashte wachtwoord
+    const insertGebruikerSql = `
+      INSERT INTO gebruiker (email, wachtwoord, rol)
+      VALUES (?, ?, 'bedrijf')
     `;
 
-    const values = [
-      gebruikerId,   // bedrijf_id = zelfde als gebruiker_id
-      naam,
-      locatie,
-      vertegenwoordiger,
-      telefoon,
-      'logo_'+naam
-    ];
-
-    db.query(insertBedrijfSql, values, (err2) => {
-      if (err2) {
-        return res.status(500).json({ error: 'Fout bij toevoegen bedrijf: ' + err2.message });
+    db.query(insertGebruikerSql, [email, hashedPassword], (err, result) => {
+      if (err) {
+        return res.status(500).json({ error: 'Fout bij toevoegen gebruiker: ' + err.message });
       }
 
-      res.status(201).json({
-        message: 'Bedrijf en gebruiker succesvol toegevoegd.',
-        gebruiker_id: gebruikerId
+      const gebruikerId = result.insertId;
+
+      // Voeg bedrijf toe
+      const insertBedrijfSql = `
+        INSERT INTO bedrijf (
+          bedrijf_id, naam, locatie, vertegenwoordiger, telefoon, logo_link
+        )
+        VALUES (?, ?, ?, ?, ?, ?)
+      `;
+
+      const values = [
+        gebruikerId,
+        naam,
+        adres,
+        vertegenwoordiger,
+        telefoon,
+        'logo_' + naam
+      ];
+
+      db.query(insertBedrijfSql, values, (err2) => {
+        if (err2) {
+          return res.status(500).json({ error: 'Fout bij toevoegen bedrijf: ' + err2.message });
+        }
+
+        res.status(201).json({
+          message: 'Bedrijf en gebruiker succesvol toegevoegd.',
+          gebruiker_id: gebruikerId
+        });
       });
     });
+  } catch (err) {
+    res.status(500).json({ error: 'Interne serverfout bij hashing: ' + err.message });
+  }
+});
+
+app.get('/api/speeddate-config', (req, res) => {
+  db.query('SELECT beginuur, einduur FROM speeddate_config LIMIT 1', (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results[0]);
   });
 });
 
 
+app.put('/api/speeddate-config', (req, res) => {
+  const { beginuur, einduur } = req.body;
+
+  if (!beginuur || !einduur) {
+    return res.status(400).json({ error: 'Begin- en einduur zijn verplicht.' });
+  }
+
+  const sql = `UPDATE speeddate_config SET beginuur = ?, einduur = ? WHERE config_id = 1`;
+  db.query(sql, [beginuur, einduur], (err) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ message: 'Speeddate-uren succesvol bijgewerkt' });
+  });
+});
 
 
 // 1. Set up Multer
@@ -824,7 +872,7 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  const allowed = /jpeg|jpg|png|gif/;
+  const allowed = /jpeg|jpg|png|gif|pdf/;
   const isValid = allowed.test(file.mimetype);
   isValid ? cb(null, true) : cb(new Error('Only images allowed'));
 };
@@ -832,7 +880,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
 });
 
 // 2. Upload Route with old file cleanup
@@ -877,6 +925,90 @@ app.post('/api/upload', upload.single('image'), (req, res) => {
     });
   });
 });
-app.listen(5000, () => console.log('Backend running on http://localhost:5000'));
 
 
+
+// POST route to upload CV and remove old one
+app.post('/api/upload-cv', upload.single('cv'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+
+  const userId = req.body.userId;
+  const newPath = `/uploads/${req.file.filename}`;
+
+  // Step 1: Get old CV path
+  const getOldQuery = 'SELECT cv_link FROM student WHERE student_id = ?';
+  db.query(getOldQuery, [userId], (err, results) => {
+    if (err) {
+      console.error('Error fetching old CV:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+
+    const oldPath = results[0]?.cv_link;
+
+    // Step 2: Delete old file if it exists
+    if (oldPath) {
+      const fullPath = path.join(__dirname, oldPath);
+      fs.unlink(fullPath, (unlinkErr) => {
+        if (unlinkErr && unlinkErr.code !== 'ENOENT') {
+          console.error('Error deleting old file:', unlinkErr);
+        }
+      });
+    }
+
+    // Step 3: Update DB with new path
+    const updateQuery = 'UPDATE student SET cv_link = ? WHERE student_id = ?';
+    db.query(updateQuery, [newPath, userId], (err) => {
+      if (err) {
+        console.error('Error updating DB:', err);
+        return res.status(500).json({ error: 'Database update failed' });
+      }
+
+      res.json({ cv_link: newPath });
+    });
+  });
+});
+
+app.get('/api/student/:id/cv', (req, res) => {
+  const studentId = req.params.id;
+
+  const query = 'SELECT cv_link FROM student WHERE student_id = ?';
+  db.query(query, [studentId], (err, results) => {
+    if (err) {
+      console.error('Error fetching cv_link:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+
+    res.json({ cv_link: results[0].cv_link });
+  });
+});
+
+
+app.post('/api/upload/logo', upload.single('logo'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+
+  const logoPath = `/uploads/${req.file.filename}`;
+  const bedrijfId = req.body.bedrijfId;
+
+  // Check if bedrijf already has a logo to delete
+  const getQuery = 'SELECT logo_link FROM bedrijf WHERE bedrijf_id = ?';
+  db.query(getQuery, [bedrijfId], (err, result) => {
+    if (err) return res.status(500).json({ error: 'DB error on select' });
+
+    const oldPath = result[0]?.logo_link;
+    if (oldPath) {
+      const fullPath = path.join(__dirname, oldPath);
+      if (fs.existsSync(fullPath)) fs.unlinkSync(fullPath);
+    }
+
+    // Update DB with new logo path
+    const updateQuery = 'UPDATE bedrijf SET logo_link = ? WHERE bedrijf_id = ?';
+    db.query(updateQuery, [logoPath, bedrijfId], (err, result) => {
+      if (err) return res.status(500).json({ error: 'DB update failed' });
+      res.json({ logoUrl: logoPath });
+    });
+  });
+});

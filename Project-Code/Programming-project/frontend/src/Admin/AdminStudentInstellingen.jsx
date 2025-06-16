@@ -21,14 +21,21 @@ export default function AdminStudentInstellingen() {
     axios.get(`http://localhost:5000/api/student/${id}`)
       .then((res) => {
         setStudent(res.data);
+        const fullName = res.data.name || '';
+        const [voornaam, ...rest] = fullName.trim().split(' ');
+        const naam = rest.join(' '); // vang "De Smet", "van den Berg", enz.
+        console.log("Studentdata binnengekomen:", res.data);
+
         setForm({
-          voornaam: res.data.voornaam || '',
-          naam: res.data.naam || '',
+          voornaam: voornaam || '',
+          naam: naam || '',
           email: res.data.email || '',
           adres: res.data.adres || '',
           specialisatie: res.data.specialisatie || '',
-          linkedin: res.data.linkedin_url || ''  // let op: backend stuurt linkedin_url
+          linkedin: res.data.linkedinurl || '',
+          
         });
+
       })
       .catch((err) => {
         console.error("Fout bij ophalen studentgegevens:", err);
@@ -40,22 +47,25 @@ export default function AdminStudentInstellingen() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    axios.put(`http://localhost:5000/api/student/${id}`, form)
-      .then(() => {
-        alert("Gegevens succesvol bijgewerkt!");
-      })
-      .catch((err) => {
-        console.error("Fout bij updaten student:", err);
-        alert("Er is een fout opgetreden bij het bijwerken van de gegevens.");
-      });
-  };
+  axios.put(`http://localhost:5000/api/student/${id}`, {
+    ...form,
+    linkedin_url: form.linkedin  // voeg correcte veldnaam toe
+  })
+    .then(() => {
+      alert("Gegevens succesvol bijgewerkt!");
+    })
+    .catch((err) => {
+      console.error("Fout bij updaten student:", err);
+      alert("Er is een fout opgetreden bij het bijwerken van de gegevens.");
+    });
+};
 
   if (!student) return <p>Studentgegevens laden...</p>;
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
+    <div style={{ fontFamily: 'Arial, sans-serif' }}>
       <Navbar />
 
       <section style={{ margin: '30px 0', textAlign: 'center' }}>

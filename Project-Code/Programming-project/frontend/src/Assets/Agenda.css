@@ -22,7 +22,7 @@
   padding: 20px;
   width: 250px;
   background-color: #e8e8e8;
-  border: 1px lightgray;
+  border: 1px solid lightgray;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
   margin-bottom: 15px;
   border-radius: 8px;
@@ -101,8 +101,7 @@
 .weigenKnopAdmin {
   background-color:red ;
   color: whitesmoke;
-  border:black;
-  border-width: 3px;
+  border: 3px solid black;
   border-radius: 0.2rem;
   margin-top: 15px;
   padding: 3px;
@@ -114,28 +113,71 @@
   box-shadow: 0 0 10px rgba(0,0,0,0.6);
 }
 
+.time-settings {
+  margin: 30px 0;
+  padding: 20px;
+  background: #f5f5f5;
+  border-radius: 10px;
+  max-width: 600px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.time-settings-row {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.time-settings-row label {
+  font-weight: bold;
+  color: #333;
+  min-width: 80px;
+}
+
+.time-settings-row input[type="time"] {
+  padding: 10px;
+  border: 2px solid #1a1a5c;
+  border-radius: 8px;
+  background-color: white;
+  font-size: 1em;
+  color: #1a1a5c;
+  width: 130px;
+}
+
+.time-settings .save-button {
+  background-color: #1a1a5c;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1em;
+  transition: background-color 0.2s ease;
+  margin-left: 10px;
+}
+
+.time-settings .save-button:hover {
+  background-color: #2a2a7a;
+}
 
 @media (max-width: 450px) {
   .page {
     padding: 10px;
   }
-
   .card {
     width: 95%;
   }
-
   .time {
     font-size: 1.3rem;
   }
-
   .company {
     font-size: 1rem;
   }
-
   .modal {
     padding: 20px;
   }
-
   .modal h3 {
     font-size: 1.2rem;
   }

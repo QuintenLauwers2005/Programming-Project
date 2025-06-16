@@ -35,7 +35,7 @@ function BedrijfHomePage() {
 
       <main>
         {/* Hero */}
-        <section className="hero">
+        <section id = 'Home' className="hero">
           <h1>Hoe goed schat jij jouw kansen in?</h1>
           <p>
             Wil je een indrukwekkend bedrijf dat perfect bij jouw interesses past? Of ben je nieuwsgierig naar andere sectoren? De Career Launch is jouw kans om te ontdekken wat bij jou past en je netwerk uit te breiden!
@@ -50,7 +50,7 @@ function BedrijfHomePage() {
         </section>
 
         {/* Praktisch */}
-        <section className="location enhanced-box">
+        <section id="locatie" className="location enhanced-box">
           <h2>Locatie & Datum</h2>
 
           <div className="map-card">
@@ -73,7 +73,7 @@ function BedrijfHomePage() {
         </section>
 
         {/* Waarom deelnemen */}
-        <section className="why enhanced-box">
+        <section id="waarom" className="why enhanced-box">
           <h2>Waarom je dit niet mag missen</h2>
           <p>
             Tijdens de Career Launch krijg je de unieke kans om in contact te komen met topbedrijven uit jouw sector. Netwerk, ontdek en zet de eerste stap naar jouw droomjob.
@@ -133,7 +133,7 @@ function BedrijfHomePage() {
         </section>
 
         {/* Veelgestelde vragen */}
-        <section className="faq">
+        <section id="faq" className="faq">
           <h2>Veelgestelde vragen</h2>
           <div className="faq-container">
             <div className="faq-blok">

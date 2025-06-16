@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../Assets/Agenda.css';
 import Navbar from '../Components/StudentNavbar';
-import { useLocation } from 'react-router-dom';
 import Footer from '../Components/Footer';
 
 export default function AgendaStudenten() {

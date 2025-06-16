@@ -15,6 +15,9 @@ export default function BedrijfProfilePage() {
   const [selectedVacature, setSelectedVacature] = useState(null);
   const [selectedTime, setSelectedTime] = useState('');
 
+  // Nieuwe state voor login-popup
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
+
   useEffect(() => {
     axios.get(`http://localhost:5000/api/bedrijf/${id}`)
       .then((response) => {
@@ -28,7 +31,6 @@ export default function BedrijfProfilePage() {
       });
   }, [id]);
 
-  // Zelfde time options als in jouw VacatureLijst
   const generateTimeOptions = () => {
     const options = [];
     for (let hour = 8; hour < 19; hour++) {
@@ -40,7 +42,13 @@ export default function BedrijfProfilePage() {
     return options;
   };
 
+  // Pas hier: eerst check login, dan modal openen
   const handleOpenModal = (vacature) => {
+    const isLoggedIn = localStorage.getItem('gebruiker_id'); // of hoe je login status opslaat
+    if (!isLoggedIn) {
+      setShowLoginPopup(true);
+      return;
+    }
     setSelectedVacature(vacature);
     setSelectedTime('');
     setShowModal(true);
@@ -156,7 +164,7 @@ export default function BedrijfProfilePage() {
         )}
       </section>
 
-      {/* Modal alleen tijdstip kiezen */}
+      {/* Modal tijdstip kiezen */}
       {showModal && (
         <div style={{
           position: 'fixed',
@@ -215,17 +223,62 @@ export default function BedrijfProfilePage() {
         </div>
       )}
 
-      <section style={{ marginBottom: '30px', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
-        <h3 style={{ borderBottom: '2px solid #ddd', paddingBottom: '10px', marginBottom: '20px', color: '#333' }}>Contact & Locatie</h3>
-        <p style={{ margin: '10px 0', color: '#555' }}><strong>Adres:</strong> {companyData.locatie}</p>
-        <p style={{ margin: '10px 0', color: '#555' }}><strong>Vertegenwoordiger:</strong> {companyData.vertegenwoordiger}</p>
-        <p style={{ margin: '10px 0', color: '#555' }}><strong>Telefoon:</strong> {companyData.telefoon}</p>
-      </section>
+      {/* Login popup */}
+      {showLoginPopup && (
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex', justifyContent: 'center', alignItems: 'center',
+          zIndex: 1100,
+        }}>
+          <div style={{
+            backgroundColor: 'white',
+            padding: '20px',
+            borderRadius: '8px',
+            width: '320px',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
+            textAlign: 'center'
+          }}>
+            <h3>Inloggen vereist</h3>
+            <p>Je moet ingelogd zijn om een gesprek te reserveren.</p>
+            <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between' }}>
+              <button
+                onClick={() => setShowLoginPopup(false)}
+                style={{
+                  backgroundColor: '#6c757d',
+                  color: 'white',
+                  border: 'none',
+                  padding: '8px 16px',
+                  borderRadius: '5px',
+                  cursor: 'pointer',
+                  flex: 1,
+                  marginRight: '10px'
+                }}
+              >
+                Annuleren
+              </button>
+              <button
+                onClick={() => {
+                  setShowLoginPopup(false);
+                  navigate('/login');  
+                }}
+                style={{
+                  backgroundColor: '#007bff',
+                  color: 'white',
+                  border: 'none',
+                  padding: '8px 16px',
+                  borderRadius: '5px',
+                  cursor: 'pointer',
+                  flex: 1
+                }}
+              >
+                Inloggen
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
-      <footer>
-       <Footer />
-      </footer>
-
-    </div>
-  );
-}
+</div>
+)};

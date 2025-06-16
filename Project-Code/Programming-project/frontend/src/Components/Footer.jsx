@@ -1,7 +1,11 @@
 import React from "react";
 import './Footer.css';
+import { useLocation } from 'react-router-dom';
 
 function Footer() {
+  const location = useLocation();
+  const basePath = location.pathname;
+
   return (
     <footer className="footer">
       <div className="footer-content">
@@ -17,10 +21,10 @@ function Footer() {
         <div className="footer-section">
           <h4>Snel naar</h4>
           <ul>
-            <li><a href="#hero">Home</a></li>
-            <li><a href="#location">Locatie</a></li>
-            <li><a href="#why">Waarom Deelnemen</a></li>
-            <li><a href="#faq">FAQ</a></li>
+            <li><a href={`${basePath}#Home`}>Home</a></li>
+            <li><a href={`${basePath}#locatie`}>Locatie</a></li>
+            <li><a href={`${basePath}#waarom`}>Waarom Deelnemen</a></li>
+            <li><a href={`${basePath}#faq`}>FAQ</a></li>
           </ul>
         </div>
 

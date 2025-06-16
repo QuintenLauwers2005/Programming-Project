@@ -16,8 +16,12 @@ export default function BedrijfProfileStudent() {
   const [showModal, setShowModal] = useState(false);
   const [selectedVacature, setSelectedVacature] = useState(null);
   const [selectedTime, setSelectedTime] = useState('');
+  const [timeConfig, setTimeConfig] = useState({
+    beginuur: '08:00:00',
+    einduur: '18:00:00'
+  });
 
-  // Fetch company data from the API
+  // Bedrijf ophalen
   useEffect(() => {
     axios.get(`http://localhost:5000/api/bedrijf/${id}`)
       .then((response) => {
@@ -31,26 +35,47 @@ export default function BedrijfProfileStudent() {
       });
   }, [id]);
 
-  // Generate time options for the select
+  // Tijdsconfiguratie ophalen
+  useEffect(() => {
+    axios.get('http://localhost:5000/api/speeddate-config')
+      .then((res) => {
+        setTimeConfig(res.data);
+      })
+      .catch((err) => {
+        console.error('Fout bij ophalen tijdsconfiguratie:', err);
+      });
+  }, []);
+
+  // Genereer tijdsopties o.b.v. configuratie
   const generateTimeOptions = () => {
     const options = [];
-    for (let hour = 8; hour < 19; hour++) {
-      for (let minute = 0; minute < 60; minute += 10) {
-        const time = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
-        options.push(<option key={time} value={time}>{time}</option>);
-      }
+
+    const [startHour, startMinute] = timeConfig.beginuur.split(':').map(Number);
+    const [endHour, endMinute] = timeConfig.einduur.split(':').map(Number);
+
+    let current = new Date();
+    current.setHours(startHour, startMinute, 0, 0);
+
+    const end = new Date();
+    end.setHours(endHour, endMinute, 0, 0);
+
+    while (current <= end) {
+      const hours = String(current.getHours()).padStart(2, '0');
+      const minutes = String(current.getMinutes()).padStart(2, '0');
+      const time = `${hours}:${minutes}`;
+      options.push(<option key={time} value={time}>{time}</option>);
+      current.setMinutes(current.getMinutes() + 10);
     }
+
     return options;
   };
 
-  // Open modal for selected vacature (of null als geen vacature)
   const handleOpenModal = (vacature) => {
     setSelectedVacature(vacature);
     setSelectedTime('');
     setShowModal(true);
   };
 
-  // Confirm afspraak and send POST request to backend
   const handleConfirm = () => {
     if (!selectedTime) {
       alert('Kies een tijdstip');
@@ -61,7 +86,7 @@ export default function BedrijfProfileStudent() {
       student_id: studentId,
       bedrijf_id: id,
       vacature_id: selectedVacature ? selectedVacature.vacature_id : null,
-      tijdstip: selectedTime + ':00', // "HH:mm:ss" formaat
+      tijdstip: selectedTime + ':00',
       locatie: 'Aula 1',
       status: 'bevestigd'
     })
@@ -75,11 +100,7 @@ export default function BedrijfProfileStudent() {
   };
 
   if (loading) {
-    return (
-      <div style={{ textAlign: 'center', padding: '20px' }}>
-        <h2>Laden...</h2>
-      </div>
-    );
+    return <div style={{ textAlign: 'center', padding: '20px' }}><h2>Laden...</h2></div>;
   }
 
   if (error) {
@@ -129,10 +150,11 @@ export default function BedrijfProfileStudent() {
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
       <Navbar />
-      {/* Company Profile Section */}
+
+      {/* Bedrijfsprofiel */}
       <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee', marginTop: '70px' }}>
         <img
-          src={`/${companyData.logo_link}`}
+          src={`http://localhost:5000${companyData.logo_link}`}
           alt={`Logo van ${companyData.naam}`}
           style={{ width: '150px', height: '150px', borderRadius: '8px', objectFit: 'cover', marginRight: '30px' }}
         />
@@ -143,7 +165,7 @@ export default function BedrijfProfileStudent() {
         </div>
       </section>
 
-      {/* Vacatures Section */}
+      {/* Vacatures */}
       <section style={{ marginBottom: '30px' }}>
         <h3 style={{ borderBottom: '2px solid #ddd', paddingBottom: '10px', marginBottom: '20px', color: '#333' }}>Openstaande Vacatures & Stages</h3>
         {companyData.vacatures && companyData.vacatures.length > 0 ? (
@@ -228,7 +250,6 @@ export default function BedrijfProfileStudent() {
             boxShadow: '0 2px 10px rgba(0,0,0,0.3)'
           }}>
             <h3>Kies een tijdstip</h3>
-
             <label style={{ display: 'block', margin: '10px 0 5px' }}>Tijdstip:</label>
             <select
               value={selectedTime}
@@ -271,12 +292,34 @@ export default function BedrijfProfileStudent() {
         </div>
       )}
 
-      {/* Contact & Locatie Section */}
+      {/* Contact */}
       <section style={{ marginBottom: '30px', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
         <h3 style={{ borderBottom: '2px solid #ddd', paddingBottom: '10px', marginBottom: '20px', color: '#333' }}>Contact & Locatie</h3>
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Adres:</strong> {companyData.locatie}</p>
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Vertegenwoordiger:</strong> {companyData.vertegenwoordiger}</p>
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Telefoon:</strong> {companyData.telefoon}</p>
+
+        <button
+          onClick={() => {
+            if (companyData.email) {
+              window.location.href = `mailto:${companyData.email}`;
+            } else {
+              alert("Er is geen contact e-mailadres beschikbaar voor dit bedrijf.");
+            }
+          }}
+          style={{
+            marginTop: '20px',
+            padding: '10px 20px',
+            backgroundColor: '#6c757d',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            fontSize: '1em'
+          }}
+        >
+          Contacteer via E-mail
+        </button>
       </section>
 
       <Footer />

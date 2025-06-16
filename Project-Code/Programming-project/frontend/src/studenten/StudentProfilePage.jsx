@@ -3,15 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Components/StudentNavbar';
 import Footer from '../Components/Footer';
-import UploadForm from '../Components/Uploadform';
+
 
 function StudentProfilePage() {
   const [studentData, setStudentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
-  const [toastType, setToastType] = useState('success');
+   const [cvLink, setCvLink] = useState('');
 
   const studentId = localStorage.getItem('gebruiker_id');
   const navigate = useNavigate();
@@ -21,50 +19,11 @@ function StudentProfilePage() {
     navigate('/login');
   };
 
-  // Profielfoto upload
-  const [profilePhoto, setProfilePhoto] = useState(null);
-  const [currentProfilePhoto, setCurrentProfilePhoto] = useState('');
-
-  // Custom Toast Component
-  const Toast = ({ message, type = 'success', onClose }) => {
-    return (
-      <div style={{
-        position: 'fixed',
-        top: '20px',
-        right: '20px',
-        backgroundColor: type === 'success' ? '#28a745' : '#dc3545',
-        color: 'white',
-        padding: '12px 20px',
-        borderRadius: '8px',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
-        zIndex: 1001,
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        <span>{message}</span>
-        <button 
-          onClick={onClose}
-          style={{ 
-            background: 'none', 
-            border: 'none', 
-            color: 'white', 
-            fontSize: '16px', 
-            cursor: 'pointer' 
-          }}
-        >
-          &times;
-        </button>
-      </div>
-    );
-  };
-
   // Ophalen studentgegevens
   useEffect(() => {
     axios.get(`http://localhost:5000/api/student/${studentId}`)
       .then(res => {
         setStudentData(res.data);
-        setCurrentProfilePhoto(res.data.profielFotoUrl || '');
         setLoading(false);
       })
       .catch(err => {
@@ -74,54 +33,19 @@ function StudentProfilePage() {
       });
   }, [studentId]);
 
-  // Upload profielfoto
-  const handleProfilePhotoUpload = (e) => {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith('image/')) {
-      setProfilePhoto(file);
-      // Toon preview
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setCurrentProfilePhoto(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setToastMessage('Selecteer een geldig afbeeldingsbestand.');
-      setToastType('error');
-      setShowToast(true);
-    }
-  };
+   useEffect(() => {
+  const userId = localStorage.getItem('gebruiker_id');
 
-  // Verstuur profielfoto naar backend
-  const handleUpload = async () => {
-    const formData = new FormData();
-    if (profilePhoto) formData.append('profielFoto', profilePhoto);
-    //if (cvFile) formData.append('cv', cvFile);
-  
-    try {
-      const response = await axios.post(
-        `http://localhost:5000/api/student/upload/profielFoto/${studentId}`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }
-      );
-      // ...
-    } catch (err) {
-      // ...
-    }
-  };
-  // Sluit toast automatisch na 3 seconden
-  useEffect(() => {
-    if (showToast) {
-      const timer = setTimeout(() => {
-        setShowToast(false);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [showToast]);
+  axios.get(`http://localhost:5000/api/student/${userId}/cv`)
+    .then((res) => {
+      setCvLink(res.data.cv_link);
+    })
+    .catch((err) => {
+      console.error(err);
+      setCvLink(null);
+    });
+}, []);
+
 
   if (loading) return <p>Studentgegevens laden...</p>;
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
@@ -134,15 +58,26 @@ function StudentProfilePage() {
 
 
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
-      <UploadForm />
+
 
       {/* Profiel Hoofding */}
-      <section style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>
+     
+     <section style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>
+      
+{studentData.profielFotoUrl != null ? (
   <img
     src={`http://localhost:5000${studentData.profielFotoUrl}`}
     alt={`Profiel van ${studentData.profielFotoUrl}`}
     style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', marginRight: '30px' }}
   />
+) : (
+  <img src="./blank-profile-picture.png" alt="No profile picture found" style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', marginRight: '30px' }}/>  // or whatever fallback you want
+)}
+
+
+    
+      
+  
 
   <div style={{ flex: 1 }}>
     <h2 style={{ margin: '0 0 10px 0', fontSize: '2em' }}>{studentData.name}</h2>
@@ -199,6 +134,15 @@ function StudentProfilePage() {
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Opleiding:</strong> {studentData.opleiding}</p>
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Instelling:</strong> {studentData.instelling}</p>
         <p style={{ margin: '10px 0', color: '#555' }}><strong>Verwacht afstudeerjaar:</strong> {studentData.afstudeerjaar}</p>
+        <p style={{ margin: '10px 0', color: '#555' }}>
+  <strong>LinkedIn:</strong>{' '}
+  <a href={studentData.linkedinurl} target="_blank" rel="noopener noreferrer" style={{ color: '#0077b5', textDecoration: 'underline' }}>
+    {studentData.linkedinurl}
+  </a>
+</p>
+ <p style={{ margin: '10px 0', color: '#555' }}><strong>Opleiding:</strong> <a href={`http://localhost:5000${cvLink}`} target="_blank" rel="noopener noreferrer" className="cv-download-link">Bekijk CV (PDF)</a></p>
+
+        
       </section>
 
       {/* Vaardigheden */}
