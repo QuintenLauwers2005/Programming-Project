@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from "../Components/AdminNavBar";
 import Footer from '../Components/Footer';
+const backendUrl = 'http://localhost:5000';
 
 export default function AdminBedrijfProfiel() {
   const { id } = useParams();
@@ -14,7 +15,9 @@ export default function AdminBedrijfProfiel() {
   useEffect(() => {
     axios.get(`http://localhost:5000/api/bedrijf/${id}`)
       .then((response) => {
+        console.log('Logo link van backend:', response.data.logo_link);
         setCompanyData(response.data);
+        
       })
       .catch(() => {
         setError('Kon bedrijf niet ophalen');
@@ -53,7 +56,7 @@ export default function AdminBedrijfProfiel() {
       <div style={{ padding: '0 70px' }}>
         <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee', marginTop:'70px' }}>
         <img 
-          src={`/${companyData.logo_link}`}       
+          src={`${backendUrl}${companyData.logo_link}`}       
           alt={`Logo van ${companyData.naam}`}
           style={{ width: '150px', height: '150px', borderRadius: '8px', objectFit: 'cover', marginRight: '30px' }} 
         />
