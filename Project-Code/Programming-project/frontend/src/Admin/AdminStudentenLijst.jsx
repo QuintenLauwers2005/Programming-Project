@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import Navbar from '../Components/AdminNavBar'
+import Footer from '../Components/Footer';
 
 function AdminStudentenLijst() {
     const navigate = useNavigate();
@@ -49,7 +50,7 @@ function AdminStudentenLijst() {
   });
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
+    <div style={{ fontFamily: 'Arial, sans-serif'}}>
       <header>
        <Navbar />
       </header>
@@ -115,11 +116,7 @@ function AdminStudentenLijst() {
         Toon meer
       </button>
 
-      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '20px', marginTop: '40px' }}>
-        <h5 style={{ marginBottom: '10px' }}>Contact</h5>
-        <p>info@careerlaunch.be</p>
-        <p>EhB - Erasmushogeschool Brussel</p>
-      </footer>
+      <footer><Footer/></footer>
     </div>
   );
 }
