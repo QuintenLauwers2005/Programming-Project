@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import BedrijfNavbar from '../Components/BedrijfNavBar'; // Pas aan naar jouw navbar-component
+import BedrijfNavbar from '../Components/BedrijfNavBar';
 import Footer from '../Components/Footer';
 
-export default function StudentPublicProfile() {
+function StudentPublicProfile() {
   const { student_id } = useParams();
   const [studentData, setStudentData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -18,7 +18,6 @@ export default function StudentPublicProfile() {
       return;
     }
 
-    // Ophalen studentgegevens
     axios.get(`http://localhost:5000/api/student/${student_id}`)
       .then(res => {
         setStudentData(res.data);
@@ -29,7 +28,6 @@ export default function StudentPublicProfile() {
         setLoading(false);
       });
 
-    // Ophalen CV-link
     axios.get(`http://localhost:5000/api/student/${student_id}/cv`)
       .then(res => setCvLink(res.data.cv_link))
       .catch(() => setCvLink(null));
@@ -135,3 +133,5 @@ export default function StudentPublicProfile() {
     </div>
   );
 }
+
+export default StudentPublicProfile;
