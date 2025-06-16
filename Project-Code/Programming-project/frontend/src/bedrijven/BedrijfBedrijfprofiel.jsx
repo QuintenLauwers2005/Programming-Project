@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from "../Components/BedrijfNavBar";
 import Footer from '../Components/Footer';
+import LogoUploadForm from '../Components/LogoUpload';
 
 export default function BedrijfBedrijfProfilePage() {
   const id = localStorage.getItem('gebruiker_id');
@@ -68,6 +69,10 @@ export default function BedrijfBedrijfProfilePage() {
   maxWidth: '900px', 
   margin: '0 auto', // ← this centers the div itself
   textAlign: 'center'}}>
+
+    <div>
+    <LogoUploadForm />
+    </div>
 
       
 <section style={{
