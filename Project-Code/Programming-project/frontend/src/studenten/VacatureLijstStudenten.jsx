@@ -8,20 +8,24 @@ import { useNavigate } from 'react-router-dom';
 export default function StudentVacatureLijst() {
   const navigate = useNavigate();
   const [vacatures, setVacatures] = useState([]);
-    const [filteredVacatures, setFilteredVacatures] = useState([]);
-    const [selectedVacature, setSelectedVacature] = useState(null);
-    const [showModal, setShowModal] = useState(false);
-    const [selectedTime, setSelectedTime] = useState('');
-    const [filters, setFilters] = useState({
-      bedrijf: '',
-      functie: '',
-      contractType: ''
-    });
+  const [filteredVacatures, setFilteredVacatures] = useState([]);
+  const [selectedVacature, setSelectedVacature] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedTime, setSelectedTime] = useState('');
+  const [filters, setFilters] = useState({
+    bedrijf: '',
+    functie: '',
+    contractType: ''
+  });
+  const [timeConfig, setTimeConfig] = useState({
+    beginuur: '08:00:00',
+    einduur: '18:00:00'
+  });
 
-  // Fetch vacatures from API
+  // Vacatures ophalen
   useEffect(() => {
     axios.get('http://localhost:5000/api/vacatures')
-      .then((res) => {    
+      .then((res) => {
         setVacatures(res.data);
         setFilteredVacatures(res.data);
       })
@@ -30,16 +34,18 @@ export default function StudentVacatureLijst() {
       });
   }, []);
 
-  // Handle filter change
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters({
-      ...filters,
-      [name]: value
-    });
-  };
+  // Tijdsconfiguratie ophalen
+  useEffect(() => {
+    axios.get('http://localhost:5000/api/speeddate-config')
+      .then((res) => {
+        setTimeConfig(res.data);
+      })
+      .catch((err) => {
+        console.error('Fout bij ophalen tijdsconfiguratie:', err.message);
+      });
+  }, []);
 
-  // Apply filters
+  // Filters toepassen
   useEffect(() => {
     let filtered = vacatures;
 
@@ -58,43 +64,56 @@ export default function StudentVacatureLijst() {
     setFilteredVacatures(filtered);
   }, [filters, vacatures]);
 
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters({ ...filters, [name]: value });
+  };
 
-  // Handle form submission
   const handleConfirm = () => {
     if (!selectedTime) {
       alert('Kies een tijdstip');
       return;
     }
 
-    // Save to localStorage or send to backend
-    // For now, just redirect to Agenda with query params
     axios.post('http://localhost:5000/api/speeddate', {
-    student_id: localStorage.getItem("gebruiker_id"),
-    bedrijf_id: selectedVacature.bedrijf_id,
-    tijdstip: selectedTime + ':00',
-    locatie: 'Aula 1', 
-    status: 'bevestigd'
+      student_id: localStorage.getItem("gebruiker_id"),
+      bedrijf_id: selectedVacature.bedrijf_id,
+      tijdstip: selectedTime + ':00',
+      locatie: 'Aula 1',
+      status: 'bevestigd'
     })
     .then(() => {
       alert('Afspraak succesvol vastgelegd!');
       setShowModal(false);
-      })
-      .catch(err => {
+    })
+    .catch(err => {
       alert(err.response?.data?.error || 'Er ging iets mis bij het reserveren.');
-      });
-
-    
+    });
   };
+
   const generateTimeOptions = () => {
     const options = [];
-    for (let hour = 8; hour < 19; hour++) {
-      for (let minute = 0; minute < 60; minute += 10) {
-        const time = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
-        options.push(<option key={time} value={time}>{time}</option>);
-      }
+
+    const [startHour, startMinute] = timeConfig.beginuur.split(':').map(Number);
+    const [endHour, endMinute] = timeConfig.einduur.split(':').map(Number);
+
+    let current = new Date();
+    current.setHours(startHour, startMinute, 0, 0);
+
+    const end = new Date();
+    end.setHours(endHour, endMinute, 0, 0);
+
+    while (current <= end) {
+      const hours = String(current.getHours()).padStart(2, '0');
+      const minutes = String(current.getMinutes()).padStart(2, '0');
+      const time = `${hours}:${minutes}`;
+      options.push(<option key={time} value={time}>{time}</option>);
+      current.setMinutes(current.getMinutes() + 10);
     }
+
     return options;
   };
+
   const handleOpenModal = (vacature) => {
     setSelectedVacature(vacature);
     setSelectedTime('');
@@ -103,7 +122,6 @@ export default function StudentVacatureLijst() {
 
   return (
     <div className="pagina">
-      {/* Header with Navbar */}
       <header>
         <Navbar />
       </header>
@@ -111,7 +129,6 @@ export default function StudentVacatureLijst() {
       <main className="inhoud">
         <h2>Vacatures</h2>
 
-        {/* Filter Form */}
         <div className="filter-form">
           <input
             type="text"
@@ -137,69 +154,69 @@ export default function StudentVacatureLijst() {
         </div>
 
         <section className="enhanced-box">
-  <div className="vacature-wrapper">
-    <div className="vacature-list">
-      {filteredVacatures.map((vacature) => (
-        <div key={vacature.vacature_id} className="vacature-card">
-          <div className="logo-blok">
-            <img
-              src={`/${vacature.logo_link}`}
-              alt={`logo van ${vacature.bedrijf}`}
-              style={{
-                width: '80px',
-                height: '80px',
-                borderRadius: '8px',
-                objectFit: 'cover'
-              }}
-            />
+          <div className="vacature-wrapper">
+            <div className="vacature-list">
+              {filteredVacatures.map((vacature) => (
+                <div key={vacature.vacature_id} className="vacature-card">
+                  <div className="logo-blok">
+                    <img
+                      src={`/${vacature.logo_link}`}
+                      alt={`logo van ${vacature.bedrijf}`}
+                      style={{
+                        width: '80px',
+                        height: '80px',
+                        borderRadius: '8px',
+                        objectFit: 'cover'
+                      }}
+                    />
+                  </div>
+                  <div className="vacature-info">
+                    <p 
+                      className="bedrijf" 
+                      style={{ cursor: 'pointer', color: '#007bff', textDecoration: 'underline' }}
+                      onClick={() => navigate(`/BedrijfProfileStudent/${vacature.bedrijf_id}`)}
+                    >
+                      {vacature.bedrijf}
+                    </p>
+                    <p className="beschrijving">{vacature.synopsis}</p>
+                    <p className="functie">
+                      Functie: {vacature.functie}
+                      <br />
+                      Contract: {vacature.contract_type}
+                    </p>
+                    <button
+                      onClick={() => handleOpenModal(vacature)}
+                      style={{
+                        padding: '6px 12px',
+                        backgroundColor: '#007bff',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
+                        fontSize: '0.9em'
+                      }}
+                    >
+                      Reserveer gesprek
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="vacature-info">
-            <p 
-              className="bedrijf" 
-              style={{ cursor: 'pointer', color: '#007bff', textDecoration: 'underline' }}
-              onClick={() => navigate(`/BedrijfProfileStudent/${vacature.bedrijf_id}`)}
-            >
-              {vacature.bedrijf}
-            </p>
-            <p className="beschrijving">{vacature.synopsis}</p>
-            <p className="functie">
-              Functie: {vacature.functie}
-              <br />
-              Contract: {vacature.contract_type}
-            </p>
-            <button
-              onClick={() => handleOpenModal(vacature)}
-              style={{
-                padding: '6px 12px',
-                backgroundColor: '#007bff',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer',
-                fontSize: '0.9em'
-              }}
-            >
-              Reserveer gesprek
-            </button>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
+        </section>
 
-
-        <button className="toonmeer-btn" onClick={() => alert('Toon meer geklikt!')}>Toon meer</button>
+        <button className="toonmeer-btn" onClick={() => alert('Toon meer geklikt!')}>
+          Toon meer
+        </button>
       </main>
 
-      {/* Modal for selecting time */}
       {showModal && (
         <div style={{
           position: 'fixed',
           top: 0, left: 0, right: 0, bottom: 0,
           backgroundColor: 'rgba(0,0,0,0.5)',
           display: 'flex', justifyContent: 'center', alignItems: 'center',
-          zIndex: 1000,
+          zIndex: 1000
         }}>
           <div style={{
             backgroundColor: 'white',
@@ -250,8 +267,9 @@ export default function StudentVacatureLijst() {
           </div>
         </div>
       )}
+
       <footer>
-       <Footer />
+        <Footer />
       </footer>
     </div>
   );
