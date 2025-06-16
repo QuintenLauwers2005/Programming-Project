@@ -9,6 +9,13 @@
   border-bottom: 1px solid #eee;
 }
 
+.desktop-only {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 1rem;
+}
+
 .logo-link {
   display: flex;
   align-items: center;
