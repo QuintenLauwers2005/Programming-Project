@@ -84,7 +84,7 @@ export default function BedrijfBedrijfProfilePage() {
   marginTop: '70px'
 }}>
   <img
-    src={`/${companyData.logo_link}`}
+    src={`http://localhost:5000${companyData.logo_link}`}
     alt={`Logo van ${companyData.naam}`}
     style={{
       width: '150px',

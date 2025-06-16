@@ -1,4 +1,8 @@
 /* src/Components/Navbar.css */
+.navbar-container{
+  margin-left: 10px;
+  margin-right: 10px;
+}
 
 .top-bar {
   display: flex;
