@@ -572,7 +572,8 @@ app.get('/api/afspraken', (req, res) => {
       st.naam, 
       s.locatie, 
       b.naam AS bedrijf_naam,
-      s.status
+      s.status,
+      s.student_id
     FROM speeddate s
     JOIN student st ON s.student_id = st.student_id
     JOIN bedrijf b ON s.bedrijf_id = b.bedrijf_id
@@ -983,5 +984,32 @@ app.get('/api/student/:id/cv', (req, res) => {
     }
 
     res.json({ cv_link: results[0].cv_link });
+  });
+});
+
+
+
+app.get('/api/speeddate/:id/student', (req, res) => {
+  const speeddateId = req.params.id;
+
+  const sql = `
+    SELECT 
+      s.student_id
+    FROM speeddate sp
+    JOIN student s ON sp.student_id = s.student_id
+    WHERE sp.speeddate_id = ?
+  `;
+
+  db.query(sql, [speeddateId], (err, results) => {
+    if (err) {
+      console.error('Databasefout:', err);
+      return res.status(500).json({ error: 'Databasefout' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Speeddate of student niet gevonden' });
+    }
+
+    res.json(results[0]);
   });
 });
