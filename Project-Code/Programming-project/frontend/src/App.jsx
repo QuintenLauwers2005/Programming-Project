@@ -32,6 +32,7 @@ import Bedrijfsagenda from './bedrijven/BedrijfsAgenda';
 import BedrijfBedrijfProfilePage from './bedrijven/BedrijfBedrijfprofiel';
 import BedrijfVacatureLijst from './bedrijven/BedrijfVacatures';
 import StudentInstellingen from './studenten/StudentInstellingen';
+import StudentInfoPage from './bedrijven/StudentProfielBedrijf';
 
 
 function App() {
@@ -65,6 +66,7 @@ function App() {
         <Route path="/admin/bedrijf/:id/instellingen" element={<AdminBedrijfInstellingen />} />
         <Route path="/BedrijfsInstellingen/:id" element={<BedrijfInstellingen />} />
         <Route path="/AgendaStudenten" element={<AgendaStudenten />} />
+        <Route path="/student-info/:student_id" element={<StudentInfoPage/>} />
         <Route path="/BedrijfProfileStudent/:id" element={<BedrijfProfileStudent />} />
         <Route path="/StudentBedrijvenLijst" element={<StudentBedrijvenLijst />} />
         <Route path="/StudentVacatureLijst" element={<StudentVacatureLijst />} />
