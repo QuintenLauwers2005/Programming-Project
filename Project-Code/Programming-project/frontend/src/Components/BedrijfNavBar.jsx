@@ -85,7 +85,7 @@ useRequireLogin("bedrijf");
         </Link>
         <button className="login-btn" onClick={() => navigate('/BedrijfBedrijfProfilePage')}>
           <img 
-                  src={`/${logo_link}`} 
+                  src={`http://localhost:5000${logo_link}`} 
                   style={{ width: '55px', height: '40px', borderRadius: '8px', objectFit: 'cover' }} 
                   alt="Logo" 
                 /></button>
