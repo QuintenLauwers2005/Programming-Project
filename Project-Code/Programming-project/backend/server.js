@@ -985,3 +985,30 @@ app.get('/api/student/:id/cv', (req, res) => {
     res.json({ cv_link: results[0].cv_link });
   });
 });
+
+
+app.post('/api/upload/logo', upload.single('logo'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+
+  const logoPath = `/uploads/${req.file.filename}`;
+  const bedrijfId = req.body.bedrijfId;
+
+  // Check if bedrijf already has a logo to delete
+  const getQuery = 'SELECT logo_link FROM bedrijf WHERE bedrijf_id = ?';
+  db.query(getQuery, [bedrijfId], (err, result) => {
+    if (err) return res.status(500).json({ error: 'DB error on select' });
+
+    const oldPath = result[0]?.logo_link;
+    if (oldPath) {
+      const fullPath = path.join(__dirname, oldPath);
+      if (fs.existsSync(fullPath)) fs.unlinkSync(fullPath);
+    }
+
+    // Update DB with new logo path
+    const updateQuery = 'UPDATE bedrijf SET logo_link = ? WHERE bedrijf_id = ?';
+    db.query(updateQuery, [logoPath, bedrijfId], (err, result) => {
+      if (err) return res.status(500).json({ error: 'DB update failed' });
+      res.json({ logoUrl: logoPath });
+    });
+  });
+});
