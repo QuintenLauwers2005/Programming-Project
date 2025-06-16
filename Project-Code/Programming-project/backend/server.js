@@ -96,11 +96,23 @@ app.post('/api/login', (req, res) => {
 
 //vacatures ophalen
 app.get('/api/vacatures', (req, res) => {
-  db.query(' SELECT  v.vacature_id, b.naam AS bedrijf, v.functie, v.contract_type, v.synopsis, v.open, b.logo_link, b.bedrijf_id FROM vacature v JOIN bedrijf b ON v.bedrijf_id = b.bedrijf_id', (err, results) => {
-    if (err) return res.status(500).json({ error: err.message })
-    res.json(results)
-  })
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 2;
+  const offset = (page - 1) * limit;
+
+  const sql = `
+    SELECT v.vacature_id, b.naam AS bedrijf, v.functie, v.contract_type, v.synopsis, v.open, b.logo_link, b.bedrijf_id
+    FROM vacature v
+    JOIN bedrijf b ON v.bedrijf_id = b.bedrijf_id
+    LIMIT ? OFFSET ?
+  `;
+
+  db.query(sql, [limit, offset], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
 });
+
 
 app.put('/api/vacatures/:id', (req, res) => {
   const { id } = req.params;
