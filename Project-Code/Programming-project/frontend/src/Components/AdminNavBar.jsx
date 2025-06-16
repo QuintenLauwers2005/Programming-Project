@@ -113,6 +113,7 @@ useRequireLogin("admin");
         <button className='NavBar-kleur' onClick={() => navigate('/HomePageAdmin')}>Home</button>
         <button className='NavBar-kleur' onClick={() => navigate('/AdminAgenda')}>Speeddates</button>
         <button className='NavBar-kleur' onClick={() => navigate('/AdminBedrijvenLijst')}>Bedrijven</button>
+        <button className='NavBar-kleur' onClick={() => navigate('/AdminStudentenLijst')}>Studenten</button>
         <button className='NavBar-kleur' onClick={() => navigate('/AdminVacatureLijst')}>Vacatures</button>
       </div>
     </div>
