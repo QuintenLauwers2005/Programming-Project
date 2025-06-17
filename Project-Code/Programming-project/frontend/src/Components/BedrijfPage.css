@@ -1,4 +1,11 @@
- Voeg deze CSS toe aan je bestaande BedrijfPage.css bestand */
+.bedrijven-titel {
+  text-align: left;
+  font-size: 28px;
+  margin: 40px auto 20px;
+  font-weight: bold;
+  max-width: 1200px;
+  padding: 0 20px;
+}/* Voeg deze CSS toe aan je bestaande BedrijfPage.css bestand */
 
 /* Verbeterde filter sectie */
 .filter-section {
@@ -10,7 +17,7 @@
   display: flex;
   gap: 12px;
   margin-bottom: 20px;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
   flex-wrap: wrap;
 }
@@ -63,7 +70,7 @@
 
 /* Resultaten info */
 .results-info {
-  text-align: center;
+  text-align: left;
   color: #666;
   font-size: 14px;
   font-weight: 500;
@@ -72,8 +79,6 @@
   background-color: #f8f9fa;
   border-radius: 20px;
   display: inline-block;
-  margin-left: 50%;
-  transform: translateX(-50%);
 }
 
 /* Loading verbeteringen */
@@ -291,18 +296,5 @@
   
   .bedrijven-grid {
     grid-template-columns: 1fr;
-  }
-}
-
-
-@media (max-width: 780px) {
-  .filter-form {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .filter-form input {
-    width: 70%;
-    max-width: none;
   }
 }
