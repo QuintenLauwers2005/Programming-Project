@@ -12,8 +12,7 @@ export default function AdminBedrijvenLijst() {
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     naam: '',
-    locatie: '',
-    vertegenwoordiger: ''
+    locatie: ''
   });
   const [showAll, setShowAll] = useState(false);
 
@@ -42,20 +41,17 @@ export default function AdminBedrijvenLijst() {
   const clearFilters = () => {
     setFilters({
       naam: '',
-      locatie: '',
-      vertegenwoordiger: ''
+      locatie: ''
     });
   };
 
   const filteredBedrijven = bedrijven.filter(bedrijf => {
     const naam = bedrijf.naam || '';
     const locatie = bedrijf.locatie || '';
-    const vertegenwoordiger = bedrijf.vertegenwoordiger || '';
   
     return (
       naam.toLowerCase().includes(filters.naam.toLowerCase()) &&
-      locatie.toLowerCase().includes(filters.locatie.toLowerCase()) &&
-      vertegenwoordiger.toLowerCase().includes(filters.vertegenwoordiger.toLowerCase())
+      locatie.toLowerCase().includes(filters.locatie.toLowerCase())
     );
   });
 
@@ -74,10 +70,23 @@ export default function AdminBedrijvenLijst() {
         {/* Verbeterde Filter Sectie */}
         <div className="filter-section">
           <div className="filter-form">
-            <input type="text" name="naam" placeholder="Naam" value={filters.naam} onChange={handleFilterChange} />
-            <input type="text" name="locatie" placeholder="Locatie" value={filters.locatie} onChange={handleFilterChange} />
-            <input type="text" name="vertegenwoordiger" placeholder="Vertegenwoordiger" value={filters.vertegenwoordiger} onChange={handleFilterChange} />
-            {(filters.naam || filters.locatie || filters.vertegenwoordiger) && (
+            <input 
+              type="text" 
+              name="naam" 
+              placeholder="Zoek op naam..." 
+              value={filters.naam} 
+              onChange={handleFilterChange}
+              className="filter-input"
+            />
+            <input 
+              type="text" 
+              name="locatie" 
+              placeholder="Locatie..." 
+              value={filters.locatie} 
+              onChange={handleFilterChange}
+              className="filter-input"
+            />
+            {(filters.naam || filters.locatie) && (
               <button 
                 onClick={clearFilters}
                 className="clear-filters-btn"
@@ -128,9 +137,6 @@ export default function AdminBedrijvenLijst() {
                   <p className="bedrijf-naam">{bedrijf.naam}</p>
                   {bedrijf.locatie && (
                     <p className="bedrijf-locatie">📍 {bedrijf.locatie}</p>
-                  )}
-                  {bedrijf.vertegenwoordiger && (
-                    <p className="bedrijf-vertegenwoordiger">👤 {bedrijf.vertegenwoordiger}</p>
                   )}
                 </div>
               ))}
