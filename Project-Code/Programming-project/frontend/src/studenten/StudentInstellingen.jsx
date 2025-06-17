@@ -73,16 +73,15 @@ export default function RegistratiePage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const volledigeNaam = `${form.voornaam} ${form.naam}`.trim();
-
     try {
-      // 1. Update studentinfo (zonder skills)
+      // 1. Update studentinfo (voornaam & naam los meesturen)
       await axios.put(`http://localhost:5000/api/student/${gebruikerId}`, {
-        name: volledigeNaam,
+        voornaam: form.voornaam,
+        naam: form.naam,
         email: form.email,
         adres: form.adres,
         specialisatie: form.specialisatie,
-        linkedin_url: form.linkedin,
+        linkedin: form.linkedin,
         bio: form.bio
       });
 
@@ -116,8 +115,23 @@ export default function RegistratiePage() {
 
       <section style={{ maxWidth: '400px', margin: '0 auto', padding: '20px' }}>
         <form onSubmit={handleSubmit}>
-          <input type="hidden" name="voornaam" value={form.voornaam} />
-          <input type="hidden" name="naam" value={form.naam} />
+          {/* 🔒 Naamvelden readonly tonen */}
+          <input
+            type="text"
+            name="voornaam"
+            value={form.voornaam}
+            readOnly
+            style={inputStyle}
+            placeholder="Voornaam"
+          />
+          <input
+            type="text"
+            name="naam"
+            value={form.naam}
+            readOnly
+            style={inputStyle}
+            placeholder="Achternaam"
+          />
 
           <input
             type="email"
