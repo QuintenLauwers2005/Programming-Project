@@ -1,111 +1,128 @@
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import React, { useState, useEffect, useCallback } from 'react';
 import Navbar from '../Components/AdminNavBar';
 import Footer from '../Components/Footer';
+import '../Components/BedrijfPage.css';
+import '../App.css'; // Zorg dat dit de juiste CSS bevat of verwijs naar aparte CSS
 
 function AdminStudentenLijst() {
   const navigate = useNavigate();
   const [studenten, setStudenten] = useState([]);
   const [filters, setFilters] = useState({ naam: '', opleiding: '' });
+  const [showAll, setShowAll] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const limit = 10;
-
-  // 📦 Ophalen studenten met paginering
-  const fetchStudenten = useCallback((page) => {
-    setLoadingMore(true);
-    axios.get(`http://localhost:5000/api/studenten?page=${page}&limit=${limit}`)
+  useEffect(() => {
+    axios.get('http://localhost:5000/api/studenten')
       .then((response) => {
-        if (response.data.length < limit) setHasMore(false);
-        setStudenten(prev => [...prev, ...response.data]);
+        setStudenten(response.data);
       })
       .catch((error) => {
         console.error('Fout bij ophalen studenten:', error);
       })
       .finally(() => {
-        setLoadingMore(false);
+        setLoading(false);
       });
   }, []);
 
-  useEffect(() => {
-    fetchStudenten(page);
-  }, [page, fetchStudenten]);
-
-  // 🧠 Scroll Listener
-  useEffect(() => {
-    const handleScroll = () => {
-      if (loadingMore || !hasMore) return;
-      const scrollPosition = window.innerHeight + window.scrollY;
-      const threshold = document.documentElement.offsetHeight - 100;
-      if (scrollPosition >= threshold) setPage(prev => prev + 1);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [loadingMore, hasMore]);
-
-  // 🔍 Filters toepassen
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters({ ...filters, [name]: value });
   };
 
-  const filteredStudenten = studenten.filter(student => {
-    const naam = `${student.voornaam || ''} ${student.naam || ''}`;
-    const opleiding = student.opleiding || '';
+  const filteredStudenten = studenten.filter((student) => {
+    const naam = `${student.voornaam || ''} ${student.naam || ''}`.toLowerCase();
+    const opleiding = (student.opleiding || '').toLowerCase();
     return (
-      naam.toLowerCase().includes(filters.naam.toLowerCase()) &&
-      opleiding.toLowerCase().includes(filters.opleiding.toLowerCase())
+      naam.includes(filters.naam.toLowerCase()) &&
+      opleiding.includes(filters.opleiding.toLowerCase())
     );
   });
 
+  const displayedStudenten = showAll ? filteredStudenten : filteredStudenten.slice(0, 8);
+  const hasMoreResults = filteredStudenten.length > 8;
+
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif' }}>
-      <header><Navbar /></header>
+    <div>
+      <Navbar />
 
-      <h2 style={{ textAlign: 'center', fontSize: '28px', margin: '40px 0 20px', fontWeight: 'bold' }}>Studenten</h2>
+      <div style={{ padding: '2rem', maxWidth: '900px', margin: '0 auto' }}>
+        <h1 style={{ textAlign: 'center', marginBottom: '2rem' }}>Studentenlijst</h1>
 
-      {/* 🔍 Filter Form */}
-      <div className="filter-form" style={{ display: 'flex', gap: '10px', marginBottom: '30px', justifyContent: 'center' }}>
-        <input type="text" name="naam" placeholder="Naam" value={filters.naam} onChange={handleFilterChange} />
-        <input type="text" name="opleiding" placeholder="Opleiding" value={filters.opleiding} onChange={handleFilterChange} />
+        {/* 🔍 Filters */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '1rem',
+          marginBottom: '2rem',
+          flexWrap: 'wrap'
+        }}>
+          <input
+            type="text"
+            name="naam"
+            placeholder="Zoek op naam"
+            value={filters.naam}
+            onChange={handleFilterChange}
+            style={{ padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
+          />
+          <input
+            type="text"
+            name="opleiding"
+            placeholder="Zoek op opleiding"
+            value={filters.opleiding}
+            onChange={handleFilterChange}
+            style={{ padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
+          />
+        </div>
+
+        {/* 📃 Studentenlijst */}
+        <ul style={{ listStyle: 'none', padding: 0 }}>
+          {displayedStudenten.map((student) => (
+            <li
+              key={student.id}
+              onClick={() => navigate(`/admin/student/${student.id}/profiel`)}
+              style={{
+                cursor: 'pointer',
+                padding: '15px',
+                marginBottom: '10px',
+                border: '1px solid #ddd',
+                borderRadius: '8px',
+                backgroundColor: '#f9f9f9',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+              }}
+            >
+              <p style={{ fontSize: '18px', fontWeight: 'bold' }}>{student.voornaam} {student.naam}</p>
+              <p style={{ color: '#555' }}>{student.email}</p>
+              <p style={{ color: '#777', fontSize: '14px' }}>{student.opleiding}</p>
+            </li>
+          ))}
+        </ul>
+
+        {/* 📍 Toon meer/minder knoppen */}
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+          {loading ? (
+            <p>Laden...</p>
+          ) : filteredStudenten.length === 0 ? (
+            <p>Geen studenten gevonden</p>
+          ) : (
+            hasMoreResults && (
+              <button
+                onClick={() => setShowAll(!showAll)}
+                className="toonmeer-btn"
+              >
+                {showAll ? 'Toon minder' : `Toon alle ${filteredStudenten.length} studenten`}
+              </button>
+            )
+          )}
+        </div>
       </div>
 
-      {/* 📃 Studentenlijst */}
-      <ul style={{ listStyle: 'none', padding: 0, maxWidth: '600px', margin: '0 auto' }}>
-        {filteredStudenten.map((student) => (
-          <li
-            key={student.id}
-            onClick={() => navigate(`/admin/student/${student.id}/profiel`)}
-            style={{
-              cursor: 'pointer',
-              padding: '15px',
-              marginBottom: '10px',
-              border: '1px solid #ddd',
-              borderRadius: '8px',
-              backgroundColor: '#f9f9f9',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-            }}
-          >
-            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>{student.voornaam} {student.naam}</p>
-            <p style={{ color: '#555' }}>{student.email}</p>
-            <p style={{ color: '#777', fontSize: '14px' }}>{student.opleiding}</p>
-          </li>
-        ))}
-      </ul>
-
-      {/* 🔄 Lazy loading status */}
-      <div style={{ textAlign: 'center', marginTop: '20px' }}>
-        {loadingMore && <p>Laden...</p>}
-        {!hasMore && <p>Alle studenten zijn geladen.</p>}
-      </div>
-
-      <footer><Footer /></footer>
+      <Footer />
     </div>
   );
 }
 
 export default AdminStudentenLijst;
+
+
