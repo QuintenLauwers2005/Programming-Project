@@ -585,7 +585,8 @@ app.get('/api/afspraken', (req, res) => {
       s.locatie, 
       b.naam AS bedrijf_naam,
       s.status,
-      s.student_id
+      s.student_id,
+      b.bedrijf_id
     FROM speeddate s
     JOIN student st ON s.student_id = st.student_id
     JOIN bedrijf b ON s.bedrijf_id = b.bedrijf_id
