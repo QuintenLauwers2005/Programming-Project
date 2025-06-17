@@ -24,6 +24,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // serve i
 
 
 
+/*res.json({
+  ...studentData,
+  vaardigheden: vaardigheidArray // dit moet een array zijn zoals [{naam: 'React'}, {naam: 'SQL'}]
+});*/
 
 
 const db = mysql.createConnection({
@@ -304,7 +308,7 @@ app.get('/api/student/:id', (req, res) => {
 
 //bedrijven ophalen
 app.get('/api/bedrijven', (req, res) => {
-  const sql = `SELECT bedrijf_id AS id, naam, logo_link FROM bedrijf`;
+  const sql = `SELECT bedrijf_id AS id, naam, logo_link, locatie FROM bedrijf`;
 
   db.query(sql, (err, results) => {
     if (err) {
@@ -324,6 +328,7 @@ app.get('/api/bedrijf/:id', (req, res) => {
       b.bedrijf_id AS id,
       b.naam,
       b.locatie,
+      b.aula,
       b.vertegenwoordiger,
       b.telefoon,
       b.logo_link,
@@ -332,9 +337,11 @@ app.get('/api/bedrijf/:id', (req, res) => {
       v.contract_type,
       v.synopsis,
       v.open,
-      b.url
+      b.url,
+      g.email
     FROM bedrijf b
     LEFT JOIN vacature v ON b.bedrijf_id = v.bedrijf_id
+    LEFT JOIN gebruiker g ON b.bedrijf_id = g.gebruiker_id
     WHERE b.bedrijf_id = ?
   `;
 
@@ -357,6 +364,8 @@ app.get('/api/bedrijf/:id', (req, res) => {
       telefoon: results[0].telefoon,
       logo_link: results[0].logo_link,
       url:results[0].url,
+      aula:results[0].aula,
+      email:results[0].email,
       vacatures: []
     };
 
@@ -437,7 +446,8 @@ app.get('/api/HomePageAantalen', (req, res) => {
     SELECT
       (SELECT COUNT(*) FROM bedrijf) AS bedrijf_aantal,
       (SELECT COUNT(*) FROM vacature) AS vacature_aantal,
-      (SELECT COUNT(*) FROM student) AS student_aantal
+      (SELECT COUNT(*) FROM student) AS student_aantal,
+      (SELECT COUNT(*) FROM speeddate) AS speeddate_aantal
   `
   db.query(sql, (err, results) => {
     if (err) return res.status(500).json({ error: err.message })
