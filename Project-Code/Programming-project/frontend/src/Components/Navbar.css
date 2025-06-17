@@ -145,19 +145,31 @@
   gap: 2rem;
 }
 
-.career-launchName{
-font-size: 1.75rem;
+.nav-title-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%; /* of bijv. 60px als dat je navbarhoogte is */
+}
+
+.career-launchName {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.75rem;
   font-weight: 700;
   font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
-  color: #202c6f; /* Dark navy blue */
+  color: #202c6f;
   letter-spacing: 0.5px;
   text-transform: uppercase;
   text-shadow:
     0 0 4px rgba(39, 104, 203, 0.2),
     0 0 8px rgba(112, 135, 238, 0.15),
     0 0 8px rgba(18, 48, 180, 0.15);
-
   transition: text-shadow 0.3s ease, color 0.3s ease;
+
+  display: inline-block; /* belangrijk voor centrering */
 }
 
 .mobile-menu-links button {

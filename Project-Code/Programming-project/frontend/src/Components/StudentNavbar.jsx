@@ -82,7 +82,7 @@ function Navbar() {
     <div className='navbar-container'>
       <div className="top-bar">
         <Link to="/HomePageStudent" className="logo-link"><Logo /></Link>
-        <div className='career-launchName'>Career-launch</div>
+        <div className='career-launchName'>Career launch</div>
         <div className="top-bar-right">
           <div className="desktop-only">
             <div ref={buttonRef} className="navigatie-button-popout">
