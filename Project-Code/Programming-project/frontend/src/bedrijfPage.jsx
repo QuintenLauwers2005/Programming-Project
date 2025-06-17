@@ -3,35 +3,59 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Components/Navbar';
 import Footer from './Components/Footer';
-import './Components/BedrijfPage.css'; // 👈 CSS import
-
+import './Components/BedrijfPage.css';
 
 export default function BedrijvenLijst() {
   const navigate = useNavigate();
   const [bedrijven, setBedrijven] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({ naam: '' });
+  const [filters, setFilters] = useState({
+    naam: '',
+    locatie: ''
+  });
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     axios.get('http://localhost:5000/api/bedrijven')
-      .then((res) => {
-        console.log("Ophaalde bedrijven:", res.data);
-        setBedrijven(res.data);
+      .then((response) => {
+        console.log("Ophaalde bedrijven:", response.data);
+        setBedrijven(response.data);
       })
-      .catch((err) => {
-        console.error('Fout bij ophalen bedrijven:', err);
+      .catch((error) => {
+        console.error('Fout bij ophalen bedrijven:', error);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setFilters(prev => ({ ...prev, [name]: value }));
+    setFilters({
+      ...filters,
+      [name]: value
+    });
   };
 
-  const filteredBedrijven = bedrijven.filter(bedrijf =>
-    (bedrijf.naam || '').toLowerCase().includes(filters.naam.toLowerCase())
-  );
+  const clearFilters = () => {
+    setFilters({
+      naam: '',
+      locatie: ''
+    });
+  };
+
+  const filteredBedrijven = bedrijven.filter(bedrijf => {
+    const naam = bedrijf.naam || '';
+    const locatie = bedrijf.locatie || '';
+  
+    return (
+      naam.toLowerCase().includes(filters.naam.toLowerCase()) &&
+      locatie.toLowerCase().includes(filters.locatie.toLowerCase())
+    );
+  });
+
+  const displayedBedrijven = showAll ? filteredBedrijven : filteredBedrijven.slice(0, 8);
+  const hasMoreResults = filteredBedrijven.length > 8;
 
   return (
     <div className="bedrijven-container">
@@ -39,47 +63,104 @@ export default function BedrijvenLijst() {
         <Navbar />
       </header>
 
-      <h2 className="bedrijven-titel">Bedrijven</h2>
-
-      <div className="filter-form">
-        <input 
-          type="text" 
-          name="naam" 
-          placeholder="Naam bedrijf" 
-          value={filters.naam} 
-          onChange={handleFilterChange} 
-        />
-      </div>
-
-      {loading ? (
-        <p className="loading-text">Laden...</p>
-      ) : (
-        <div className="bedrijven-grid">
-          {filteredBedrijven.length > 0 ? (
-            filteredBedrijven.map(bedrijf => (
-              <div
-                key={bedrijf.id}
-                className="bedrijf-card"
-                onClick={() => navigate(`/bedrijf/${bedrijf.id}`)}
+      <main>
+        <h1 className="bedrijven-titel">Bedrijven</h1>
+        
+        {/* Verbeterde Filter Sectie */}
+        <div className="filter-section">
+          <div className="filter-form">
+            <input 
+              type="text" 
+              name="naam" 
+              placeholder="Zoek op naam..." 
+              value={filters.naam} 
+              onChange={handleFilterChange}
+              className="filter-input"
+            />
+            <input 
+              type="text" 
+              name="locatie" 
+              placeholder="Locatie..." 
+              value={filters.locatie} 
+              onChange={handleFilterChange}
+              className="filter-input"
+            />
+            {(filters.naam || filters.locatie) && (
+              <button 
+                onClick={clearFilters}
+                className="clear-filters-btn"
+                title="Filters wissen"
               >
-                <div className="bedrijf-logo">
-                  <img
-                    src={`http://localhost:5000${bedrijf.logo_link}`}
-                    alt={`${bedrijf.naam} logo`}
-                  />
-                </div>
-                <p className="bedrijf-naam">{bedrijf.naam}</p>
-              </div>
-            ))
-          ) : (
-            <p className="geen-resultaten">Geen bedrijven gevonden.</p>
-          )}
+                ✕
+              </button>
+            )}
+          </div>
         </div>
-      )}
 
-      <button className="toonmeer-btn" onClick={() => alert('Toon meer geklikt!')}>
-        Toon meer
-      </button>
+        {loading ? (
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p className="loading-text">Bedrijven laden...</p>
+          </div>
+        ) : filteredBedrijven.length === 0 ? (
+          <div className="geen-resultaten">
+            <div className="no-results-icon">🏢</div>
+            <h3>Geen bedrijven gevonden</h3>
+            <p>Probeer je zoekfilters aan te passen</p>
+          </div>
+        ) : (
+          <>
+            <div className="bedrijven-grid">
+              {displayedBedrijven.map((bedrijf) => (
+                <div
+                  key={bedrijf.id}
+                  onClick={() => navigate(`/bedrijf/${bedrijf.id}`)}
+                  className="bedrijf-card"
+                >
+                  <div className="bedrijf-logo">
+                    <img
+                      src={`http://localhost:5000${bedrijf.logo_link}`}
+                      alt={`${bedrijf.naam} logo`}
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
+                    />
+                    <div 
+                      className="logo-fallback"
+                      style={{ display: 'none' }}
+                    >
+                      🏢
+                    </div>
+                  </div>
+                  <p className="bedrijf-naam">{bedrijf.naam}</p>
+                  {bedrijf.locatie && (
+                    <p className="bedrijf-locatie">📍 {bedrijf.locatie}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {hasMoreResults && !showAll && (
+              <button 
+                className="toonmeer-btn" 
+                onClick={() => setShowAll(true)}
+              >
+                Toon alle {filteredBedrijven.length} bedrijven
+              </button>
+            )}
+
+            {showAll && hasMoreResults && (
+              <button 
+                className="toonmeer-btn" 
+                onClick={() => setShowAll(false)}
+              >
+                Toon minder
+              </button>
+            )}
+          </>
+        )}
+      </main>
 
       <footer>
         <Footer />
