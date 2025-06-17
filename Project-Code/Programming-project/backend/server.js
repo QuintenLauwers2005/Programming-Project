@@ -1260,6 +1260,22 @@ app.get('/api/bedrijf/:id/aula', (req, res) => {
   });
 });
 
+app.get('/api/speeddate/unavailable', (req, res) => {
+  const { student_id, bedrijf_id } = req.query;
+
+  const sql = `
+    SELECT tijdstip FROM speeddate
+    WHERE student_id = ? OR bedrijf_id = ?
+  `;
+
+  db.query(sql, [student_id, bedrijf_id], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+
+    const times = results.map(row => row.tijdstip.slice(0, 5)); // "HH:MM:SS" to "HH:MM"
+    return res.json(times);
+  });
+});
+
 app.put('/api/bedrijf/:id/aula', (req, res) => {
   const bedrijfId = req.params.id;
   const { aula } = req.body;
