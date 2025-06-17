@@ -11,6 +11,7 @@ export default function BedrijfProfileStudent() {
   const [companyData, setCompanyData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [unavailableTimes, setUnavailableTimes] = useState([]);
 
   // Modal state
   const [showModal, setShowModal] = useState(false);
@@ -48,32 +49,50 @@ export default function BedrijfProfileStudent() {
 
   // Genereer tijdsopties o.b.v. configuratie
   const generateTimeOptions = () => {
-    const options = [];
+  const options = [];
 
-    const [startHour, startMinute] = timeConfig.beginuur.split(':').map(Number);
-    const [endHour, endMinute] = timeConfig.einduur.split(':').map(Number);
+  const [startHour, startMinute] = timeConfig.beginuur.split(':').map(Number);
+  const [endHour, endMinute] = timeConfig.einduur.split(':').map(Number);
 
-    let current = new Date();
-    current.setHours(startHour, startMinute, 0, 0);
+  let current = new Date();
+  current.setHours(startHour, startMinute, 0, 0);
 
-    const end = new Date();
-    end.setHours(endHour, endMinute, 0, 0);
+  const end = new Date();
+  end.setHours(endHour, endMinute, 0, 0);
 
-    while (current <= end) {
-      const hours = String(current.getHours()).padStart(2, '0');
-      const minutes = String(current.getMinutes()).padStart(2, '0');
-      const time = `${hours}:${minutes}`;
+  while (current <= end) {
+    const hours = String(current.getHours()).padStart(2, '0');
+    const minutes = String(current.getMinutes()).padStart(2, '0');
+    const time = `${hours}:${minutes}`;
+
+    if (!unavailableTimes.includes(time)) {
       options.push(<option key={time} value={time}>{time}</option>);
-      current.setMinutes(current.getMinutes() + 10);
     }
 
-    return options;
-  };
+    current.setMinutes(current.getMinutes() + 10);
+  }
+
+  return options;
+};
 
   const handleOpenModal = (vacature) => {
     setSelectedVacature(vacature);
     setSelectedTime('');
     setShowModal(true);
+
+    axios.get(`http://localhost:5000/api/speeddate/unavailable`, {
+  params: { student_id: studentId, bedrijf_id: id }
+})
+.then((res) => {
+  setUnavailableTimes(res.data);
+  setSelectedVacature(vacature);
+  setSelectedTime('');
+  setShowModal(true);
+})
+.catch((err) => {
+  console.error('Fout bij ophalen van bezette tijdstippen:', err);
+  alert('Tijdsloten konden niet worden opgehaald');
+});
   };
 
   const handleConfirm = () => {
