@@ -324,6 +324,7 @@ app.get('/api/bedrijf/:id', (req, res) => {
       b.bedrijf_id AS id,
       b.naam,
       b.locatie,
+      b.aula,
       b.vertegenwoordiger,
       b.telefoon,
       b.logo_link,
@@ -357,6 +358,7 @@ app.get('/api/bedrijf/:id', (req, res) => {
       telefoon: results[0].telefoon,
       logo_link: results[0].logo_link,
       url:results[0].url,
+      aula:results[0].aula,
       vacatures: []
     };
 
