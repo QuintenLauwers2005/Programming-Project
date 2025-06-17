@@ -12,9 +12,8 @@ export default function Bedrijfsagenda() {
   const gebruiker_id = localStorage.getItem('gebruiker_id');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!gebruiker_id) return;
-
+  // 🔁 Functie om afspraken opnieuw op te halen
+  const fetchAfspraken = () => {
     fetch(`http://localhost:5000/api/afspraken?gebruiker_id=${gebruiker_id}`)
       .then(res => res.json())
       .then(data => {
@@ -26,6 +25,13 @@ export default function Bedrijfsagenda() {
         setNotificatie('❌ Fout bij ophalen afspraken');
         setTimeout(() => setNotificatie(null), 3000);
       });
+  };
+
+  // 🧠 Ophalen bij laden van component
+  useEffect(() => {
+    if (gebruiker_id) {
+      fetchAfspraken();
+    }
   }, [gebruiker_id]);
 
   const handleCancelConfirm = (id) => {
@@ -57,14 +63,23 @@ export default function Bedrijfsagenda() {
 
   const toggleStatus = async (id, nieuweStatus) => {
     try {
-      await axios.put(`http://localhost:5000/api/speeddate/${id}/status`, { status: nieuweStatus });
+      // Status lokaal meteen wijzigen zodat gebruiker het direct ziet
       setAfspraken(prev =>
         prev.map(app =>
           app.id === id ? { ...app, status: nieuweStatus } : app
         )
       );
+
+      await axios.put(`http://localhost:5000/api/speeddate/${id}/status`, { status: nieuweStatus });
+      
       setNotificatie(`Status gewijzigd naar "${nieuweStatus}" ✅`);
-      setTimeout(() => setNotificatie(null), 3000);
+
+      // Pas na 1,5 seconden opnieuw ophalen en notificatie wissen
+      setTimeout(() => {
+        fetchAfspraken();
+        setNotificatie(null);
+      }, 1500);
+
     } catch (err) {
       console.error('Fout bij bijwerken status:', err);
       setNotificatie('❌ Fout bij wijzigen status');
@@ -112,9 +127,9 @@ export default function Bedrijfsagenda() {
                 </button>
                 <button
                   className="status-button weiger"
-                  onClick={(e) => {
+                  onClick={async (e) => {
                     e.stopPropagation();
-                    toggleStatus(afspraak.id, 'geweigerd');
+                    await toggleStatus(afspraak.id, 'geweigerd');
                   }}
                 >
                   Weigeren
