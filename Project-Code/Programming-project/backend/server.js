@@ -24,6 +24,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // serve i
 
 
 
+/*res.json({
+  ...studentData,
+  vaardigheden: vaardigheidArray // dit moet een array zijn zoals [{naam: 'React'}, {naam: 'SQL'}]
+});*/
 
 
 const db = mysql.createConnection({
