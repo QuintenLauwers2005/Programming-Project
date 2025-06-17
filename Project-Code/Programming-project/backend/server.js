@@ -176,71 +176,6 @@ app.get('/api/vacatures', (req, res) => {
 
 
 app.put('/api/vacatures/:id', (req, res) => {
-  app.post('/api/student/:id/skills', (req, res) => {
-    const studentId = req.params.id;
-    const skills = req.body.skills; // verwacht een array van string namen
-  
-    if (!Array.isArray(skills)) {
-      return res.status(400).json({ error: 'skills moet een array zijn' });
-    }
-  
-    // Verwijder oude koppelingen
-    db.query(
-      'DELETE FROM student_vaardigheid WHERE student_id = ?',
-      [studentId],
-      (delErr) => {
-        if (delErr) return res.status(500).json({ error: delErr.message });
-  
-        if (skills.length === 0) {
-          return res.json({ message: 'Geen vaardigheden om bij te werken' });
-        }
-  
-        // Voor elke vaardigheid: check of bestaat, anders maak aan, en link
-        const insertPromises = skills.map((naam) => {
-          return new Promise((resolve, reject) => {
-            db.query(
-              'SELECT id FROM vaardigheid WHERE naam = ?',
-              [naam],
-              (selErr, rows) => {
-                if (selErr) return reject(selErr);
-  
-                const vaardigheidId = rows.length
-                  ? rows[0].id
-                  : null;
-  
-                if (vaardigheidId) {
-                  return resolve({ vaardigheidId });
-                }
-  
-                // Maak vaardigheid aan
-                db.query(
-                  'INSERT INTO vaardigheid (naam) VALUES (?)',
-                  [naam],
-                  (insErr, result) => {
-                    if (insErr) return reject(insErr);
-                    resolve({ vaardigheidId: result.insertId });
-                  }
-                );
-              }
-            );
-          }).then(({ vaardigheidId }) => {
-            return new Promise((resolve, reject) => {
-              db.query(
-                'INSERT INTO student_vaardigheid (student_id, vaardigheid_id) VALUES (?, ?)',
-                [studentId, vaardigheidId],
-                (err) => err ? reject(err) : resolve()
-              );
-            });
-          });
-        });
-  
-        Promise.all(insertPromises)
-          .then(() => res.json({ message: 'Vaardigheden bijgewerkt' }))
-          .catch(err => res.status(500).json({ error: err.message }));
-      }
-    );
-  });
-  
   const { id } = req.params;
   const { functie, contract_type, synopsis } = req.body;
 
@@ -1320,3 +1255,53 @@ app.put('/api/bedrijf/:id/aula', (req, res) => {
     });
   });
 });
+
+app.put('/api/student/:id/skills', (req, res) => {
+  const studentId = req.params.id;
+  const skills = req.body.skills || [];
+
+  // Verwijder oude vaardigheden
+  const deleteSql = 'DELETE FROM student_vaardigheid WHERE student_id = ?';
+  db.query(deleteSql, [studentId], (err) => {
+    if (err) {
+      console.error('Fout bij verwijderen vaardigheden:', err);
+      return res.status(500).json({ error: 'Kon oude vaardigheden niet verwijderen' });
+    }
+
+    // Voeg nieuwe vaardigheden toe (indien nodig) en koppel ze
+    const insertSkill = (skill) => {
+      return new Promise((resolve, reject) => {
+        const vaardigheidId = `skill_${skill.toLowerCase().replace(/\s+/g, '_')}`;
+
+        // Voeg toe aan vaardigheid (indien niet bestaand)
+        const insertVaardigheidSql = `
+          INSERT IGNORE INTO vaardigheid (id, naam) VALUES (?, ?)
+        `;
+        db.query(insertVaardigheidSql, [vaardigheidId, skill], (err) => {
+          if (err) return reject(err);
+
+          // Voeg toe aan koppelings-tabel
+          const linkSql = `
+            INSERT INTO student_vaardigheid (student_id, vaardigheid_id)
+            VALUES (?, ?)
+          `;
+          db.query(linkSql, [studentId, vaardigheidId], (err) => {
+            if (err) return reject(err);
+            resolve();
+          });
+        });
+      });
+    };
+
+    // Voeg alle nieuwe vaardigheden toe
+    Promise.all(skills.map(insertSkill))
+      .then(() => {
+        res.json({ message: 'Vaardigheden succesvol bijgewerkt' });
+      })
+      .catch((err) => {
+        console.error('Fout bij toevoegen vaardigheden:', err);
+        res.status(500).json({ error: 'Kon vaardigheden niet opslaan' });
+      });
+  });
+});
+
