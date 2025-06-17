@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import '../Assets/Agenda.css';
 import Navbar from '../Components/StudentNavbar';
 import Footer from '../Components/Footer';
+import { useNavigate } from 'react-router-dom';
 
 export default function AgendaStudenten() {
   const [afspraken, setAfspraken] = useState([]);
   const [showInfo, setShowInfo] = useState(false);
   const [cancelId, setCancelId] = useState(null);
-  
+  const navigate = useNavigate();
+
   useEffect(() => {
     const gebruiker_id = localStorage.getItem('gebruiker_id');
     if (!gebruiker_id) return;
@@ -45,6 +47,12 @@ export default function AgendaStudenten() {
     setCancelId(null);
   };
 
+  const handleCardClick = (bedrijf_id) => {
+    if (bedrijf_id) {
+      navigate(`/BedrijfProfileStudent/${bedrijf_id}`);
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -55,7 +63,12 @@ export default function AgendaStudenten() {
 
         {afspraken.length > 0 ? (
           afspraken.map(afspraak => (
-            <div key={afspraak.id} className="card">
+            <div
+              key={afspraak.id}
+              className="card"
+              onClick={() => handleCardClick(afspraak.bedrijf_id)}
+              style={{ cursor: 'pointer' }}
+            >
               <div className="time">{afspraak.time}</div>
               <div className="company">
                 {afspraak.voornaam} {afspraak.naam} — {afspraak.bedrijf_naam}
@@ -63,7 +76,10 @@ export default function AgendaStudenten() {
               <div className="room">{afspraak.locatie}</div>
               <button
                 className="cancel-button"
-                onClick={() => handleCancelConfirm(afspraak.id)}
+                onClick={(e) => {
+                  e.stopPropagation(); // voorkomt dat klik op knop ook navigatie triggert
+                  handleCancelConfirm(afspraak.id);
+                }}
               >
                 Annuleren
               </button>
