@@ -26,6 +26,7 @@ export default function StudentVacatureLijst() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const limit = 2;
+  const [unavailableTimes, setUnavailableTimes] = useState([]);
 
   // Vacatures ophalen met paginering
   const fetchVacatures = (pageNum = 1) => {
@@ -129,33 +130,46 @@ export default function StudentVacatureLijst() {
   };
 
   const generateTimeOptions = () => {
-    const options = [];
+  const options = [];
 
-    const [startHour, startMinute] = timeConfig.beginuur.split(':').map(Number);
-    const [endHour, endMinute] = timeConfig.einduur.split(':').map(Number);
+  const [startHour, startMinute] = timeConfig.beginuur.split(':').map(Number);
+  const [endHour, endMinute] = timeConfig.einduur.split(':').map(Number);
 
-    let current = new Date();
-    current.setHours(startHour, startMinute, 0, 0);
+  let current = new Date();
+  current.setHours(startHour, startMinute, 0, 0);
 
-    const end = new Date();
-    end.setHours(endHour, endMinute, 0, 0);
+  const end = new Date();
+  end.setHours(endHour, endMinute, 0, 0);
 
-    while (current <= end) {
-      const hours = String(current.getHours()).padStart(2, '0');
-      const minutes = String(current.getMinutes()).padStart(2, '0');
-      const time = `${hours}:${minutes}`;
+  while (current <= end) {
+    const hours = String(current.getHours()).padStart(2, '0');
+    const minutes = String(current.getMinutes()).padStart(2, '0');
+    const time = `${hours}:${minutes}`;
+
+    if (!unavailableTimes.includes(time)) {
       options.push(<option key={time} value={time}>{time}</option>);
-      current.setMinutes(current.getMinutes() + 10);
     }
 
-    return options;
-  };
+    current.setMinutes(current.getMinutes() + 10);
+  }
+
+  return options;
+};
 
   const handleOpenModal = (vacature) => {
     setSelectedVacature(vacature);
     setSelectedTime('');
     setShowModal(true);
-  };
+
+    const student_id = localStorage.getItem('gebruiker_id');
+  const bedrijf_id = vacature.bedrijf_id;
+
+  fetch(`http://localhost:5000/api/speeddate/unavailable?student_id=${student_id}&bedrijf_id=${bedrijf_id}`)
+    .then(res => res.json())
+    .then(data => setUnavailableTimes(data))
+    .catch(err => console.error('Fout bij ophalen onbeschikbare tijdstippen:', err));
+};
+  
 
   return (
     <div className="pagina">
