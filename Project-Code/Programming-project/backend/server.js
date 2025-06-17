@@ -378,15 +378,15 @@ app.get('/api/bedrijf/:id', (req, res) => {
 // PUT: Bedrijf bijwerken
 app.put('/api/bedrijf/:id', (req, res) => {
   const bedrijfId = req.params.id;
-  const { naam, locatie, vertegenwoordiger, telefoon, url } = req.body;
+  const { naam, locatie, vertegenwoordiger, telefoon, url, aula } = req.body;
 
   const sql = `
     UPDATE bedrijf 
-    SET naam = ?, locatie = ?, vertegenwoordiger = ?, telefoon = ?, url = ?
+    SET naam = ?, locatie = ?, vertegenwoordiger = ?, telefoon = ?, url = ?, aula = ?
     WHERE bedrijf_id = ?
   `;
 
-  const values = [naam, locatie, vertegenwoordiger, telefoon, url, bedrijfId];
+  const values = [naam, locatie, vertegenwoordiger, telefoon, url, aula, bedrijfId];
 
   db.query(sql, values, (err, result) => {
     if (err) {
@@ -401,6 +401,7 @@ app.put('/api/bedrijf/:id', (req, res) => {
     res.json({ message: 'Bedrijf succesvol bijgewerkt' });
   });
 });
+
 
 // PUT: student bijwerken
 app.put('/api/student/:id', (req, res) => {
