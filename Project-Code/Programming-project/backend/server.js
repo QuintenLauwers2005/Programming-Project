@@ -29,6 +29,63 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // serve i
   vaardigheden: vaardigheidArray // dit moet een array zijn zoals [{naam: 'React'}, {naam: 'SQL'}]
 });*/
 
+app.get('/api/student/:id', (req, res) => {
+  const studentId = req.params.id;
+  const sql = `
+    SELECT 
+      s.student_id,
+      s.voornaam,
+      s.naam,
+      s.email,
+      s.opleiding,
+      s.opleidingsjaar,
+      s.profiel_foto_url,
+      v.id AS vaardigheid_id,
+      v.naam AS vaardigheid_naam,
+      s.linkedin_url,
+      s.bio,
+      s.adres,
+      s.specialisatie,
+      s.telefoon
+    FROM student s
+    LEFT JOIN student_vaardigheid sv ON s.student_id = sv.student_id
+    LEFT JOIN vaardigheid v ON sv.vaardigheid_id = v.id
+    WHERE s.student_id = ?
+  `;
+
+  db.query(sql, [studentId], (err, results) => {
+    if (err) return res.status(500).json({ error: 'Interne serverfout' });
+    if (results.length === 0) return res.status(404).json({ error: 'Student niet gevonden' });
+
+    const studentInfo = {
+      id: results[0].student_id.toString(),
+      name: `${results[0].voornaam || ''} ${results[0].naam || ''}`,
+      email: results[0].email,
+      opleiding: results[0].opleiding,
+      instelling: 'Erasmushogeschool Brussel',
+      afstudeerjaar: results[0].opleidingsjaar,
+      adres: results[0].adres,
+      profielFotoUrl: results[0].profiel_foto_url,
+      linkedinurl: results[0].linkedin_url,
+      bio: results[0].bio,
+      specialisatie: results[0].specialisatie,
+      telefoon: results[0].telefoon,
+      vaardigheden: []
+    };
+
+    results.forEach(row => {
+      if (row.vaardigheid_id && row.vaardigheid_naam) {
+        studentInfo.vaardigheden.push({
+          id: row.vaardigheid_id.toString(),
+          naam: row.vaardigheid_naam
+        });
+      }
+    });
+
+    res.json(studentInfo);
+  });
+});
+
 
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -119,6 +176,71 @@ app.get('/api/vacatures', (req, res) => {
 
 
 app.put('/api/vacatures/:id', (req, res) => {
+  app.post('/api/student/:id/skills', (req, res) => {
+    const studentId = req.params.id;
+    const skills = req.body.skills; // verwacht een array van string namen
+  
+    if (!Array.isArray(skills)) {
+      return res.status(400).json({ error: 'skills moet een array zijn' });
+    }
+  
+    // Verwijder oude koppelingen
+    db.query(
+      'DELETE FROM student_vaardigheid WHERE student_id = ?',
+      [studentId],
+      (delErr) => {
+        if (delErr) return res.status(500).json({ error: delErr.message });
+  
+        if (skills.length === 0) {
+          return res.json({ message: 'Geen vaardigheden om bij te werken' });
+        }
+  
+        // Voor elke vaardigheid: check of bestaat, anders maak aan, en link
+        const insertPromises = skills.map((naam) => {
+          return new Promise((resolve, reject) => {
+            db.query(
+              'SELECT id FROM vaardigheid WHERE naam = ?',
+              [naam],
+              (selErr, rows) => {
+                if (selErr) return reject(selErr);
+  
+                const vaardigheidId = rows.length
+                  ? rows[0].id
+                  : null;
+  
+                if (vaardigheidId) {
+                  return resolve({ vaardigheidId });
+                }
+  
+                // Maak vaardigheid aan
+                db.query(
+                  'INSERT INTO vaardigheid (naam) VALUES (?)',
+                  [naam],
+                  (insErr, result) => {
+                    if (insErr) return reject(insErr);
+                    resolve({ vaardigheidId: result.insertId });
+                  }
+                );
+              }
+            );
+          }).then(({ vaardigheidId }) => {
+            return new Promise((resolve, reject) => {
+              db.query(
+                'INSERT INTO student_vaardigheid (student_id, vaardigheid_id) VALUES (?, ?)',
+                [studentId, vaardigheidId],
+                (err) => err ? reject(err) : resolve()
+              );
+            });
+          });
+        });
+  
+        Promise.all(insertPromises)
+          .then(() => res.json({ message: 'Vaardigheden bijgewerkt' }))
+          .catch(err => res.status(500).json({ error: err.message }));
+      }
+    );
+  });
+  
   const { id } = req.params;
   const { functie, contract_type, synopsis } = req.body;
 
