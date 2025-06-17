@@ -33,14 +33,14 @@ export default function AdminStudentInstellingen() {
           adres: res.data.adres || '',
           specialisatie: res.data.specialisatie || '',
           linkedin: res.data.linkedinurl || '',
-          
+          bio: res.data.bio||'',
         });
 
       })
       .catch((err) => {
         console.error("Fout bij ophalen studentgegevens:", err);
       });
-  }, [id]);
+  }, [id]); 
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -118,6 +118,15 @@ export default function AdminStudentInstellingen() {
           value={form.linkedin}
           onChange={handleChange}
           style={inputStyle}
+        />
+
+        <textarea
+        name="bio"
+        placeholder="Biografie"
+        value={form.bio}
+        onChange={handleChange}
+        rows={4}
+        style={{ ...inputStyle, resize: 'vertical' }}
         />
 
         <button type="submit" style={buttonStyle}>Opslaan</button>

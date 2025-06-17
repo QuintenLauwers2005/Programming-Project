@@ -1,10 +1,8 @@
 import React from "react";
 import './Footer.css';
-import { useLocation } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 
 function Footer() {
-  const location = useLocation();
-  const basePath = location.pathname;
 
   return (
     <footer className="footer">
@@ -21,10 +19,11 @@ function Footer() {
         <div className="footer-section">
           <h4>Snel naar</h4>
           <ul>
-            <li><a href={`${basePath}#Home`}>Home</a></li>
-            <li><a href={`${basePath}#locatie`}>Locatie</a></li>
-            <li><a href={`${basePath}#waarom`}>Waarom Deelnemen</a></li>
-            <li><a href={`${basePath}#faq`}>FAQ</a></li>
+            <li><HashLink smooth to="/#top">Home</HashLink></li>
+            <li><HashLink smooth to="/#locatie">Locatie</HashLink></li>
+            <li><HashLink smooth to="/#waarom">Waarom Deelnemen</HashLink></li>
+            <li><HashLink smooth to="/#testimonial">Ervaringen van studenten</HashLink></li>
+            <li><HashLink smooth to="/#faq">FAQ</HashLink></li>
           </ul>
         </div>
 
