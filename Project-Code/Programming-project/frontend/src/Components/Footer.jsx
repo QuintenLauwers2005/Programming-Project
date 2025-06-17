@@ -2,7 +2,24 @@ import React from "react";
 import './Footer.css';
 import { HashLink } from 'react-router-hash-link';
 
+
 function Footer() {
+
+
+  const testInlog = localStorage.getItem('rol')
+    ? localStorage.getItem('rol') === 'student' ? '/#locatie'
+    : localStorage.getItem('rol') === 'bedrijf' ? '/BedrijfHomePage/#locatie'
+    : localStorage.getItem('rol') === 'admin' ? '/HomePageAdmin/#locatie'
+    : '/home'  // fallback
+    : '/home';   // niet ingelogd
+
+
+  const baseHomePath = localStorage.getItem('rol')
+    ? localStorage.getItem('rol') === 'student' ? '/HomePageStudent'
+    : localStorage.getItem('rol') === 'bedrijf' ? '/BedrijfHomePage'
+    : localStorage.getItem('rol') === 'admin' ? '/HomePageAdmin'
+    : '/home'  // fallback
+    : '/home';   // niet ingelogd
 
   return (
     <footer className="footer">
@@ -19,8 +36,8 @@ function Footer() {
         <div className="footer-section">
           <h4>Snel naar</h4>
           <ul>
-            <li><HashLink smooth to="/#top">Home</HashLink></li>
-            <li><HashLink smooth to="/#locatie">Locatie</HashLink></li>
+            <li><HashLink smooth to={`${baseHomePath}#top`}>Home</HashLink></li>
+            <li><HashLink smooth to={`${testInlog}`}>Locatie</HashLink></li>
             <li><HashLink smooth to="/#waarom">Waarom Deelnemen</HashLink></li>
             <li><HashLink smooth to="/#testimonial">Ervaringen van studenten</HashLink></li>
             <li><HashLink smooth to="/#faq">FAQ</HashLink></li>
