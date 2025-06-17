@@ -207,48 +207,42 @@ export default function AdminVacatureLijst() {
         </section>
       </main>
 
-      {showModal && (
-        <div style={{
-          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex',
-          justifyContent: 'center', alignItems: 'center', zIndex: 1000
-        }}>
-          <div style={{
-            backgroundColor: 'white', padding: '20px',
-            borderRadius: '8px', width: '300px',
-            boxShadow: '0 2px 10px rgba(0,0,0,0.3)'
-          }}>
-            {editMode ? (
-              <>
-                <h3>Vacature Bewerken</h3>
-                <label>Functie:</label>
-                <input type="text" value={editData.functie} onChange={(e) => setEditData({ ...editData, functie: e.target.value })} />
-                <label>Contract Type:</label>
-                <input type="text" value={editData.contract_type} onChange={(e) => setEditData({ ...editData, contract_type: e.target.value })} />
-                <label>Beschrijving:</label>
-                <textarea value={editData.synopsis} onChange={(e) => setEditData({ ...editData, synopsis: e.target.value })} />
-                <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-                  <button onClick={handleUpdateVacature} style={{ backgroundColor: '#28a745', color: 'white' }}>Opslaan</button>
-                  <button onClick={() => { setShowModal(false); setEditMode(false); }} style={{ backgroundColor: '#dc3545', color: 'white' }}>Annuleren</button>
-                </div>
-              </>
-            ) : (
-              <>
-                <h3>Kies een tijdstip</h3>
-                <label>Tijdstip:</label>
-                <select value={selectedTime} onChange={e => setSelectedTime(e.target.value)}>
-                  <option value="">Selecteer tijd</option>
-                  {generateTimeOptions()}
-                </select>
-                <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-                  <button onClick={handleConfirm} style={{ backgroundColor: '#28a745', color: 'white' }}>Bevestigen</button>
-                  <button onClick={() => setShowModal(false)} style={{ backgroundColor: '#dc3545', color: 'white' }}>Annuleren</button>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      )}
+      {showModal && selectedVacature && (
+  <div className="modal-overlay">
+    <div className="modal">
+      <h3>Vacature bewerken</h3>
+
+      <label>Functie:</label>
+      <input
+        type="text"
+        value={editData.functie}
+        onChange={(e) => setEditData({ ...editData, functie: e.target.value })}
+      />
+
+      <label>Contracttype:</label>
+      <select
+        value={editData.contract_type}
+        onChange={(e) => setEditData({ ...editData, contract_type: e.target.value })}
+      >
+        <option value="">-- Kies type --</option>
+        <option value="Stage">Stage</option>
+        <option value="Voltijds">Voltijds</option>
+        <option value="Deeltijds">Deeltijds</option>
+      </select>
+
+      <label>Beschrijving (synopsis):</label>
+      <textarea
+        value={editData.synopsis}
+        onChange={(e) => setEditData({ ...editData, synopsis: e.target.value })}
+      />
+
+      <div className="modal-buttons">
+        <button onClick={handleUpdateVacature}>Opslaan</button>
+        <button onClick={() => setShowModal(false)}>Annuleren</button>
+      </div>
+    </div>
+  </div>
+)}
 
       <Footer />
     </div>

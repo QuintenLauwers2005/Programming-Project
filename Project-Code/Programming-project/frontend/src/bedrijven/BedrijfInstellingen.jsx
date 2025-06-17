@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../Components/BedrijfNavBar';
 import Footer from '../Components/Footer';
+import LogoUploadForm from '../Components/LogoUpload';
 
 export default function BedrijfInstellingen() {
   const { id } = useParams(); // haalt bedrijf-id uit de URL
@@ -57,6 +58,10 @@ export default function BedrijfInstellingen() {
         <h2>Bedrijfgegevens aanpassen</h2>
         <p>Je kan hier de gegevens van <strong>{form.naam}</strong> aanpassen.</p>
       </section>
+
+      <div>
+    <LogoUploadForm />
+    </div>
 
       <form onSubmit={handleSubmit} style={{ maxWidth: '500px', margin: '0 auto' }}>
           <input 
