@@ -66,13 +66,27 @@
 }
 
 @media (max-width: 768px) {
+  .footer {
+    padding: 25px 15px 15px;
+  }
+
   .footer-content {
     flex-direction: column;
     align-items: center;
+    text-align: center;
+    gap: 0px; 
   }
 
   .footer-section {
     text-align: center;
+    width: 100%;
+    min-width: unset; 
+  }
+
+  .footer-section h4 {
+    font-size: 1rem;
+    margin-bottom: 0px; 
+    padding-bottom: 0px;
   }
 
   .social-icons {
@@ -82,5 +96,18 @@
   .footer-section ul {
     display: inline-block;
     text-align: center;
+  }
+
+  .footer-section ul li {
+    margin: 5px 0;
+  }
+
+  .footer-section p, .footer-section a {
+    font-size: 0.9rem;
+  }
+
+  .footer-bottom {
+    margin-top: 25px;
+    padding-top: 15px;
   }
 }
