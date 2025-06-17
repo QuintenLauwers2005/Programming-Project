@@ -126,7 +126,7 @@ export default function BedrijfBedrijfProfilePage() {
         onMouseOver={(e) => e.target.style.backgroundColor = '#0056b3'}
         onMouseOut={(e) => e.target.style.backgroundColor = '#007bff'}
       >
-        vacature aanmaken
+        Vacature aanmaken
       </button>
 
       <button
