@@ -442,7 +442,8 @@ app.get('/api/HomePageAantalen', (req, res) => {
     SELECT
       (SELECT COUNT(*) FROM bedrijf) AS bedrijf_aantal,
       (SELECT COUNT(*) FROM vacature) AS vacature_aantal,
-      (SELECT COUNT(*) FROM student) AS student_aantal
+      (SELECT COUNT(*) FROM student) AS student_aantal,
+      (SELECT COUNT(*) FROM speeddate) AS speeddate_aantal
   `
   db.query(sql, (err, results) => {
     if (err) return res.status(500).json({ error: err.message })
