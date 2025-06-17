@@ -252,7 +252,8 @@ app.get('/api/student/:id', (req, res) => {
       s.profiel_foto_url,
       v.id AS vaardigheid_id,
       v.naam AS vaardigheid_naam,
-      s.linkedin_url
+      s.linkedin_url,
+      s.bio
     FROM student s
     LEFT JOIN student_vaardigheid sv ON s.student_id = sv.student_id
     LEFT JOIN vaardigheid v ON sv.vaardigheid_id = v.id
@@ -279,6 +280,7 @@ app.get('/api/student/:id', (req, res) => {
       bio: results[0].bio,
       profielFotoUrl: results[0].profiel_foto_url,
       linkedinurl: results[0].linkedin_url,
+      bio:results[0].bio,
       vaardigheden: []
     };
 
