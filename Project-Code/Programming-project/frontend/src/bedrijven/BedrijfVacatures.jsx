@@ -185,7 +185,7 @@ export default function BedrijfVacatureLijst() {
             >
               <option value="">-- Kies type --</option>
               <option value="Stage">Stage</option>
-              <option value="Volltijds">Volltijds</option>
+              <option value="Voltijds">Voltijds</option>
               <option value="Deeltijds">Deeltijds</option>
             </select>
 
