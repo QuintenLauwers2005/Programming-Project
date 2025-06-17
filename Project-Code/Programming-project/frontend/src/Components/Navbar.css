@@ -227,3 +227,52 @@ font-size: 1.75rem;
     font-size: 1.3rem;
   }
 }
+
+.notif-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f8f9ff;
+  padding: 10px;
+  margin-bottom: 6px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: background-color 0.2s ease;
+}
+
+.notif-item:hover {
+  background-color: #eef1ff;
+}
+
+.notif-message {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #333;
+  word-break: break-word;
+  margin-right: 10px;
+}
+
+.remove-btn {
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s ease;
+}
+
+.remove-btn:hover {
+  color: #d11a2a;
+}
+
+.notif-indicator {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  z-index: 10;
+}
