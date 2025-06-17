@@ -44,7 +44,7 @@ export default function RegistratiePage() {
       </header>
 
       <section style={{ margin: '30px 0', textAlign: 'center' }}>
-        <h2>instellingen</h2>
+        <h2>Instellingen</h2>
         <p>Je kan hier jouw gegevens aanpassen.</p>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <UploadForm />
