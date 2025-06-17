@@ -333,9 +333,11 @@ app.get('/api/bedrijf/:id', (req, res) => {
       v.contract_type,
       v.synopsis,
       v.open,
-      b.url
+      b.url,
+      g.email
     FROM bedrijf b
     LEFT JOIN vacature v ON b.bedrijf_id = v.bedrijf_id
+    LEFT JOIN gebruiker g ON b.bedrijf_id = g.gebruiker_id
     WHERE b.bedrijf_id = ?
   `;
 
@@ -359,6 +361,7 @@ app.get('/api/bedrijf/:id', (req, res) => {
       logo_link: results[0].logo_link,
       url:results[0].url,
       aula:results[0].aula,
+      email:results[0].email,
       vacatures: []
     };
 
