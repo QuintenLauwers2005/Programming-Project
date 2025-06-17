@@ -116,15 +116,7 @@ export default function Bedrijfsagenda() {
 
               {/* Status wijzigen knoppen */}
               <div className="button-row">
-                <button
-                  className="status-button bevestig"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleStatus(afspraak.id, 'bevestigd');
-                  }}
-                >
-                  Bevestigen
-                </button>
+                
                 <button
                   className="status-button weiger"
                   onClick={async (e) => {
