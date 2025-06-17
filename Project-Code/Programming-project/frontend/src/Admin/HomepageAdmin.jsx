@@ -41,7 +41,7 @@ function HomePageAdmin() {
             route: '/AdminVacatureLijst'
         },
         {
-            aantal: '📅',
+            aantal:  stats?.speeddate_aantal,
             label: 'Speeddates Agenda',
             route: '/AdminAgenda'
         }
