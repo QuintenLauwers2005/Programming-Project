@@ -9,48 +9,16 @@ export default function AdminAgenda() {
   const [cancelId, setCancelId] = useState(null);
   const [tijdConfig, setTijdConfig] = useState({ beginuur: '', einduur: '' });
   const [formData, setFormData] = useState({ beginuur: '', einduur: '' });
-  const [locatieEdits, setLocatieEdits] = useState({});
-
-  //functie om locatie toe te passen
-  const handleLocatieChange = (id, value) => {
-  setLocatieEdits(prev => ({ ...prev, [id]: value }));
-};
-
-const handleLocatieSave = (id) => {
-  const nieuweLocatie = locatieEdits[id];
-  if (!nieuweLocatie) return;
-
-  fetch(`http://localhost:5000/api/speeddate/${id}/status`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ locatie: nieuweLocatie })
-  })
-    .then(res => {
-      if (!res.ok) throw new Error('Fout bij opslaan');
-      return res.json();
-    })
-    .then(() => {
-      setAfspraken(prev =>
-        prev.map(app => app.id === id ? { ...app, locatie: nieuweLocatie } : app)
-      );
-      alert('Locatie bijgewerkt');
-    })
-    .catch(err => {
-      console.error(err);
-      alert('Fout bij opslaan van locatie.');
-    });
-};
-
-
+  const [aulaEdits, setAulaEdits] = useState({});
 
   useEffect(() => {
-    // Afspraken ophalen
+    // Haal alle afspraken op
     fetch('http://localhost:5000/api/afspraken/all')
       .then(res => res.json())
       .then(data => setAfspraken(data))
       .catch(err => console.error('Fout bij ophalen van afspraken:', err));
 
-    // Tijdconfiguratie ophalen
+    // Haal huidige speeddate tijdconfig op
     fetch('http://localhost:5000/api/speeddate-config')
       .then(res => res.json())
       .then(data => {
@@ -60,46 +28,90 @@ const handleLocatieSave = (id) => {
       .catch(err => console.error('Fout bij ophalen tijdsconfiguratie:', err));
   }, []);
 
+  // Aula per bedrijf wijzigen input handler
+  const handleAulaChange = (bedrijfId, value) => {
+    setAulaEdits(prev => ({ ...prev, [bedrijfId]: value }));
+  };
+
+  // Aula opslaan, update backend en refresh afsprakenlijst
+  const handleAulaSave = (bedrijfId) => {
+    const nieuweAula = aulaEdits[bedrijfId];
+    if (!nieuweAula) {
+      alert('Voer een geldige aula in.');
+      return;
+    }
+
+    fetch(`http://localhost:5000/api/bedrijf/${bedrijfId}/aula`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ aula: nieuweAula }),
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Fout bij opslaan aula');
+        return res.json();
+      })
+      .then(() => {
+        alert('Aula succesvol bijgewerkt. Locaties zijn automatisch aangepast.');
+        // Nieuwe data ophalen
+        return fetch('http://localhost:5000/api/afspraken/all')
+          .then(res => res.json())
+          .then(setAfspraken);
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Fout bij opslaan van aula.');
+      });
+  };
+
+  // Annuleren bevestigen
   const handleCancelConfirm = (id) => setCancelId(id);
 
   const confirmCancel = () => {
     fetch(`http://localhost:5000/api/speeddate/${cancelId}`, { method: 'DELETE' })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('Fout bij annuleren');
+        return res.json();
+      })
       .then(() => {
         setAfspraken(prev => prev.filter(app => app.id !== cancelId));
         setCancelId(null);
       })
       .catch(err => {
-        console.error('Fout bij annuleren van afspraak:', err);
+        console.error(err);
+        alert('Fout bij annuleren van afspraak');
         setCancelId(null);
       });
   };
 
   const closeCancelModal = () => setCancelId(null);
 
+  // Tijdconfiguratie form handlers
   const handleFormChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSaveTijden = () => {
     if (!formData.beginuur || !formData.einduur) {
-      alert('Vul beide tijden in.');
+      alert('Vul zowel begin- als einduur in.');
       return;
     }
 
     fetch('http://localhost:5000/api/speeddate-config', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(formData),
     })
-      .then(res => res.json())
-      .then(data => {
-        alert('Tijdschema succesvol aangepast.');
+      .then(res => {
+        if (!res.ok) throw new Error('Fout bij opslaan tijdconfig');
+        return res.json();
+      })
+      .then(() => {
+        alert('Tijdschema succesvol aangepast');
         setTijdConfig(formData);
       })
       .catch(err => {
-        console.error('Fout bij opslaan tijdconfig:', err);
-        alert('Opslaan mislukt.');
+        console.error(err);
+        alert('Opslaan tijdschema mislukt');
       });
   };
 
@@ -107,14 +119,13 @@ const handleLocatieSave = (id) => {
     <div>
       <Navbar />
       <div className="page">
-
         <button className="top-button" onClick={() => setShowInfo(true)}>
           Hoe speeddate reserveren?
         </button>
 
-        {/* ⏰ Tijdconfiguratie formulier */}
+        {/* Tijdconfiguratie */}
         <div className="time-settings">
-          <h3>speeddate uren aanpassen</h3>
+          <h3>Speeddate uren aanpassen</h3>
           <label>Beginuur:</label>
           <input
             type="time"
@@ -129,36 +140,50 @@ const handleLocatieSave = (id) => {
             value={formData.einduur}
             onChange={handleFormChange}
           />
-          <button onClick={handleSaveTijden} className="save-button">Opslaan</button>
+          <button onClick={handleSaveTijden} className="save-button">
+            Opslaan
+          </button>
         </div>
 
-        {/* 🗓️ Afsprakenlijst */}
+        {/* Afsprakenlijst */}
         {afspraken.length > 0 ? (
-          afspraken.map(afspraak => (
-            <div key={afspraak.id} className="card">
-              <div className="time">{afspraak.time}</div>
-              <div className="company">
-                {afspraak.voornaam} {afspraak.naam} — {afspraak.bedrijf_naam}
+          afspraken.map((afspraak) => {
+            const bedrijfId = afspraak.bedrijf_id;
+            // Huidige aula in de input: eerst uit edits, anders locatie uit afspraak
+            const huidigeAula = aulaEdits[bedrijfId] ?? afspraak.locatie;
+
+            return (
+              <div key={afspraak.id} className="card">
+                <div className="time">{afspraak.time}</div>
+                <div className="company">
+                  {afspraak.voornaam} {afspraak.naam} — {afspraak.bedrijf_naam}
+                </div>
+
+                <div className="lokaal">
+                  <input
+                    type="text"
+                    value={huidigeAula}
+                    onChange={(e) => handleAulaChange(bedrijfId, e.target.value)}
+                    style={{ padding: '4px', width: '150px' }}
+                  />
+                  <button
+                    onClick={() => handleAulaSave(bedrijfId)}
+                    className="save-button"
+                    style={{ marginLeft: '10px' }}
+                  >
+                    Opslaan
+                  </button>
+                </div>
+
+                <button
+                  className="cancel-button"
+                  onClick={() => handleCancelConfirm(afspraak.id)}
+                >
+                  Annuleren
+                </button>
               </div>
-              <div className="lokaal">
-               <input
-                type="text"
-                value={locatieEdits[afspraak.id] ?? afspraak.locatie}
-                onChange={(e) => handleLocatieChange(afspraak.id, e.target.value)}
-                style={{ padding: '4px', width: '150px' }}
-              />
-              <button onClick={() => handleLocatieSave(afspraak.id)} className="save-button">
-                Opslaan
-              </button>
-              </div>
-              <button
-                className="cancel-button"
-                onClick={() => handleCancelConfirm(afspraak.id)}
-              >
-                Annuleren
-              </button>
-            </div>
-          ))
+            );
+          })
         ) : (
           <div className="no-appointments">
             <p>Geen afspraken gevonden.</p>
@@ -166,7 +191,7 @@ const handleLocatieSave = (id) => {
         )}
       </div>
 
-      {/* ℹ️ Info Modal */}
+      {/* Info modal */}
       {showInfo && (
         <div className="modal-overlay">
           <div className="modal">
@@ -179,7 +204,7 @@ const handleLocatieSave = (id) => {
         </div>
       )}
 
-      {/* ❌ Annulatiebevestiging */}
+      {/* Annuleerbevestiging */}
       {cancelId && (
         <div className="modal-overlay">
           <div className="modal">
