@@ -31,9 +31,15 @@ function Footer() {
         <div className="footer-section">
           <h4>Volg ons</h4>
           <div className="social-icons">
-            <a href="https://www.linkedin.com/school/ehb/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-            <a href="https://www.instagram.com/ehogeschool/" target="_blank" rel="noopener noreferrer">Instagram</a>
-          </div>
+  <ul>
+    <li>
+      <a href="https://www.linkedin.com/school/ehb/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </li>
+    <li>
+      <a href="https://www.instagram.com/ehogeschool/" target="_blank" rel="noopener noreferrer">Instagram</a>
+    </li>
+  </ul>
+</div>
         </div>
       </div>
 
