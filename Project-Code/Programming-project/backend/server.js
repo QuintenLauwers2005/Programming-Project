@@ -259,7 +259,8 @@ app.get('/api/student/:id', (req, res) => {
       s.linkedin_url,
       s.bio,
       s.adres,
-      s.specialisatie
+      s.specialisatie,
+      s.telefoon
     FROM student s
     LEFT JOIN student_vaardigheid sv ON s.student_id = sv.student_id
     LEFT JOIN vaardigheid v ON sv.vaardigheid_id = v.id
@@ -288,6 +289,7 @@ app.get('/api/student/:id', (req, res) => {
       linkedinurl: results[0].linkedin_url,
       bio: results[0].bio,
       specialisatie:results[0].specialisatie,
+      telefoon: results[0].telefoon,
       vaardigheden: []
     };
 
@@ -306,7 +308,7 @@ app.get('/api/student/:id', (req, res) => {
 
 //bedrijven ophalen
 app.get('/api/bedrijven', (req, res) => {
-  const sql = `SELECT bedrijf_id AS id, naam, logo_link FROM bedrijf`;
+  const sql = `SELECT bedrijf_id AS id, naam, logo_link, locatie FROM bedrijf`;
 
   db.query(sql, (err, results) => {
     if (err) {
@@ -326,6 +328,7 @@ app.get('/api/bedrijf/:id', (req, res) => {
       b.bedrijf_id AS id,
       b.naam,
       b.locatie,
+      b.aula,
       b.vertegenwoordiger,
       b.telefoon,
       b.logo_link,
@@ -334,9 +337,11 @@ app.get('/api/bedrijf/:id', (req, res) => {
       v.contract_type,
       v.synopsis,
       v.open,
-      b.url
+      b.url,
+      g.email
     FROM bedrijf b
     LEFT JOIN vacature v ON b.bedrijf_id = v.bedrijf_id
+    LEFT JOIN gebruiker g ON b.bedrijf_id = g.gebruiker_id
     WHERE b.bedrijf_id = ?
   `;
 
@@ -359,6 +364,8 @@ app.get('/api/bedrijf/:id', (req, res) => {
       telefoon: results[0].telefoon,
       logo_link: results[0].logo_link,
       url:results[0].url,
+      aula:results[0].aula,
+      email:results[0].email,
       vacatures: []
     };
 
@@ -382,15 +389,15 @@ app.get('/api/bedrijf/:id', (req, res) => {
 // PUT: Bedrijf bijwerken
 app.put('/api/bedrijf/:id', (req, res) => {
   const bedrijfId = req.params.id;
-  const { naam, locatie, vertegenwoordiger, telefoon, url } = req.body;
+  const { naam, locatie, vertegenwoordiger, telefoon, url, aula } = req.body;
 
   const sql = `
     UPDATE bedrijf 
-    SET naam = ?, locatie = ?, vertegenwoordiger = ?, telefoon = ?, url = ?
+    SET naam = ?, locatie = ?, vertegenwoordiger = ?, telefoon = ?, url = ?, aula = ?
     WHERE bedrijf_id = ?
   `;
 
-  const values = [naam, locatie, vertegenwoordiger, telefoon, url, bedrijfId];
+  const values = [naam, locatie, vertegenwoordiger, telefoon, url, aula, bedrijfId];
 
   db.query(sql, values, (err, result) => {
     if (err) {
@@ -406,18 +413,19 @@ app.put('/api/bedrijf/:id', (req, res) => {
   });
 });
 
+
 // PUT: student bijwerken
 app.put('/api/student/:id', (req, res) => {
   const studentId = req.params.id;
-  const { voornaam, naam, email, adres, specialisatie, linkedin,bio } = req.body;
+  const { voornaam, naam, email, adres, specialisatie, linkedin, bio, telefoon } = req.body;
 
   const sql = `
     UPDATE student 
-    SET voornaam = ?, naam = ?, email = ?, adres = ?, specialisatie = ?, linkedin_url = ?, bio = ?
+    SET voornaam = ?, naam = ?, email = ?, adres = ?, specialisatie = ?, linkedin_url = ?, bio = ?, telefoon = ?
     WHERE student_id = ?
   `;
 
-  const values = [voornaam, naam, email, adres, specialisatie, linkedin, bio, studentId];
+  const values = [voornaam, naam, email, adres, specialisatie, linkedin, bio, telefoon, studentId];
 
   db.query(sql, values, (err, result) => {
     if (err) {
@@ -1075,5 +1083,24 @@ app.patch('/api/meldingen/lezen/:gebruikerId', (req, res) => {
   db.query(sql, [gebruikerId], (err, result) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json({ success: true, updated: result.affectedRows });
+  });
+});
+
+app.get('/api/bedrijf/:id/aula', (req, res) => {
+  const bedrijfId = req.params.id;
+
+  const sql = `SELECT aula FROM bedrijf WHERE bedrijf_id = ?`;
+
+  db.query(sql, [bedrijfId], (err, results) => {
+    if (err) {
+      console.error('Fout bij ophalen van aula:', err);
+      return res.status(500).json({ error: 'Databasefout' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Bedrijf niet gevonden' });
+    }
+
+    res.json({ aula: results[0].aula });
   });
 });
