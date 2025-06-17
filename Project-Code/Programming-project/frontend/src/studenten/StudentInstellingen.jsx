@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../Components/Footer';
 import Navbar from '../Components/StudentNavbar';
@@ -8,33 +8,95 @@ import axios from 'axios';
 
 export default function RegistratiePage() {
   const navigate = useNavigate();
-  const [skills, setSkills] = useState([]);
-  const [inputSkill, setInputSkill] = useState("");
-
   const gebruikerId = localStorage.getItem('gebruiker_id');
+
+  const [form, setForm] = useState({
+    voornaam: '',
+    naam: '',
+    email: '',
+    adres: '',
+    specialisatie: '',
+    linkedin: '',
+    bio: '',
+    skills: []
+  });
+
+  const [inputSkill, setInputSkill] = useState('');
+
+  useEffect(() => {
+    axios.get(`http://localhost:5000/api/student/${gebruikerId}`)
+      .then(res => {
+        const fullName = res.data.name || '';
+        const [voornaam, ...rest] = fullName.trim().split(' ');
+        const naam = rest.join(' ');
+
+        const skills = res.data.vaardigheden?.map(v => v.naam) || [];
+
+        setForm({
+          voornaam: voornaam || '',
+          naam: naam || '',
+          email: res.data.email || '',
+          adres: res.data.adres || '',
+          specialisatie: res.data.specialisatie || '',
+          linkedin: res.data.linkedinurl || '',
+          bio: res.data.bio || '',
+          skills: skills
+        });
+      })
+      .catch(err => console.error('Fout bij ophalen studentgegevens:', err));
+  }, [gebruikerId]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+  };
 
   const handleAddSkill = (e) => {
     e.preventDefault();
-    if (inputSkill.trim() && !skills.includes(inputSkill.trim())) {
-      const newSkills = [...skills, inputSkill.trim()];
-      setSkills(newSkills);
-      setInputSkill("");
-
-      // Opslaan naar backend
-      axios.post(`http://localhost:5000/api/student/${gebruikerId}/skills`, { skills: newSkills })
-        .then(() => console.log('Vaardigheden opgeslagen'))
-        .catch((err) => console.error('Fout bij opslaan vaardigheden:', err));
+    const trimmed = inputSkill.trim();
+    if (trimmed && !form.skills.includes(trimmed)) {
+      setForm(prev => ({
+        ...prev,
+        skills: [...prev.skills, trimmed]
+      }));
+      setInputSkill('');
     }
   };
 
   const handleRemoveSkill = (skillToRemove) => {
-    const updatedSkills = skills.filter(skill => skill !== skillToRemove);
-    setSkills(updatedSkills);
+    setForm(prev => ({
+      ...prev,
+      skills: prev.skills.filter(skill => skill !== skillToRemove)
+    }));
+  };
 
-    // Bijwerken backend
-    axios.post(`http://localhost:5000/api/student/${gebruikerId}/skills`, { skills: updatedSkills })
-      .then(() => console.log('Vaardigheden bijgewerkt'))
-      .catch((err) => console.error('Fout bij bijwerken vaardigheden:', err));
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const volledigeNaam = `${form.voornaam} ${form.naam}`.trim();
+
+    try {
+      // 1. Update studentinfo (zonder skills)
+      await axios.put(`http://localhost:5000/api/student/${gebruikerId}`, {
+        name: volledigeNaam,
+        email: form.email,
+        adres: form.adres,
+        specialisatie: form.specialisatie,
+        linkedin_url: form.linkedin,
+        bio: form.bio
+      });
+
+      // 2. Update skills via aparte endpoint
+      await axios.put(`http://localhost:5000/api/student/${gebruikerId}/skills`, {
+        skills: form.skills
+      });
+
+      alert('Gegevens succesvol opgeslagen');
+      navigate('/StudentProfilePage');
+    } catch (err) {
+      console.error('Fout bij opslaan studentgegevens of skills:', err);
+      alert('Er is een fout opgetreden bij het opslaan');
+    }
   };
 
   return (
@@ -53,13 +115,55 @@ export default function RegistratiePage() {
       </section>
 
       <section style={{ maxWidth: '400px', margin: '0 auto', padding: '20px' }}>
-        <form>
-          <input type="email" placeholder="Email" style={inputStyle} required />
-          <input type="password" placeholder="Wachtwoord" style={inputStyle} required />
-          <input type="text" placeholder="Adres" style={inputStyle} required />
-          <input type="text" placeholder="Specialisatie" style={inputStyle} required />
-          <input type="text" placeholder="LinkedIn" style={inputStyle} />
+        <form onSubmit={handleSubmit}>
+          <input type="hidden" name="voornaam" value={form.voornaam} />
+          <input type="hidden" name="naam" value={form.naam} />
 
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={handleInputChange}
+            style={inputStyle}
+            required
+          />
+          <input
+            type="text"
+            name="adres"
+            placeholder="Adres"
+            value={form.adres}
+            onChange={handleInputChange}
+            style={inputStyle}
+            required
+          />
+          <input
+            type="text"
+            name="specialisatie"
+            placeholder="Specialisatie"
+            value={form.specialisatie}
+            onChange={handleInputChange}
+            style={inputStyle}
+            required
+          />
+          <input
+            type="text"
+            name="linkedin"
+            placeholder="LinkedIn"
+            value={form.linkedin}
+            onChange={handleInputChange}
+            style={inputStyle}
+          />
+          <textarea
+            name="bio"
+            placeholder="Biografie"
+            value={form.bio}
+            onChange={handleInputChange}
+            rows={4}
+            style={{ ...inputStyle, resize: 'vertical' }}
+          />
+
+          {/* Skills */}
           <div style={{ marginBottom: '15px' }}>
             <label>Vaardigheden</label>
             <div style={{ display: 'flex', marginTop: '5px' }}>
@@ -77,7 +181,7 @@ export default function RegistratiePage() {
               </button>
             </div>
             <ul style={{ listStyle: 'none', padding: 0, marginTop: '10px' }}>
-              {skills.map(skill => (
+              {form.skills.map(skill => (
                 <li key={skill} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px', background: '#f1f1f1', padding: '5px 10px', borderRadius: '4px' }}>
                   {skill}
                   <button type="button" onClick={() => handleRemoveSkill(skill)} style={{ background: 'none', border: 'none', color: '#e00', cursor: 'pointer' }}>✕</button>
