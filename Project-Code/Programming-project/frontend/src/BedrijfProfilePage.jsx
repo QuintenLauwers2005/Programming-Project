@@ -78,12 +78,12 @@ export default function BedrijfProfilePage() {
   };
 
   if (loading) {
-    return <div style={{ textAlign: 'center', padding: '20px' }}><h2>Laden...</h2></div>;
+    return <div style={{ textAlign: 'center' }}><h2>Laden...</h2></div>;
   }
 
   if (error) {
     return (
-      <div style={{ textAlign: 'center', color: 'red', padding: '20px' }}>
+      <div style={{ textAlign: 'center', color: 'red' }}>
         <h2>{error}</h2>
         <button onClick={() => navigate('/BedrijvenLijst')} style={{ marginTop: '10px' }}>Terug naar bedrijvenlijst</button>
       </div>
@@ -92,7 +92,7 @@ export default function BedrijfProfilePage() {
 
   if (!companyData) {
     return (
-      <div style={{ textAlign: 'center', padding: '20px' }}>
+      <div style={{ textAlign: 'center' }}>
         <h2>Geen bedrijf gevonden</h2>
         <button onClick={() => navigate('/BedrijvenLijst')} style={{ marginTop: '10px' }}>Terug naar bedrijvenlijst</button>
       </div>
@@ -100,9 +100,9 @@ export default function BedrijfProfilePage() {
   }
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
+    <div style={{ fontFamily: 'Arial, sans-serif' }}>
       <Navbar />
-
+      <div style={{padding:'20px'}}>
       <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee', marginTop:'70px' }}>
         <img 
           src={`http://localhost:5000${companyData.logo_link}`}       
@@ -280,6 +280,7 @@ export default function BedrijfProfilePage() {
           </div>
         </div>
       )}
-
+      </div>
+<Footer />
 </div>
 )};
