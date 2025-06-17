@@ -117,7 +117,7 @@ export default function StudentVacatureLijst() {
       student_id: localStorage.getItem("gebruiker_id"),
       bedrijf_id: selectedVacature.bedrijf_id,
       tijdstip: selectedTime + ':00',
-      locatie: 'Aula 1',
+      locatie: selectedVacature.aula,
       status: 'bevestigd'
     })
     .then(() => {
