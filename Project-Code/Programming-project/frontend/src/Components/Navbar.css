@@ -265,3 +265,14 @@ font-size: 1.75rem;
 .remove-btn:hover {
   color: #d11a2a;
 }
+
+.notif-indicator {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  z-index: 10;
+}
