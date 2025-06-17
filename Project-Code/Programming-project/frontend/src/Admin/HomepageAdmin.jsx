@@ -12,7 +12,7 @@ function HomePageAdmin() {
     const [error, setError] = useState(false)
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/HomePageAantallen')
+        axios.get('http://localhost:5000/api/HomePageAantalen')
             .then(response => {
                 setStats(response.data)  // verwacht { bedrijf_aantal, vacature_aantal, student_aantal }
                 setLoading(false)
