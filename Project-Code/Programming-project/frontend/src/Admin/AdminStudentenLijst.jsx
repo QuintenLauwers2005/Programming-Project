@@ -48,16 +48,10 @@ function AdminStudentenLijst() {
       <Navbar />
 
       <div style={{ padding: '2rem', maxWidth: '900px', margin: '0 auto' }}>
-        <h1 style={{ textAlign: 'center', marginBottom: '2rem' }}>Studentenlijst</h1>
+        <h1 id='bedrijven-titel'>Studentenlijst</h1>
 
         {/* 🔍 Filters */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '1rem',
-          marginBottom: '2rem',
-          flexWrap: 'wrap'
-        }}>
+        <div className='filter-form'>
           <input
             type="text"
             name="naam"
