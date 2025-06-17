@@ -122,7 +122,7 @@ function Navbar() {
       </div>
 
       <div className="nav-bar-desktop">
-        <button onClick={() => navigate('/HomePageAdmin')}>Home</button>
+        <button onClick={() => navigate('/HomePageAdmin')}>Dashboard</button>
         <button onClick={() => navigate('/AdminAgenda')}>Speeddates</button>
         <button onClick={() => navigate('/AdminBedrijvenLijst')}>Bedrijven</button>
         <button onClick={() => navigate('/AdminStudentenLijst')}>Studenten</button>
