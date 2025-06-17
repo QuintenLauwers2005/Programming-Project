@@ -86,10 +86,36 @@ function Navbar() {
         <div className="top-bar-right">
           <div className="desktop-only">
             <div ref={buttonRef} className="navigatie-button-popout">
-              <button className="notificatie-btn" onClick={() => setShowNotifications(p => !p)}>
-                🔔
-                {meldingen.some(m => !m.gelezen) && <span className="notif-indicator"></span>}
-              </button>
+              <button
+  className="notificatie-btn"
+  onClick={async () => {
+    const gebruikerId = localStorage.getItem("gebruiker_id");
+    const willOpen = !showNotifications;
+
+    setShowNotifications(willOpen);
+
+    if (willOpen && meldingen.some(m => m.gelezen === 0)) {
+      try {
+        await fetch(`http://localhost:5000/api/meldingen/lezen/${gebruikerId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        // Re-fetch meldingen to update state and remove red dot
+        const res = await fetch(`http://localhost:5000/api/meldingen/${gebruikerId}`);
+        const updated = await res.json();
+        setMeldingen(updated);
+      } catch (err) {
+        console.error("Fout bij bijwerken meldingen:", err);
+      }
+    }
+  }}
+>
+  🔔
+  {meldingen.some(m => m.gelezen === 0) && (
+    <span className="notif-indicator"></span>
+  )}
+</button>
               {showNotifications && (
                 <div className="notif-popout" ref={popoutRef}>
                   <ul>

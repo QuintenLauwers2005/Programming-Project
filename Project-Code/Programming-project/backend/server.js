@@ -1058,3 +1058,18 @@ app.post('/api/upload/logo', upload.single('logo'), (req, res) => {
     });
   });
 });
+
+app.patch('/api/meldingen/lezen/:gebruikerId', (req, res) => {
+  const gebruikerId = req.params.gebruikerId;
+
+  const sql = `
+    UPDATE melding 
+    SET gelezen = 1 
+    WHERE gebruiker_id = ? AND gelezen = 0
+  `;
+
+  db.query(sql, [gebruikerId], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ success: true, updated: result.affectedRows });
+  });
+});
