@@ -119,10 +119,6 @@ export default function AdminAgenda() {
     <div>
       <Navbar />
       <div className="page">
-        <button className="top-button" onClick={() => setShowInfo(true)}>
-          Hoe speeddate reserveren?
-        </button>
-
         {/* Tijdconfiguratie */}
         <div className="time-settings">
           <h3>Speeddate uren aanpassen</h3>
