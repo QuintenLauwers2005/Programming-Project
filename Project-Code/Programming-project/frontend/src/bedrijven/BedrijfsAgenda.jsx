@@ -13,7 +13,7 @@ export default function Bedrijfsagenda() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!gebruiker_id) return; // veiligheid
+    if (!gebruiker_id) return;
 
     fetch(`http://localhost:5000/api/afspraken?gebruiker_id=${gebruiker_id}`)
       .then(res => res.json())
@@ -55,9 +55,7 @@ export default function Bedrijfsagenda() {
     setCancelId(null);
   };
 
-  const toggleStatus = async (id, huidigeStatus) => {
-    const nieuweStatus = huidigeStatus === 'bevestigd' ? 'geweigerd' : 'bevestigd';
-
+  const toggleStatus = async (id, nieuweStatus) => {
     try {
       await axios.put(`http://localhost:5000/api/speeddate/${id}/status`, { status: nieuweStatus });
       setAfspraken(prev =>
@@ -74,57 +72,67 @@ export default function Bedrijfsagenda() {
     }
   };
 
+  const handleCardClick = (student_id) => {
+    if (student_id) {
+      navigate(`/student-info/${student_id}`);
+    } else {
+      alert('Geen student_id beschikbaar voor deze afspraak.');
+    }
+  };
+
   return (
     <div>
       <Navbar notificatie={notificatie} />
       <div className="page">
         {afspraken.length > 0 ? (
-          afspraken.map(afspraak => {
-            console.log('afspraak:', afspraak); // Debug: check wat er in afspraak zit
-            return (
-              <div key={afspraak.id} className="card">
-                <div className="time">{afspraak.time}</div>
-                <div className="company">
-                  {afspraak.voornaam} {afspraak.naam} — {afspraak.bedrijf_naam}
-                </div>
-                <div className="room">{afspraak.locatie}</div>
-                <div>Status: {afspraak.status}</div>
+          afspraken.map(afspraak => (
+            <div
+              key={afspraak.id}
+              className="card"
+              onClick={() => handleCardClick(afspraak.student_id)}
+              style={{ cursor: 'pointer' }}
+            >
+              <div className="time">{afspraak.time}</div>
+              <div className="company">
+                {afspraak.voornaam} {afspraak.naam} — {afspraak.bedrijf_naam}
+              </div>
+              <div className="room">{afspraak.locatie}</div>
+              <div>Status: {afspraak.status}</div>
 
-                {/* Toggle status */}
+              {/* Status wijzigen knoppen */}
+              <div className="button-row">
                 <button
-                  className="weigenKnopAdmin"
-                  onClick={() => toggleStatus(afspraak.id, afspraak.status)}
-                >
-                  {afspraak.status === 'bevestigd' ? 'Weigeren' : 'Bevestigen'}
-                </button>
-
-                {/* Bekijk studentprofiel */}
-                <button
-                  className="view-button"
-                  onClick={() => {
-                    if (afspraak.student_id) {
-                      console.log(afspraak.student_id);
-                      
-                      navigate(`/student-info/${afspraak.student_id}`);
-
-                    } else {
-                      alert('Geen student_id beschikbaar voor deze afspraak.');
-                    }
+                  className="status-button bevestig"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleStatus(afspraak.id, 'bevestigd');
                   }}
                 >
-                  Bekijk studentprofiel
+                  Bevestigen
                 </button>
-
-                {/* Annuleren knop */}
                 <button
-                  className="cancel-button"
-                  onClick={() => handleCancelConfirm(afspraak.id)}
+                  className="status-button weiger"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleStatus(afspraak.id, 'geweigerd');
+                  }}
                 >
-                  Annuleren
+                  Weigeren
                 </button>
               </div>
-            );
-          })
+
+              {/* Annuleer knop */}
+              <button
+                className="cancel-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCancelConfirm(afspraak.id);
+                }}
+              >
+                Annuleren
+              </button>
+            </div>
+          ))
         ) : (
           <div className="no-appointments">
             <p>Geen afspraken gevonden.</p>
@@ -132,7 +140,7 @@ export default function Bedrijfsagenda() {
         )}
       </div>
 
-      {/* Annulatie bevestiging */}
+      {/* Annulatie bevestiging modal */}
       {cancelId && (
         <div className="modal-overlay">
           <div className="modal">
