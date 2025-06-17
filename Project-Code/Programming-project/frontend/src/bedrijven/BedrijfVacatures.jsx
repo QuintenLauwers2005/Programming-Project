@@ -189,7 +189,7 @@ export default function BedrijfVacatureLijst() {
               <option value="Deeltijds">Deeltijds</option>
             </select>
 
-            <label>Beschrijving (synopsis):</label>
+            <label> Beschrijving (synopsis):</label>
             <textarea
               value={editVacature.synopsis}
               onChange={(e) => setEditVacature({ ...editVacature, synopsis: e.target.value })}
