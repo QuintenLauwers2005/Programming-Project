@@ -162,7 +162,7 @@ app.get('/api/vacatures', (req, res) => {
   const offset = (page - 1) * limit;
 
   const sql = `
-    SELECT v.vacature_id, b.naam AS bedrijf, v.functie, v.contract_type, v.synopsis, v.open, b.logo_link, b.bedrijf_id
+    SELECT v.vacature_id, b.naam AS bedrijf, v.functie, v.contract_type, v.synopsis, v.open, b.logo_link, b.bedrijf_id,b.aula
     FROM vacature v
     JOIN bedrijf b ON v.bedrijf_id = b.bedrijf_id
     LIMIT ? OFFSET ?
@@ -265,7 +265,7 @@ app.put('/api/vacatures/:id', (req, res) => {
 });
 
 
-//vacatures verwijdfer
+//vacatures verwijderen
 
 app.delete('/api/vacatures/:id', (req, res) => {
   const { id } = req.params;
@@ -509,18 +509,31 @@ app.get('/api/bedrijf/:id', (req, res) => {
 });
 
 // PUT: Bedrijf bijwerken
-app.put('/api/bedrijf/:id', (req, res) => {
+app.put('/api/bedrijf/:id', (req, res) => { 
   const bedrijfId = req.params.id;
   const { naam, locatie, vertegenwoordiger, telefoon, url, aula } = req.body;
 
-  const sql = `
-    UPDATE bedrijf 
-    SET naam = ?, locatie = ?, vertegenwoordiger = ?, telefoon = ?, url = ?, aula = ?
-    WHERE bedrijf_id = ?
-  `;
+  let sql;
+  let values;
 
-  const values = [naam, locatie, vertegenwoordiger, telefoon, url, aula, bedrijfId];
+  // Bepaal welke SQL en values worden gebruikt, afhankelijk van of aula is meegegeven
+  if (aula !== undefined && aula !== null) {
+    sql = `
+      UPDATE bedrijf 
+      SET naam = ?, locatie = ?, vertegenwoordiger = ?, telefoon = ?, url = ?, aula = ?
+      WHERE bedrijf_id = ?
+    `;
+    values = [naam, locatie, vertegenwoordiger, telefoon, url, aula, bedrijfId];
+  } else {
+    sql = `
+      UPDATE bedrijf 
+      SET naam = ?, locatie = ?, vertegenwoordiger = ?, telefoon = ?, url = ?
+      WHERE bedrijf_id = ?
+    `;
+    values = [naam, locatie, vertegenwoordiger, telefoon, url, bedrijfId];
+  }
 
+  // Update bedrijf
   db.query(sql, values, (err, result) => {
     if (err) {
       console.error('Fout bij bijwerken bedrijf:', err);
@@ -531,9 +544,27 @@ app.put('/api/bedrijf/:id', (req, res) => {
       return res.status(404).json({ error: 'Bedrijf niet gevonden' });
     }
 
-    res.json({ message: 'Bedrijf succesvol bijgewerkt' });
+    // Als aula is meegegeven, update dan ook de locatie in speeddate
+    if (aula !== undefined && aula !== null) {
+      const sqlSpeeddate = `
+        UPDATE speeddate
+        SET locatie = ?
+        WHERE bedrijf_id = ?
+      `;
+      db.query(sqlSpeeddate, [aula, bedrijfId], (err2, result2) => {
+        if (err2) {
+          console.error('Fout bij bijwerken speeddate locatie:', err2);
+          return res.status(500).json({ error: 'Databasefout bij speeddate update' });
+        }
+        return res.json({ message: 'Bedrijf en speeddate locatie succesvol bijgewerkt' });
+      });
+    } else {
+      return res.json({ message: 'Bedrijf succesvol bijgewerkt' });
+    }
   });
 });
+
+
 
 
 // PUT: student bijwerken
@@ -692,7 +723,8 @@ app.get('/api/afspraken/all', (req, res) => {
       st.naam,
       s.locatie,
       b.naam AS bedrijf_naam,
-      s.status
+      s.status,
+      b.bedrijf_id
     FROM speeddate s
     LEFT JOIN student st ON s.student_id = st.student_id
     JOIN bedrijf b ON s.bedrijf_id = b.bedrijf_id
@@ -1225,5 +1257,50 @@ app.get('/api/bedrijf/:id/aula', (req, res) => {
     }
 
     res.json({ aula: results[0].aula });
+  });
+});
+
+app.put('/api/bedrijf/:id/aula', (req, res) => {
+  const bedrijfId = req.params.id;
+  const { aula } = req.body;
+
+  if (!aula) {
+    return res.status(400).json({ error: 'Aula is vereist' });
+  }
+
+  // Update de aula in de bedrijf-tabel
+  const updateBedrijfQuery = `
+    UPDATE bedrijf 
+    SET aula = ? 
+    WHERE bedrijf_id = ?
+  `;
+
+  db.query(updateBedrijfQuery, [aula, bedrijfId], (err, result) => {
+    if (err) {
+      console.error('Fout bij bijwerken van bedrijf.aula:', err);
+      return res.status(500).json({ error: 'Databasefout bij bijwerken van bedrijf' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Bedrijf niet gevonden' });
+    }
+
+    // Update ook de locatie in speeddate-tabel naar de nieuwe aula
+    const updateSpeeddateQuery = `
+      UPDATE speeddate 
+      SET locatie = ?
+      WHERE bedrijf_id = ?
+    `;
+
+    db.query(updateSpeeddateQuery, [aula, bedrijfId], (err2, result2) => {
+      if (err2) {
+        console.error('Fout bij bijwerken van speeddate.locatie:', err2);
+        return res.status(500).json({ error: 'Databasefout bij bijwerken van speeddate' });
+      }
+
+      return res.json({
+        message: 'Aula succesvol bijgewerkt in bedrijf en locatie aangepast in speeddate',
+      });
+    });
   });
 });
