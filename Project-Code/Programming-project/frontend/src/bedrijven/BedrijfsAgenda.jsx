@@ -120,17 +120,6 @@ export default function Bedrijfsagenda() {
                   Weigeren
                 </button>
               </div>
-
-              {/* Annuleer knop */}
-              <button
-                className="cancel-button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleCancelConfirm(afspraak.id);
-                }}
-              >
-                Annuleren
-              </button>
             </div>
           ))
         ) : (
