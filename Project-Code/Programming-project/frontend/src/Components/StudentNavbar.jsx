@@ -35,10 +35,21 @@ function Navbar() {
     navigate(path);
   };
 
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate('/login');
-  };
+  const handleDeleteMelding = async (meldingId) => {
+  try {
+    const res = await fetch(`http://localhost:5000/api/meldingen/${meldingId}`, {
+      method: 'DELETE'
+    });
+
+    if (!res.ok) {
+      throw new Error('Verwijderen mislukt');
+    }
+
+    setMeldingen(prev => prev.filter(m => m.melding_id !== meldingId));
+  } catch (err) {
+    console.error('Fout bij verwijderen melding:', err);
+  }
+};
 
   // Effect voor het ophalen van meldingen
   useEffect(() => {
@@ -82,8 +93,21 @@ function Navbar() {
               {showNotifications && (
                 <div className="notif-popout" ref={popoutRef}>
                   <ul>
-                    {meldingen.length > 0 ? meldingen.map(m => <li key={m.melding_id}>{m.boodschap}</li>) : <li>Geen meldingen</li>}
-                  </ul>
+{meldingen.length > 0 ? (
+  meldingen.map((m) => (
+    <li key={m.melding_id} className="notif-item">
+      <span className="notif-message">{m.boodschap}</span>
+      <button
+  className="remove-btn"
+  onClick={() => handleDeleteMelding(m.melding_id)}
+>
+  ❌
+</button>
+    </li>
+  ))
+) : (
+  <li>Geen meldingen</li>
+)}                  </ul>
                 </div>
               )}
             </div>
