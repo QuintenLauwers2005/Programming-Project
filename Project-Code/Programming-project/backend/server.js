@@ -1076,3 +1076,22 @@ app.patch('/api/meldingen/lezen/:gebruikerId', (req, res) => {
     res.json({ success: true, updated: result.affectedRows });
   });
 });
+
+app.get('/api/bedrijf/:id/aula', (req, res) => {
+  const bedrijfId = req.params.id;
+
+  const sql = `SELECT aula FROM bedrijf WHERE bedrijf_id = ?`;
+
+  db.query(sql, [bedrijfId], (err, results) => {
+    if (err) {
+      console.error('Fout bij ophalen van aula:', err);
+      return res.status(500).json({ error: 'Databasefout' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Bedrijf niet gevonden' });
+    }
+
+    res.json({ aula: results[0].aula });
+  });
+});
