@@ -253,7 +253,9 @@ app.get('/api/student/:id', (req, res) => {
       v.id AS vaardigheid_id,
       v.naam AS vaardigheid_naam,
       s.linkedin_url,
-      s.bio
+      s.bio,
+      s.adres,
+      s.specialisatie
     FROM student s
     LEFT JOIN student_vaardigheid sv ON s.student_id = sv.student_id
     LEFT JOIN vaardigheid v ON sv.vaardigheid_id = v.id
@@ -277,10 +279,11 @@ app.get('/api/student/:id', (req, res) => {
       opleiding: results[0].opleiding,
       instelling: 'Erasmushogeschool Brussel',  // nog hardcoded
       afstudeerjaar: results[0].opleidingsjaar,
-      bio: results[0].bio,
+      adres: results[0].adres,
       profielFotoUrl: results[0].profiel_foto_url,
       linkedinurl: results[0].linkedin_url,
-      bio:results[0].bio,
+      bio: results[0].bio,
+      specialisatie:results[0].specialisatie,
       vaardigheden: []
     };
 
@@ -402,15 +405,15 @@ app.put('/api/bedrijf/:id', (req, res) => {
 // PUT: student bijwerken
 app.put('/api/student/:id', (req, res) => {
   const studentId = req.params.id;
-  const { voornaam, naam, email, adres, specialisatie, linkedin } = req.body;
+  const { voornaam, naam, email, adres, specialisatie, linkedin,bio } = req.body;
 
   const sql = `
     UPDATE student 
-    SET voornaam = ?, naam = ?, email = ?, adres = ?, specialisatie = ?, linkedin_url = ?
+    SET voornaam = ?, naam = ?, email = ?, adres = ?, specialisatie = ?, linkedin_url = ?, bio = ?
     WHERE student_id = ?
   `;
 
-  const values = [voornaam, naam, email, adres, specialisatie, linkedin, studentId];
+  const values = [voornaam, naam, email, adres, specialisatie, linkedin, bio, studentId];
 
   db.query(sql, values, (err, result) => {
     if (err) {
