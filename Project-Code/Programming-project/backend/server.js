@@ -304,7 +304,7 @@ app.get('/api/student/:id', (req, res) => {
 
 //bedrijven ophalen
 app.get('/api/bedrijven', (req, res) => {
-  const sql = `SELECT bedrijf_id AS id, naam, logo_link FROM bedrijf`;
+  const sql = `SELECT bedrijf_id AS id, naam, logo_link, locatie FROM bedrijf`;
 
   db.query(sql, (err, results) => {
     if (err) {
@@ -324,6 +324,7 @@ app.get('/api/bedrijf/:id', (req, res) => {
       b.bedrijf_id AS id,
       b.naam,
       b.locatie,
+      b.aula,
       b.vertegenwoordiger,
       b.telefoon,
       b.logo_link,
@@ -357,6 +358,7 @@ app.get('/api/bedrijf/:id', (req, res) => {
       telefoon: results[0].telefoon,
       logo_link: results[0].logo_link,
       url:results[0].url,
+      aula:results[0].aula,
       vacatures: []
     };
 
@@ -1074,5 +1076,24 @@ app.patch('/api/meldingen/lezen/:gebruikerId', (req, res) => {
   db.query(sql, [gebruikerId], (err, result) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json({ success: true, updated: result.affectedRows });
+  });
+});
+
+app.get('/api/bedrijf/:id/aula', (req, res) => {
+  const bedrijfId = req.params.id;
+
+  const sql = `SELECT aula FROM bedrijf WHERE bedrijf_id = ?`;
+
+  db.query(sql, [bedrijfId], (err, results) => {
+    if (err) {
+      console.error('Fout bij ophalen van aula:', err);
+      return res.status(500).json({ error: 'Databasefout' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Bedrijf niet gevonden' });
+    }
+
+    res.json({ aula: results[0].aula });
   });
 });

@@ -12,7 +12,8 @@ export default function AdminBedrijfInstellingen() {
     url: '',
     locatie: '',
     vertegenwoordiger: '',
-    telefoon: ''
+    telefoon: '',
+    aula: '',
   });
 
   useEffect(() => {
@@ -24,7 +25,8 @@ export default function AdminBedrijfInstellingen() {
           url: res.data.url || '',
           locatie: res.data.locatie || '',
           vertegenwoordiger: res.data.vertegenwoordiger || '',
-          telefoon: res.data.telefoon || ''
+          telefoon: res.data.telefoon || '',
+          aula: res.data.aula || ''
         });
       })
       .catch((err) => {
@@ -38,7 +40,14 @@ export default function AdminBedrijfInstellingen() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.put(`http://localhost:5000/api/bedrijf/${id}`, form)
+
+    // Maak een kopie van form en verwijder 'aula' als die leeg is
+    const updateData = { ...form };
+    if (!updateData.aula) {
+      delete updateData.aula;
+    }
+
+    axios.put(`http://localhost:5000/api/bedrijf/${id}`, updateData)
       .then(() => {
         alert("Gegevens succesvol bijgewerkt!");
       })
@@ -59,14 +68,14 @@ export default function AdminBedrijfInstellingen() {
       </section>
 
       <form onSubmit={handleSubmit} style={{ maxWidth: '500px', margin: '0 auto' }}>
-          <input 
+        <input 
           name="naam"
           type="text"
-          placeholder="naam"
+          placeholder="Naam"
           value={form.naam}
           onChange={handleChange}
           style={inputStyle}
-           />
+        />
         <input
           name="url"
           type="url"
@@ -89,15 +98,21 @@ export default function AdminBedrijfInstellingen() {
           onChange={handleChange}
           style={inputStyle}
         />
-       <input
-        name="telefoon"
-        type="tel"
-        placeholder="Telefoon"
-        value={form.telefoon}
-        onChange={handleChange}
-        style={inputStyle}
+        <input
+          name="telefoon"
+          type="tel"
+          placeholder="Telefoon"
+          value={form.telefoon}
+          onChange={handleChange}
+          style={inputStyle}
         />
-
+        <input
+          name="aula"
+          placeholder="Aula"
+          value={form.aula}
+          onChange={handleChange}
+          style={inputStyle}
+        />
 
         <button type="submit" style={buttonStyle}>Opslaan</button>
       </form>
