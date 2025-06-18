@@ -71,7 +71,7 @@ function Footer() {
           <div className="social-icons">
   <ul>
     <li>
-      <a href="https://www.linkedin.com/school/ehb/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="https://www.linkedin.com/school/erasmushogeschool-brussel/posts/?feedView=all" target="_blank" rel="noopener noreferrer">LinkedIn</a>
     </li>
     <li>
       <a href="https://www.instagram.com/ehogeschool/" target="_blank" rel="noopener noreferrer">Instagram</a>
