@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, UseCallback } from 'react';
 import '../Assets/Agenda.css';
 import Navbar from '../Components/BedrijfNavBar';
 import Footer from '../Components/Footer';
@@ -13,7 +13,7 @@ export default function Bedrijfsagenda() {
   const navigate = useNavigate();
 
   // 🔁 Functie om afspraken opnieuw op te halen
-  const fetchAfspraken = () => {
+  const fetchAfspraken = UseCallback (() => {
     fetch(`http://localhost:5000/api/afspraken?gebruiker_id=${gebruiker_id}`)
       .then(res => res.json())
       .then(data => {
@@ -25,18 +25,15 @@ export default function Bedrijfsagenda() {
         setNotificatie('❌ Fout bij ophalen afspraken');
         setTimeout(() => setNotificatie(null), 3000);
       });
-  };
+  }, [gebruiker_id]);
 
   // 🧠 Ophalen bij laden van component
   useEffect(() => {
     if (gebruiker_id) {
       fetchAfspraken();
     }
-  }, [gebruiker_id]);
+  }, [gebruiker_id, fetchAfspraken]);
 
-  const handleCancelConfirm = (id) => {
-    setCancelId(id);
-  };
 
   const confirmCancel = () => {
     fetch(`http://localhost:5000/api/speeddate/${cancelId}`, {
