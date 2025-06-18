@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import '../Assets/Agenda.css';
+import '../Components/Agenda.css';
 import Navbar from '../Components/BedrijfNavBar';
 import Footer from '../Components/Footer';
 import axios from 'axios';
