@@ -118,7 +118,7 @@ export default function Bedrijfsagenda() {
               <div className="button-row">
                 
                 <button
-                  className="status-button weiger"
+                  className="cancel-button"
                   onClick={async (e) => {
                     e.stopPropagation();
                     await toggleStatus(afspraak.id, 'geweigerd');
