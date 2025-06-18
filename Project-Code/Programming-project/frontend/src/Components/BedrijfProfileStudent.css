@@ -1,0 +1,121 @@
+/* src/studenten/BedrijfProfileStudent.css */
+
+.profile-page-container {
+  font-family: Arial, sans-serif;
+}
+.profile-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 20px;
+}
+.page-message {
+  text-align: center;
+  padding: 40px;
+}
+
+/* --- Profiel Header --- */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin: 50px 0 40px 0;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+.profile-logo {
+  width: 150px;
+  height: 150px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.profile-details { flex: 1; }
+.profile-name { margin: 0 0 10px 0; font-size: 2em; color: #007bff; }
+.profile-subtext { margin: 0 0 5px 0; font-size: 1.1em; }
+.profile-contact { margin: 0; font-size: 1em; color: #007bff; }
+
+/* --- Vacatures --- */
+.profile-vacatures h3, .profile-section h3 {
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  color: #333;
+}
+.vacature-item {
+  border: 1px solid #e0e0e0;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+.vacature-item-info { flex: 1; }
+.vacature-item-info h4 { margin: 0 0 5px 0; }
+.vacature-item-info p { margin: 0; color: #666; }
+.vacature-item-actions { display: flex; align-items: center; gap: 10px; }
+.contract-type {
+  color: white;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.8em;
+  white-space: nowrap;
+}
+.contract-type.stage { background-color: #007bff; }
+.contract-type.voltijds { background-color: #28a745; }
+.contract-type.deeltijds { background-color: #ffc107; color: #333; }
+.reserveer-btn {
+  padding: 8px 14px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* --- Contact Sectie --- */
+.profile-section {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+.profile-section p { margin: 10px 0; }
+.contact-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* =======================================
+   Responsive Stijlen voor Mobiel
+   ======================================= */
+@media (max-width: 768px) {
+  .profile-content {
+    padding: 1rem 15px;
+  }
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    margin-top: 20px;
+    gap: 20px;
+  }
+  .profile-logo {
+    width: 120px;
+    height: 120px;
+  }
+  .vacature-item, .vacature-item-actions {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+  .vacature-item-actions {
+      margin-top: 15px;
+  }
+}

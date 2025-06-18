@@ -17,12 +17,20 @@ export default function AdminVacatureLijst() {
   const [loadingMore, setLoadingMore] = useState(false);
   const limit = 2;
 
+  useEffect(() => {
+  console.log('Nieuwe vacatures:', vacatures.map(v => v.vacature_id));
+}, [vacatures]);
+
   const fetchVacatures = useCallback((page) => {
     setLoadingMore(true);
+    console.log("API wordt opgeroepen!");
     axios.get(`http://localhost:5000/api/vacatures?page=${page}&limit=${limit}`)
       .then((res) => {
         if (res.data.length < limit) setHasMore(false);
-        setVacatures(prev => [...prev, ...res.data]);
+        setVacatures(prev => {
+        const newVacatures = res.data.filter(newV => !prev.some(oldV => oldV.vacature_id === newV.vacature_id));
+        return [...prev, ...newVacatures];
+      });
       })
       .catch((err) => {
         console.error('Fout bij ophalen vacatures:', err.message);
@@ -91,7 +99,6 @@ export default function AdminVacatureLijst() {
     if (window.confirm('Weet je zeker dat je deze vacature wilt verwijderen?')) {
       axios.delete(`http://localhost:5000/api/vacatures/${id}`)
         .then(() => {
-          alert('Vacature verwijderd');
           const updated = vacatures.filter(v => v.vacature_id !== id);
           setVacatures(updated);
           setFilteredVacatures(updated);
@@ -107,11 +114,11 @@ export default function AdminVacatureLijst() {
   const handleUpdateVacature = () => {
     axios.put(`http://localhost:5000/api/vacatures/${selectedVacature.vacature_id}`, editData)
       .then((res) => {
-        alert('Vacature aangepast');
         const updated = vacatures.map(v => v.vacature_id === res.data.vacature_id ? res.data : v);
         setVacatures(updated);
         setFilteredVacatures(updated);
         setShowModal(false);
+        window.location.reload();
       })
       .catch(err => {
         alert('Fout bij bewerken');
@@ -131,6 +138,7 @@ export default function AdminVacatureLijst() {
           <input type="text" name="functie" placeholder="Functie" value={filters.functie} onChange={handleFilterChange} />
           <input type="text" name="contractType" placeholder="Contracttype" value={filters.contractType} onChange={handleFilterChange} />
         </div>
+        
 
         <section className="enhanced-box">
           <div className="vacature-wrapper">

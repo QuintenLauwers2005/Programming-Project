@@ -4,8 +4,10 @@ import axios from 'axios';
 import Navbar from '../Components/BedrijfNavBar';
 import Footer from '../Components/Footer';
 import LogoUploadForm from '../Components/LogoUpload';
+import { useNavigate } from 'react-router-dom';
 
 export default function BedrijfInstellingen() {
+   const navigate = useNavigate();
   const { id } = useParams(); // haalt bedrijf-id uit de URL
   const [bedrijf, setBedrijf] = useState(null);
   const [form, setForm] = useState({
@@ -41,7 +43,7 @@ export default function BedrijfInstellingen() {
     e.preventDefault();
     axios.put(`http://localhost:5000/api/bedrijf/${id}`, form)
       .then(() => {
-        alert("Gegevens succesvol bijgewerkt!");
+        navigate(`/BedrijfsInstellingen/${id}`);
       })
       .catch((err) => {
         console.error("Fout bij updaten bedrijf:", err);
