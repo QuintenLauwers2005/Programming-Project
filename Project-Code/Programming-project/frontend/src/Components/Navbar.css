@@ -237,7 +237,12 @@
     justify-content: center;
     gap: 0;
     font-size: 1.3rem;
+
+    
   }
+  .career-launchName {
+  display: none;
+}
 }
 
 .notif-item {
@@ -288,3 +293,4 @@
   border-radius: 50%;
   z-index: 10;
 }
+

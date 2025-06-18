@@ -39,7 +39,6 @@ export default function AdminVacatureAanpassen() {
   const handleUpdate = () => {
     axios.put(`http://localhost:5000/api/vacaturee/${id}`, vacature)
       .then(() => {
-        alert('Vacature succesvol bijgewerkt.');
         navigate('/admin/vacatures');
       })
       .catch(() => {
@@ -52,7 +51,6 @@ export default function AdminVacatureAanpassen() {
     if (window.confirm('Weet je zeker dat je deze vacature wilt verwijderen?')) {
       axios.delete(`http://localhost:5000/api/vacature/${id}`)
         .then(() => {
-          alert('Vacature verwijderd.');
           navigate('/admin/vacatures');
         })
         .catch(() => {

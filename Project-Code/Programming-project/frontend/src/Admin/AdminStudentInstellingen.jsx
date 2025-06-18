@@ -56,7 +56,7 @@ export default function AdminStudentInstellingen() {
     linkedin_url: form.linkedin  // voeg correcte veldnaam toe
   })
     .then(() => {
-      alert("Gegevens succesvol bijgewerkt!");
+      navigate(`/admin/student/${id}/profiel`);
     })
     .catch((err) => {
       console.error("Fout bij updaten student:", err);
@@ -68,7 +68,7 @@ export default function AdminStudentInstellingen() {
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif' }}>
-      <Navbar />
+      <Navbar />  
 
       <section style={{ margin: '30px 0', textAlign: 'center' }}>
         <h2>Studentgegevens aanpassen</h2>
@@ -132,8 +132,8 @@ export default function AdminStudentInstellingen() {
         />
 
         <button type="submit" style={buttonStyle}>Opslaan</button>
-      </form>
-      <button
+        
+        <button
         type="button"
         onClick={() => {
           if (window.confirm("Ben je zeker dat je deze student wil verwijderen?")) {
@@ -146,10 +146,12 @@ export default function AdminStudentInstellingen() {
               });
           }
         }}
-        style={{ ...buttonStyle, backgroundColor: 'red', marginTop: '10px' }}
+        style={{ ...buttonStyle, backgroundColor: 'red', marginTop: '10px', marginRight:'2px' }}
       >
         Verwijder Student
       </button>
+      </form>
+      
 
 
       <Footer />

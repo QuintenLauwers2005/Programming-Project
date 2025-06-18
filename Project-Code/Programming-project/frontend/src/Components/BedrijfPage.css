@@ -4,18 +4,6 @@
   padding: 2rem;
 }
 
-.student-Card{
-  background-color: #f8f9ff;
-  border: 2px solid #e8e9ff;
-  width: 300px;
-  height: 200px;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  cursor: pointer;
-  box-sizing: border-box;
-}
-
 .bedrijven-titel {
   text-align: left;
   font-size: 28px;

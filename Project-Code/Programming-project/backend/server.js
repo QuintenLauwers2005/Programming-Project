@@ -730,6 +730,7 @@ app.get('/api/afspraken', (req, res) => {
     JOIN student st ON s.student_id = st.student_id
     JOIN bedrijf b ON s.bedrijf_id = b.bedrijf_id
     WHERE s.student_id = ? OR s.bedrijf_id = ?
+    ORDER BY s.tijdstip ASC
   `;
 
   db.query(sql, [gebruikerId, gebruikerId], (err, results) => {

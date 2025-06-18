@@ -63,6 +63,8 @@ export default function BedrijfProfileStudent() {
 
     const [startHour, startMinute] = timeConfig.beginuur.split(':').map(Number);
     const [endHour, endMinute] = timeConfig.einduur.split(':').map(Number);
+    const [startHour, startMinute] = timeConfig.beginuur.split(':').map(Number);
+    const [endHour, endMinute] = timeConfig.einduur.split(':').map(Number);
 
     let current = new Date();
     current.setHours(startHour, startMinute, 0, 0);
@@ -111,8 +113,8 @@ export default function BedrijfProfileStudent() {
       status: 'bevestigd'
     })
       .then(() => {
-        alert('Afspraak succesvol vastgelegd!');
         setShowModal(false);
+        navigate('/AgendaStudenten')
       })
       .catch(err => {
         alert(err.response?.data?.error || 'Er ging iets mis bij het reserveren.');

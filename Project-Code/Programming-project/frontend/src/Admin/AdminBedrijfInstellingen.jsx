@@ -51,7 +51,7 @@ export default function AdminBedrijfInstellingen() {
 
     axios.put(`http://localhost:5000/api/bedrijf/${id}`, updateData)
       .then(() => {
-        alert("Gegevens succesvol bijgewerkt!");
+        navigate("/AdminBedrijvenLijst"); 
       })
       .catch((err) => {
         console.error("Fout bij updaten bedrijf:", err);
@@ -117,8 +117,8 @@ export default function AdminBedrijfInstellingen() {
         />
 
         <button type="submit" style={buttonStyle}>Opslaan</button>
-      </form>
-      <button
+
+        <button
         type="button"
         onClick={() => {
           if (window.confirm("Ben je zeker dat je dit bedrijf wil verwijderen?")) {
@@ -131,10 +131,11 @@ export default function AdminBedrijfInstellingen() {
           });
           }
         }}
-        style={{ ...buttonStyle, backgroundColor: 'red', marginTop: '10px' }}
+        style={{ ...buttonStyle, backgroundColor: 'red', marginTop: '10px' ,maxWidth: '500px'}}
       >
         Verwijder Bedrijf
       </button>
+      </form>
 
 
       <Footer />

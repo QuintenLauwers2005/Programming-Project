@@ -89,8 +89,6 @@ export default function RegistratiePage() {
       await axios.put(`http://localhost:5000/api/student/${gebruikerId}/skills`, {
         skills: form.skills
       });
-
-      alert('Gegevens succesvol opgeslagen');
       navigate('/StudentProfilePage');
     } catch (err) {
       console.error('Fout bij opslaan studentgegevens of skills:', err);
