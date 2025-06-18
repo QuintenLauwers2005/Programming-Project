@@ -120,8 +120,8 @@ export default function BedrijfProfileStudent() {
       status: 'bevestigd'
     })
       .then(() => {
-        alert('Afspraak succesvol vastgelegd!');
         setShowModal(false);
+        navigate('/AgendaStudenten')
       })
       .catch(err => {
         alert(err.response?.data?.error || 'Er ging iets mis bij het reserveren.');

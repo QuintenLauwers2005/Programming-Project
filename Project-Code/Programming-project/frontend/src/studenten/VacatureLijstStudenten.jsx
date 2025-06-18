@@ -121,7 +121,7 @@ export default function StudentVacatureLijst() {
       status: 'bevestigd'
     })
     .then(() => {
-      alert('Afspraak succesvol vastgelegd!');
+      navigate('/AgendaStudenten');
       setShowModal(false);
     })
     .catch(err => {

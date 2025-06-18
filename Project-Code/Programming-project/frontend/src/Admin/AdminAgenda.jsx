@@ -52,7 +52,6 @@ export default function AdminAgenda() {
         return res.json();
       })
       .then(() => {
-        alert('Aula succesvol bijgewerkt. Locaties zijn automatisch aangepast.');
         // Nieuwe data ophalen
         return fetch('http://localhost:5000/api/afspraken/all')
           .then(res => res.json())
@@ -107,7 +106,6 @@ export default function AdminAgenda() {
         return res.json();
       })
       .then(() => {
-        alert('Tijdschema succesvol aangepast');
         setTijdConfig(formData);
       })
       .catch(err => {
