@@ -74,7 +74,7 @@ function Footer() {
       <a href="https://www.linkedin.com/school/erasmushogeschool-brussel/posts/?feedView=all" target="_blank" rel="noopener noreferrer">LinkedIn</a>
     </li>
     <li>
-      <a href="https://www.instagram.com/ehogeschool/" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href="https://www.instagram.com/erasmushogeschool/" target="_blank" rel="noopener noreferrer">Instagram</a>
     </li>
   </ul>
 </div>
