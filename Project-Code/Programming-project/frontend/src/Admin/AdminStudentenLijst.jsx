@@ -40,14 +40,14 @@ function AdminStudentenLijst() {
     );
   });
 
-  const displayedStudenten = showAll ? filteredStudenten : filteredStudenten.slice(0, 8);
-  const hasMoreResults = filteredStudenten.length > 8;
+  const displayedStudenten = showAll ? filteredStudenten : filteredStudenten.slice(0, 9);
+  const hasMoreResults = filteredStudenten.length > 9;
 
   return (
     <div>
       <Navbar />
 
-      <div style={{ padding: '2rem', maxWidth: '900px', margin: '0 auto' }}>
+      <div style={{ padding: '2rem', maxWidth: '1000px', margin: '0 auto' }}>
         <h1 id='bedrijven-titel'>Studentenlijst</h1>
 
         {/* 🔍 Filters */}
@@ -71,28 +71,36 @@ function AdminStudentenLijst() {
         </div>
 
         {/* 📃 Studentenlijst */}
-        <ul style={{ listStyle: 'none', padding: 0 }}>
-          {displayedStudenten.map((student) => (
-            <li
-              key={student.id}
-              onClick={() => navigate(`/admin/student/${student.id}/profiel`)}
-              style={{
-                cursor: 'pointer',
-                padding: '15px',
-                marginBottom: '10px',
-                border: '1px solid #ddd',
-                borderRadius: '8px',
-                backgroundColor: '#f9f9f9',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-              }}
-            >
-              <p style={{ fontSize: '18px', fontWeight: 'bold' }}>{student.voornaam} {student.naam}</p>
-              <p style={{ color: '#555' }}>{student.email}</p>
-              <p style={{ color: '#777', fontSize: '14px' }}>{student.opleiding}</p>
-            </li>
-          ))}
-        </ul>
-
+        <div
+  style={{
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: '20px',
+  }}
+>
+  {displayedStudenten.map((student) => (
+    <div
+      key={student.id}
+      onClick={() => navigate(`/admin/student/${student.id}/profiel`)}
+      style={{
+        width: '300px',
+        height: '200px',
+        padding: '15px',
+        border: '1px solid #ddd',
+        borderRadius: '8px',
+        backgroundColor: '#f9f9f9',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+        cursor: 'pointer',
+        boxSizing: 'border-box',
+      }}
+    >
+      <p style={{ fontSize: '18px', fontWeight: 'bold' }}>{student.voornaam} {student.naam}</p>
+      <p>{student.email}</p>
+      <p>{student.opleiding}</p>
+    </div>
+  ))}
+</div>
         {/* 📍 Toon meer/minder knoppen */}
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
           {loading ? (

@@ -7,6 +7,7 @@ export default function AdminAgenda() {
   const [afspraken, setAfspraken] = useState([]);
   const [showInfo, setShowInfo] = useState(false);
   const [cancelId, setCancelId] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [tijdConfig, setTijdConfig] = useState({ beginuur: '', einduur: '' });
   const [formData, setFormData] = useState({ beginuur: '', einduur: '' });
   const [aulaEdits, setAulaEdits] = useState({});
@@ -116,75 +117,84 @@ export default function AdminAgenda() {
   };
 
   return (
-    <div>
+    <div className="page-wrapper">
       <Navbar />
-      <div className="page">
-        {/* Tijdconfiguratie */}
-        <div className="time-settings">
-          <h3>Speeddate uren aanpassen</h3>
-          <label>Beginuur:</label>
-          <input
-            type="time"
-            name="beginuur"
-            value={formData.beginuur}
-            onChange={handleFormChange}
-          />
-          <label>Einduur:</label>
-          <input
-            type="time"
-            name="einduur"
-            value={formData.einduur}
-            onChange={handleFormChange}
-          />
-          <button onClick={handleSaveTijden} className="save-button">
-            Opslaan
-          </button>
-        </div>
+      <div className="page-container">
+        <div className="page">
+          {/* Tijdconfiguratie */}
+          <div className="time-settings">
+            <h3>Speeddate uren aanpassen</h3>
+            <div className="time-settings-row">
+              <div className="time-input-group">
+                <label>Beginuur:</label>
+                <input
+                  type="time"
+                  name="beginuur"
+                  value={formData.beginuur}
+                  onChange={handleFormChange}
+                />
+              </div>
+              <div className="time-input-group">
+                <label>Einduur:</label>
+                <input
+                  type="time"
+                  name="einduur"
+                  value={formData.einduur}
+                  onChange={handleFormChange}
+                />
+              </div>
+            </div>
+            <div className="time-settings-buttons">
+              <button onClick={handleSaveTijden} className="save-button">
+                Opslaan
+              </button>
+            </div>
+          </div>
 
-        {/* Afsprakenlijst */}
-        {afspraken.length > 0 ? (
-          afspraken.map((afspraak) => {
-            const bedrijfId = afspraak.bedrijf_id;
-            // Huidige aula in de input: eerst uit edits, anders locatie uit afspraak
-            const huidigeAula = aulaEdits[bedrijfId] ?? afspraak.locatie;
+          {/* Afsprakenlijst */}
+          {afspraken.length > 0 ? (
+            afspraken.map((afspraak) => {
+              const bedrijfId = afspraak.bedrijf_id;
+              // Huidige aula in de input: eerst uit edits, anders locatie uit afspraak
+              const huidigeAula = aulaEdits[bedrijfId] ?? afspraak.locatie;
 
-            return (
-              <div key={afspraak.id} className="card">
-                <div className="time">{afspraak.time}</div>
-                <div className="company">
-                  {afspraak.voornaam} {afspraak.naam} — {afspraak.bedrijf_naam}
-                </div>
+              return (
+                <div key={afspraak.id} className="card">
+                  <div className="time">{afspraak.time}</div>
+                  <div className="company">
+                    {afspraak.voornaam} {afspraak.naam} — {afspraak.bedrijf_naam}
+                  </div>
 
-                <div className="lokaal">
-                  <input
-                    type="text"
-                    value={huidigeAula}
-                    onChange={(e) => handleAulaChange(bedrijfId, e.target.value)}
-                    style={{ padding: '4px', width: '150px' }}
-                  />
+                  <div className="lokaal">
+                    <input
+                      type="text"
+                      value={huidigeAula}
+                      onChange={(e) => handleAulaChange(bedrijfId, e.target.value)}
+                      placeholder="Lokaal"
+                    />
+                    <button
+                      onClick={() => handleAulaSave(bedrijfId)}
+                      className="save-button"
+                    >
+                      Opslaan
+                    </button>
+                  </div>
+
                   <button
-                    onClick={() => handleAulaSave(bedrijfId)}
-                    className="save-button"
-                    style={{ marginLeft: '10px' }}
+                    className="cancel-button"
+                    onClick={() => handleCancelConfirm(afspraak.id)}
                   >
-                    Opslaan
+                    Annuleren
                   </button>
                 </div>
-
-                <button
-                  className="cancel-button"
-                  onClick={() => handleCancelConfirm(afspraak.id)}
-                >
-                  Annuleren
-                </button>
-              </div>
-            );
-          })
-        ) : (
-          <div className="no-appointments">
-            <p>Geen afspraken gevonden.</p>
-          </div>
-        )}
+              );
+            })
+          ) : (
+            <div className="no-appointments">
+              <p>Geen afspraken gevonden.</p>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Info modal */}
