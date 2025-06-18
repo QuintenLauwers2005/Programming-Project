@@ -63,8 +63,6 @@ export default function BedrijfProfileStudent() {
 
     const [startHour, startMinute] = timeConfig.beginuur.split(':').map(Number);
     const [endHour, endMinute] = timeConfig.einduur.split(':').map(Number);
-    const [startHour, startMinute] = timeConfig.beginuur.split(':').map(Number);
-    const [endHour, endMinute] = timeConfig.einduur.split(':').map(Number);
 
     let current = new Date();
     current.setHours(startHour, startMinute, 0, 0);
