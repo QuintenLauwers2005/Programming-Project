@@ -7,30 +7,37 @@ import Footer from './Components/Footer';
 export default function VacatureLijst() {
   const [vacatures, setVacatures] = useState([]);
   const [filteredVacatures, setFilteredVacatures] = useState([]);
-  const [filters, setFilters] = useState({
-    bedrijf: '',
-    functie: '',
-    contractType: ''
-  });
-
+  const [filters, setFilters] = useState({ bedrijf: '', functie: '', contractType: '' });
+  const [selectedVacature, setSelectedVacature] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
-  const [selectedVacature, setSelectedVacature] = useState(null);
-  const navigate = useNavigate();
-  
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const limit = 4;
 
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/vacatures')
-      .then(res => {
-        setVacatures(res.data);
-        setFilteredVacatures(res.data);
+  const navigate = useNavigate();
+
+  const fetchVacatures = (pageNum = 1) => {
+    axios.get(`http://localhost:5000/api/vacatures?page=${pageNum}&limit=${limit}`)
+      .then((res) => {
+        if (res.data.length < limit) {
+          setHasMore(false);
+        }
+        if (pageNum === 1) {
+          setVacatures(res.data);
+        } else {
+          setVacatures(prev => [...prev, ...res.data]);
+        }
       })
       .catch(err => console.error('Fout bij ophalen vacatures:', err.message));
+  };
+
+  useEffect(() => {
+    fetchVacatures(1);
   }, []);
 
   useEffect(() => {
     let filtered = vacatures;
-
     if (filters.bedrijf) {
       filtered = filtered.filter(v => v.bedrijf.toLowerCase().includes(filters.bedrijf.toLowerCase()));
     }
@@ -40,9 +47,28 @@ export default function VacatureLijst() {
     if (filters.contractType) {
       filtered = filtered.filter(v => v.contract_type.toLowerCase().includes(filters.contractType.toLowerCase()));
     }
-
     setFilteredVacatures(filtered);
   }, [filters, vacatures]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const fullHeight = document.documentElement.scrollHeight;
+
+      if (scrollTop + windowHeight + 100 >= fullHeight && hasMore) {
+        setPage(prev => prev + 1);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [hasMore]);
+
+  useEffect(() => {
+    if (page > 1) {
+      fetchVacatures(page);
+    }
+  }, [page]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -59,8 +85,6 @@ export default function VacatureLijst() {
     }
   };
 
-
-
   return (
     <div className="pagina">
       <header><Navbar /></header>
@@ -68,14 +92,12 @@ export default function VacatureLijst() {
       <main className="inhoud">
         <h2>Vacatures</h2>
 
-        {/* Filters */}
         <div className="filter-form">
           <input type="text" name="bedrijf" placeholder="Bedrijf" value={filters.bedrijf} onChange={handleFilterChange} />
           <input type="text" name="functie" placeholder="Functie" value={filters.functie} onChange={handleFilterChange} />
           <input type="text" name="contractType" placeholder="Contracttype" value={filters.contractType} onChange={handleFilterChange} />
         </div>
 
-        {/* Vacature Cards */}
         <section className="enhanced-box">
           <div className="vacature-wrapper">
             <div className="vacature-list">
@@ -85,12 +107,7 @@ export default function VacatureLijst() {
                     <img
                       src={`http://localhost:5000${vacature.logo_link}`}
                       alt={`logo van ${vacature.bedrijf}`}
-                      style={{
-                        width: '80px',
-                        height: '80px',
-                        borderRadius: '8px',
-                        objectFit: 'cover'
-                      }}
+                      style={{ width: '80px', height: '80px', borderRadius: '8px', objectFit: 'cover' }}
                     />
                   </div>
                   <div className="vacature-info">
@@ -110,43 +127,39 @@ export default function VacatureLijst() {
           </div>
         </section>
 
-        <button className="toonmeer-btn" onClick={() => alert('Toon meer geklikt!')}>Toon meer</button>
+        {!hasMore && (
+          <div style={{ textAlign: 'center', margin: '1rem', color: '#777' }}>
+            Geen vacatures meer om te laden
+          </div>
+        )}
       </main>
 
-      {/* Tijdkiezer Modal */}
       {showModal && (
-  <div style={{
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100vw',
-    height: '100vh',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1000
-  }}>
-    <div style={{
-      backgroundColor: '#fff',
-      padding: '20px',
-      borderRadius: '10px',
-      width: '90%',
-      maxWidth: '400px',
-      boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
-      textAlign: 'center'
-    }}>
-      <h3>Kies een tijdstip</h3>
-      
-      <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
-        
-      </div>
-    </div>
-  </div>
-)}
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex', justifyContent: 'center', alignItems: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            backgroundColor: 'white',
+            padding: '20px',
+            borderRadius: '8px',
+            width: '300px',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.3)'
+          }}>
+            <h3>Kies een tijdstip</h3>
+            {/* Tijdselector kan hier later */}
+            <div style={{ marginTop: '20px', textAlign: 'right' }}>
+              <button onClick={() => setShowModal(false)} style={{ padding: '8px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '5px' }}>
+                Sluiten
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
-
-      {/* Login popup */}
       {showLoginPopup && (
         <div style={{
           position: 'fixed',
@@ -171,11 +184,9 @@ export default function VacatureLijst() {
                 style={{
                   backgroundColor: '#6c757d',
                   color: 'white',
-                  border: 'none',
                   padding: '8px 16px',
                   borderRadius: '5px',
                   cursor: 'pointer',
-                  flex: 1,
                   marginRight: '10px'
                 }}
               >
@@ -184,16 +195,14 @@ export default function VacatureLijst() {
               <button
                 onClick={() => {
                   setShowLoginPopup(false);
-                  navigate('/login');  
+                  navigate('/login');
                 }}
                 style={{
                   backgroundColor: '#007bff',
                   color: 'white',
-                  border: 'none',
                   padding: '8px 16px',
                   borderRadius: '5px',
-                  cursor: 'pointer',
-                  flex: 1
+                  cursor: 'pointer'
                 }}
               >
                 Inloggen
@@ -202,7 +211,6 @@ export default function VacatureLijst() {
           </div>
         </div>
       )}
-
 
       <footer><Footer /></footer>
     </div>
