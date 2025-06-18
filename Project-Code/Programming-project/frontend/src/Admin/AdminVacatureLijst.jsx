@@ -99,7 +99,6 @@ export default function AdminVacatureLijst() {
     if (window.confirm('Weet je zeker dat je deze vacature wilt verwijderen?')) {
       axios.delete(`http://localhost:5000/api/vacatures/${id}`)
         .then(() => {
-          alert('Vacature verwijderd');
           const updated = vacatures.filter(v => v.vacature_id !== id);
           setVacatures(updated);
           setFilteredVacatures(updated);
@@ -115,11 +114,11 @@ export default function AdminVacatureLijst() {
   const handleUpdateVacature = () => {
     axios.put(`http://localhost:5000/api/vacatures/${selectedVacature.vacature_id}`, editData)
       .then((res) => {
-        alert('Vacature aangepast');
         const updated = vacatures.map(v => v.vacature_id === res.data.vacature_id ? res.data : v);
         setVacatures(updated);
         setFilteredVacatures(updated);
         setShowModal(false);
+        window.location.reload();
       })
       .catch(err => {
         alert('Fout bij bewerken');

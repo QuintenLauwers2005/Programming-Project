@@ -121,7 +121,7 @@ export default function StudentVacatureLijst() {
       status: 'bevestigd'
     })
     .then(() => {
-      alert('Afspraak succesvol vastgelegd!');
+      navigate('/AgendaStudenten');
       setShowModal(false);
     })
     .catch(err => {
@@ -237,15 +237,7 @@ export default function StudentVacatureLijst() {
                     </p>
                     <button
                       onClick={() => handleOpenModal(vacature)}
-                      style={{
-                        padding: '6px 12px',
-                        backgroundColor: '#007bff',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '5px',
-                        cursor: 'pointer',
-                        fontSize: '0.9em'
-                      }}
+                      className='bewerken-btn'
                     >
                       Reserveer gesprek
                     </button>

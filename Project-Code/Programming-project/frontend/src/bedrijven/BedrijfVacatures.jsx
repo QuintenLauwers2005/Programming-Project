@@ -123,7 +123,7 @@ export default function BedrijfVacatureLijst() {
            <button
         onClick={() => navigate('/VacaturePage')}
         style={{
-          backgroundColor: '#007bff',
+          background: 'linear-gradient(to right,#007bff, #1f87f7)',
           color: 'white',
           border: 'none',
           padding: '10px 20px',

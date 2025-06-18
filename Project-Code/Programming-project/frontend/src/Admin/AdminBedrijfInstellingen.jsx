@@ -51,7 +51,7 @@ export default function AdminBedrijfInstellingen() {
 
     axios.put(`http://localhost:5000/api/bedrijf/${id}`, updateData)
       .then(() => {
-        alert("Gegevens succesvol bijgewerkt!");
+        navigate("/AdminBedrijvenLijst"); 
       })
       .catch((err) => {
         console.error("Fout bij updaten bedrijf:", err);
