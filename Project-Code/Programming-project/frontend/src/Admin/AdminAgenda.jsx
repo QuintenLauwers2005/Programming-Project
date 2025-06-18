@@ -11,6 +11,8 @@ export default function AdminAgenda() {
   const [tijdConfig, setTijdConfig] = useState({ beginuur: '', einduur: '' });
   const [formData, setFormData] = useState({ beginuur: '', einduur: '' });
   const [aulaEdits, setAulaEdits] = useState({});
+  const [filterNaam, setFilterNaam] = useState('');
+  const [filterBedrijf, setFilterBedrijf] = useState('');
 
   useEffect(() => {
     // Haal alle afspraken op
@@ -114,11 +116,25 @@ export default function AdminAgenda() {
       });
   };
 
+  // Filter afspraken op naam (voornaam + naam) en bedrijf_naam
+  const gefilterdeAfspraken = afspraken.filter(afspraak => {
+    const zoekNaam = filterNaam.toLowerCase();
+    const zoekBedrijf = filterBedrijf.toLowerCase();
+
+    const volledigeNaam = (afspraak.voornaam + ' ' + afspraak.naam).toLowerCase();
+
+    const naamMatch = volledigeNaam.includes(zoekNaam);
+    const bedrijfMatch = afspraak.bedrijf_naam.toLowerCase().includes(zoekBedrijf);
+
+    return naamMatch && bedrijfMatch;
+  });
+
   return (
     <div className="page-wrapper">
       <Navbar />
       <div className="page-container">
         <div className="page">
+
           {/* Tijdconfiguratie */}
           <div className="time-settings">
             <h3>Begin- en eindtijden van de speeddates instellen</h3>
@@ -149,9 +165,27 @@ export default function AdminAgenda() {
             </div>
           </div>
 
+          {/* Filter inputs */}
+          <div className="filter-container" style={{ margin: '1rem 0', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            <input
+              type="text"
+              placeholder="Zoek op naam..."
+              value={filterNaam}
+              onChange={(e) => setFilterNaam(e.target.value)}
+              style={{ padding: '0.5rem', flex: '1 1 200px', fontSize: '1rem' }}
+            />
+            <input
+              type="text"
+              placeholder="Zoek op bedrijf..."
+              value={filterBedrijf}
+              onChange={(e) => setFilterBedrijf(e.target.value)}
+              style={{ padding: '0.5rem', flex: '1 1 200px', fontSize: '1rem' }}
+            />
+          </div>
+
           {/* Afsprakenlijst */}
-          {afspraken.length > 0 ? (
-            afspraken.map((afspraak) => {
+          {gefilterdeAfspraken.length > 0 ? (
+            gefilterdeAfspraken.map((afspraak) => {
               const bedrijfId = afspraak.bedrijf_id;
               // Huidige aula in de input: eerst uit edits, anders locatie uit afspraak
               const huidigeAula = aulaEdits[bedrijfId] ?? afspraak.locatie;
