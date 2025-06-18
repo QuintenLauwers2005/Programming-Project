@@ -10,35 +10,35 @@ function Footer() {
     : localStorage.getItem('rol') === 'bedrijf' ? '/BedrijfHomePage'
     : localStorage.getItem('rol') === 'admin' ? '/HomePageAdmin'
     : '/home'  // fallback
-    : '/home';   // niet ingelogd
+    : '/';   // niet ingelogd
 
   const testInlog = localStorage.getItem('rol')
     ? localStorage.getItem('rol') === 'student' ? '/HomePageStudent#locatie'
     : localStorage.getItem('rol') === 'bedrijf' ? '/BedrijfHomePage#locatie'
     : localStorage.getItem('rol') === 'admin' ? '/HomePageAdmin#top'
     : '/home'  // fallback
-    : '/home';   // niet ingelogd
+    : '/#locatie';   // niet ingelogd
 
     const waarmoPath = localStorage.getItem('rol')
     ? localStorage.getItem('rol') === 'student' ? '/HomePageStudent#waarom'
     : localStorage.getItem('rol') === 'bedrijf' ? '/BedrijfHomePage#waarom'
     : localStorage.getItem('rol') === 'admin' ? '/HomePageAdmin#top'
     : '/home'  // fallback
-    : '/home';   // niet ingelogd
+    : '/#waarom';   // niet ingelogd
 
     const testimonialPath = localStorage.getItem('rol')
     ? localStorage.getItem('rol') === 'student' ? '/HomePageStudent#testimonial'
     : localStorage.getItem('rol') === 'bedrijf' ? '/BedrijfHomePage#testimonial'
     : localStorage.getItem('rol') === 'admin' ? '/HomePageAdmin#top'
     : '/home'  // fallback
-    : '/home';   // niet ingelogd
+    : '/#testimonial';   // niet ingelogd
 
     const faqPath = localStorage.getItem('rol')
     ? localStorage.getItem('rol') === 'student' ? '/HomePageStudent#faq'
     : localStorage.getItem('rol') === 'bedrijf' ? '/BedrijfHomePage#faq'
     : localStorage.getItem('rol') === 'admin' ? '/HomePageAdmin#top'
     : '/home'  // fallback
-    : '/home';   // niet ingelogd
+    : '/#faq';   // niet ingelogd
 
 
 
