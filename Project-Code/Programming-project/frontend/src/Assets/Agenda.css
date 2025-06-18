@@ -1,17 +1,16 @@
-/* src/Assets/Agenda.css */
-
 .page-wrapper {
-  background-color: #f5f5f5;
+  background-color: #ffffff;
   min-height: 100vh;
 }
 
 .page-container {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 20px auto;
   padding: 20px;
-  background-color: #e8e8e8;
+  background-color: #f8f9fa;
   min-height: 100vh;
   box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  border-radius: 12px;
 }
 
 .page {
@@ -20,7 +19,6 @@
   align-items: center;
 }
 
-/* Verbeterde Tijdconfiguratie */
 .time-settings {
   margin: 30px 0;
   padding: 25px;
@@ -92,7 +90,6 @@
   background-color: #2a2a7a;
 }
 
-/* Verbeterde Cards */
 .card {
   padding: 25px;
   width: 320px;
@@ -187,7 +184,6 @@
   background-color: #c82333;
 }
 
-/* No appointments */
 .no-appointments {
   padding: 40px;
   background-color: white;
@@ -204,7 +200,6 @@
   margin: 0;
 }
 
-/* Modals - ongewijzigd */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -246,23 +241,22 @@
   background-color: #005fa3;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .page-container {
     padding: 10px;
+    margin: 10px;
   }
   
   .card {
     width: 95%;
-    max-width: 350px;
   }
   
   .time {
-    font-size: 22px;
+    font-size: 1.3rem;
   }
   
   .company {
-    font-size: 16px;
+    font-size: 1rem;
   }
   
   .time-settings {
@@ -275,11 +269,10 @@
   }
   
   .time-input-group {
-    flex-direction: column;
+    width: 100%;
     align-items: center;
-    gap: 5px;
   }
-  
+
   .lokaal {
     flex-direction: column;
     gap: 10px;
