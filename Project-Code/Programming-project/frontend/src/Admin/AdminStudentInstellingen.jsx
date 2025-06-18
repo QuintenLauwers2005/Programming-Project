@@ -56,7 +56,7 @@ export default function AdminStudentInstellingen() {
     linkedin_url: form.linkedin  // voeg correcte veldnaam toe
   })
     .then(() => {
-      alert("Gegevens succesvol bijgewerkt!");
+      navigate(`/admin/student/${id}/profiel`);
     })
     .catch((err) => {
       console.error("Fout bij updaten student:", err);
