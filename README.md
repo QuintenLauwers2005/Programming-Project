@@ -8,48 +8,93 @@ Welkom bij dit project! Volg onderstaande stappen zorgvuldig om de applicatie lo
 
 Zorg ervoor dat je het volgende hebt geïnstalleerd:
 
-- ✅ [Node.js & npm](https://nodejs.org/)
+* ✅ [Node.js & npm](https://nodejs.org/)
 
 > ℹ️ **Standaardpoorten:**
-> - MySQL (database): `3306`  
-> - host server: `5000`
+>
+> * MySQL/MariaDB (database): `3306`
+> * Host server: `5000`
+
+---
+
+## 📚 Technologieën
+
+Dit project is opgebouwd met de volgende technologieën:
+
+### 🔧 Backend
+
+* **Node.js** + **Express.js** — voor het opzetten van de server en API-routes
+
+### 🎨 Frontend
+
+* **HTML**, **CSS**, **JavaScript**
+* **React.js** — voor het bouwen van een interactieve SPA.
+* **router react** — voor verbinden van alle documenten met elkaar.
+
+### 🗄️ Database
+
+* **MariaDB** — een relationele database die draait op de schoolservers (of via VPN bereikbaar)
 
 ---
 
 ## 🚀 Installatie-instructies
 
-### 1️⃣ Backend installeren
+### 1️⃣ Clone de GitHub-repository
+  Clone het project met behulp van GitHub Desktop of via de terminal:
+
+  💻 Via terminal:
+    ```bash
+    git clone https://github.com/QuintenLauwers2005/Programming-Project.git
+    ```
+
+  🖥️ Of via GitHub Desktop:
+  1. Open GitHub Desktop
+  2. Klik op File > Clone repository
+  3. Plak de GitHub-URL in het veld (https://github.com/QuintenLauwers2005/Programming-Project.git)
+  4. Kies een lokale map en klik op Clone
+
+
+### 2️⃣ Verbinding maken met de schooldatabase
+
+1. Maak een `.env`-bestand aan in de backend-map
+2. Voeg de databasegegevens toe die je vindt in Microsoft Teams (groep 4)
+3. Zorg ervoor dat je verbonden bent met het schoolnetwerk of via de **VPN**
+
+---
+
+### 3️⃣ Backend installeren
 
 Open een terminal en voer de volgende stappen uit:
 
 ```bash
 cd pad/naar/backend     # Navigeer naar de backend-map
-npm install            # Installeer de benodigde dependencies
+npm install             # Installeer de benodigde dependencies
 ```
 
-2️⃣ Frontend installeren
+### 4️⃣ Frontend installeren
+
 In dezelfde of een nieuwe terminal:
 
 ```bash
 cd pad/naar/frontend    # Navigeer naar de frontend-map
-npm install            # Installeer de benodigde dependencies
+npm install             # Installeer de benodigde dependencies
 ```
 
-3️⃣ link maken met de school database
+---
 
-  1. maak een .env doc aan in de backend voeg de data toe die te vinden is in teams (groep 4)
-  2. zorg ervoor dat je op de school zit anders moet je met de school vpn verbonden zijn.
 
-✅ Backend starten:
+### ✅ Backend starten
+
 ```bash
 cd pad/naar/backend     # Ga naar de backend-map
-node server.js         # Start de server (maakt connectie met de database)
+node server.js          # Start de server (maakt connectie met de database)
 ```
 
-✅ Frontend starten:
+### ✅ Frontend starten
+
 Open een tweede terminal of tabblad:
 
 ```bash
 cd pad/naar/frontend    # Ga naar de frontend-map
-npm start              # Start de frontend-app in je browser
+npm start               # Start de frontend-app in je browser
 ```

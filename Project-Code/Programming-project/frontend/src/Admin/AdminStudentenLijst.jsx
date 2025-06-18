@@ -4,7 +4,8 @@ import axios from 'axios';
 import Navbar from '../Components/AdminNavBar';
 import Footer from '../Components/Footer';
 import '../Components/BedrijfPage.css';
-import '../App.css'; // Zorg dat dit de juiste CSS bevat of verwijs naar aparte CSS
+import '../App.css';
+import '../Components/AdminStudentenLijst.css';
 
 function AdminStudentenLijst() {
   const navigate = useNavigate();

@@ -3,7 +3,6 @@ import axios from 'axios';
 import '../Components/VacatureLijst.css';
 import Navbar from '../Components/AdminNavBar';
 import Footer from '../Components/Footer';
-import { useNavigate } from 'react-router-dom';
 
 export default function AdminVacatureLijst() {
   const [editData, setEditData] = useState({ functie: '', contract_type: '', synopsis: '' });
@@ -11,10 +10,7 @@ export default function AdminVacatureLijst() {
   const [filteredVacatures, setFilteredVacatures] = useState([]);
   const [selectedVacature, setSelectedVacature] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [selectedTime, setSelectedTime] = useState('');
   const [filters, setFilters] = useState({ bedrijf: '', functie: '', contractType: '' });
-  const navigate = useNavigate();
-
   // Paginering en lazy loading
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -80,10 +76,6 @@ export default function AdminVacatureLijst() {
     setFilters({ ...filters, [name]: value });
   };
 
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate('/login');
-  };
 
   const handleEditVacature = (vacature) => {
     setSelectedVacature(vacature);
@@ -125,39 +117,6 @@ export default function AdminVacatureLijst() {
         alert('Fout bij bewerken');
         console.error(err);
       });
-  };
-
-  const handleConfirm = () => {
-    if (!selectedTime) {
-      alert('Kies een tijdstip');
-      return;
-    }
-
-    axios.post('http://localhost:5000/api/speeddate', {
-      student_id: 1,
-      bedrijf_id: selectedVacature.bedrijf_id,
-      tijdstip: selectedTime + ':00',
-      locatie: 'Aula 1',
-      status: 'bevestigd'
-    })
-      .then(() => {
-        alert('Afspraak succesvol vastgelegd!');
-        setShowModal(false);
-      })
-      .catch(err => {
-        alert(err.response?.data?.error || 'Er ging iets mis bij het reserveren.');
-      });
-  };
-
-  const generateTimeOptions = () => {
-    const options = [];
-    for (let hour = 8; hour < 19; hour++) {
-      for (let minute = 0; minute < 60; minute += 10) {
-        const time = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
-        options.push(<option key={time} value={time}>{time}</option>);
-      }
-    }
-    return options;
   };
 
   return (
