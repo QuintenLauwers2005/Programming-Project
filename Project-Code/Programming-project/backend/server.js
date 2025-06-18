@@ -539,29 +539,40 @@ app.put('/api/bedrijf/:id', (req, res) => {
 // PUT: student bijwerken
 app.put('/api/student/:id', (req, res) => {
   const studentId = req.params.id;
-  const { voornaam, naam, email, adres, specialisatie, linkedin, bio, telefoon } = req.body;
+  const { voornaam, naam, email, adres, specialisatie, linkedin, bio, telefoon, opleiding } = req.body;
 
-  const sql = `
+  const updateStudentSql = `
     UPDATE student 
-    SET voornaam = ?, naam = ?, email = ?, adres = ?, specialisatie = ?, linkedin_url = ?, bio = ?, telefoon = ?
+    SET voornaam = ?, naam = ?, email = ?, adres = ?, specialisatie = ?, linkedin_url = ?, bio = ?, telefoon = ?, opleiding = ?
     WHERE student_id = ?
   `;
 
-  const values = [voornaam, naam, email, adres, specialisatie, linkedin, bio, telefoon, studentId];
+  const studentValues = [voornaam, naam, email, adres, specialisatie, linkedin, bio, telefoon, opleiding, studentId];
 
-  db.query(sql, values, (err, result) => {
+  db.query(updateStudentSql, studentValues, (err, result) => {
     if (err) {
       console.error('Fout bij bijwerken student:', err);
-      return res.status(500).json({ error: 'Databasefout' });
+      return res.status(500).json({ error: 'Databasefout bij studentupdate' });
     }
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'student niet gevonden' });
+      return res.status(404).json({ error: 'Student niet gevonden' });
     }
 
-    res.json({ message: 'student succesvol bijgewerkt' });
+    // ✉️ Email ook bijwerken in gebruiker-tabel (zelfde ID)
+    const updateGebruikerSql = `UPDATE gebruiker SET email = ? WHERE gebruiker_id = ?`;
+
+    db.query(updateGebruikerSql, [email, studentId], (err2) => {
+      if (err2) {
+        console.error('Fout bij bijwerken gebruiker-email:', err2);
+        return res.status(500).json({ error: 'Databasefout bij gebruikerupdate' });
+      }
+
+      res.json({ message: 'Student en gebruiker succesvol bijgewerkt' });
+    });
   });
 });
+
 
 app.get('/api/HomePageAantalen', (req, res) => {
   const sql = `

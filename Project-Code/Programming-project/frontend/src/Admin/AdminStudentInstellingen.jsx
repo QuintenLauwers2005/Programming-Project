@@ -6,7 +6,7 @@ import Footer from '../Components/Footer';
 import { useNavigate } from 'react-router-dom';
 
 export default function AdminStudentInstellingen() {
-   const navigate = useNavigate();
+  const navigate = useNavigate();
   const { id } = useParams(); // student id uit URL 
   const [student, setStudent] = useState(null);
   const [form, setForm] = useState({
@@ -15,7 +15,9 @@ export default function AdminStudentInstellingen() {
     email: '',
     adres: '',
     specialisatie: '',
-    linkedin: ''
+    linkedin: '',
+    bio: '',
+    opleiding: '',  // nieuw veld toegevoegd
   });
 
   useEffect(() => {
@@ -35,40 +37,42 @@ export default function AdminStudentInstellingen() {
           adres: res.data.adres || '',
           specialisatie: res.data.specialisatie || '',
           linkedin: res.data.linkedinurl || '',
-          bio: res.data.bio||'',
+          bio: res.data.bio || '',
+          opleiding: res.data.opleiding || '',  // nieuw veld meegegeven
         });
 
       })
       .catch((err) => {
         console.error("Fout bij ophalen studentgegevens:", err);
       });
-  }, [id]); 
+  }, [id]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  axios.put(`http://localhost:5000/api/student/${id}`, {
-    ...form,
-    linkedin_url: form.linkedin  // voeg correcte veldnaam toe
-  })
-    .then(() => {
-      navigate(`/admin/student/${id}/profiel`);
+    axios.put(`http://localhost:5000/api/student/${id}`, {
+      ...form,
+      linkedin_url: form.linkedin,  // veldnaam volgens backend
+      opleiding: form.opleiding,    // nieuw veld meegestuurd
     })
-    .catch((err) => {
-      console.error("Fout bij updaten student:", err);
-      alert("Er is een fout opgetreden bij het bijwerken van de gegevens.");
-    });
-};
+      .then(() => {
+        navigate(`/admin/student/${id}/profiel`);
+      })
+      .catch((err) => {
+        console.error("Fout bij updaten student:", err);
+        alert("Er is een fout opgetreden bij het bijwerken van de gegevens.");
+      });
+  };
 
   if (!student) return <p>Studentgegevens laden...</p>;
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif' }}>
-      <Navbar />  
+      <Navbar />
 
       <section style={{ margin: '30px 0', textAlign: 'center' }}>
         <h2>Studentgegevens aanpassen</h2>
@@ -114,6 +118,15 @@ export default function AdminStudentInstellingen() {
           onChange={handleChange}
           style={inputStyle}
         />
+
+        <input
+          name="opleiding"
+          placeholder="Opleiding"
+          value={form.opleiding}
+          onChange={handleChange}
+          style={inputStyle}
+        />
+
         <input
           name="linkedin"
           placeholder="LinkedIn"
@@ -123,36 +136,34 @@ export default function AdminStudentInstellingen() {
         />
 
         <textarea
-        name="bio"
-        placeholder="Biografie"
-        value={form.bio}
-        onChange={handleChange}
-        rows={4}
-        style={{ ...inputStyle, resize: 'vertical' }}
+          name="bio"
+          placeholder="Biografie"
+          value={form.bio}
+          onChange={handleChange}
+          rows={4}
+          style={{ ...inputStyle, resize: 'vertical' }}
         />
 
         <button type="submit" style={buttonStyle}>Opslaan</button>
-        
-        <button
-        type="button"
-        onClick={() => {
-          if (window.confirm("Ben je zeker dat je deze student wil verwijderen?")) {
-            axios.delete(`http://localhost:5000/api/student/${id}`)
-              .then(() => {
-                navigate("/AdminStudentenLijst"); // pas aan naar juiste route
-              })
-              .catch(err => {
-                console.error("Fout bij verwijderen student:", err);
-              });
-          }
-        }}
-        style={{ ...buttonStyle, backgroundColor: 'red', marginTop: '10px', marginRight:'2px' }}
-      >
-        Verwijder Student
-      </button>
-      </form>
-      
 
+        <button
+          type="button"
+          onClick={() => {
+            if (window.confirm("Ben je zeker dat je deze student wil verwijderen?")) {
+              axios.delete(`http://localhost:5000/api/student/${id}`)
+                .then(() => {
+                  navigate("/AdminStudentenLijst"); // pas aan naar juiste route
+                })
+                .catch(err => {
+                  console.error("Fout bij verwijderen student:", err);
+                });
+            }
+          }}
+          style={{ ...buttonStyle, backgroundColor: 'red', marginTop: '10px', marginRight: '2px' }}
+        >
+          Verwijder Student
+        </button>
+      </form>
 
       <Footer />
     </div>
