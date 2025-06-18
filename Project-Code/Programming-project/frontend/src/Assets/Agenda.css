@@ -169,6 +169,32 @@
   background-color: #218838;
 }
 
+.top-button {
+  background-color: #f8f9ff;
+  color: #1a1a5c;
+  border: 2px solid #e8e9ff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 20px;
+}
+
+.top-button:hover {
+  background-color: #eef0ff; /* iets donkerder tint van de originele */
+  border-color: #d6d8f5;      /* subtiel donkerder rand */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.top-button:active {
+  background-color: #e2e5ff;  /* nog iets donkerder */
+  border-color: #c3c7f0;
+  transform: scale(0.97);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
 .cancel-button {
   width: 100%;
   margin-top: 10px;
