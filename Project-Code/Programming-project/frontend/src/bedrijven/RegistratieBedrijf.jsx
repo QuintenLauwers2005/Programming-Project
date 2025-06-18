@@ -110,7 +110,7 @@ export default function RegistratieBedrijfPage() {
         <input type="tel" placeholder="Telefoonnummer *" value={telefoon} onChange={(e) => setTelefoon(e.target.value)} required style={inputStyle} />
         <input type="email" placeholder="Email *" value={email} onChange={(e) => setEmail(e.target.value)} required style={inputStyle} />
 
-        <div style={{ position: 'relative', marginBottom: '15px' }}>
+        <div style={{ position: 'relative', marginBottom: '15px' }}> {/* Marge staat nu hier */}
           <input
             type={passwordVisible ? 'text' : 'password'}
             placeholder="Wachtwoord *"
@@ -118,12 +118,39 @@ export default function RegistratieBedrijfPage() {
             onChange={handleWachtwoordChange}
             onFocus={() => setShowValidation(true)}
             required
-            style={{ ...inputStyle, paddingRight: '45px' }}
+            style={{
+              width: '100%',
+              padding: '10px 45px 10px 10px',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              boxSizing: 'border-box',
+            }}
           />
-          <button type="button" onClick={() => setPasswordVisible(!passwordVisible)} style={eyeButtonStyle}>
-            <img src={passwordVisible ? eyeSlashIcon : eyeIcon} alt="Toggle wachtwoord" style={{ height: '20px', width: '20px', opacity: 0.7 }} />
+          <button 
+            type="button" 
+            onClick={() => setPasswordVisible(!passwordVisible)} 
+            style={{
+              position: 'absolute',
+              right: '0px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              padding: '0 10px',
+              height: 'calc(100% - 2px)',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <img 
+              src={passwordVisible ? eyeSlashIcon : eyeIcon} 
+              alt="Toggle wachtwoord" 
+              style={{ height: '20px', width: '20px', opacity: 0.7 }} 
+            />
           </button>
         </div>
+
 
         {showValidation && (
           <div style={{ marginBottom: '15px' }}>
