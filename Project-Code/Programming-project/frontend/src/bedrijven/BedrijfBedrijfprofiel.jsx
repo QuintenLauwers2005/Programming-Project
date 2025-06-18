@@ -10,6 +10,8 @@ export default function BedrijfBedrijfProfilePage() {
   const [companyData, setCompanyData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+      const [aula, setAula] = useState(null);
+  
 
 
 
@@ -23,6 +25,17 @@ export default function BedrijfBedrijfProfilePage() {
       })
       .finally(() => {
         setLoading(false);
+      });
+  }, [id]);
+
+  useEffect(() => {
+    axios.get(`http://localhost:5000/api/bedrijf/${id}/aula`)
+      .then(response => {
+        setAula(response.data.aula);
+      })
+      .catch(err => {
+        console.error("Fout bij ophalen van aula:", err);
+        setError("Kon aula niet ophalen.");
       });
   }, [id]);
 
@@ -93,6 +106,8 @@ export default function BedrijfBedrijfProfilePage() {
     <h2 style={{ margin: '0 0 10px 0', fontSize: '2em', color: '#007bff' }}>{companyData.naam}</h2>
     <p style={{ margin: '0 0 5px 0', color: '#333', fontSize: '1.1em' }}>{companyData.vertegenwoordiger}</p>
     <p style={{ color: '#007bff', fontSize: '1em', marginBottom: '20px' }}>{companyData.telefoon}</p>
+    {aula? (<p style={{ margin: '0 0 5px 0', color: '#333', fontSize: '1.1em' }}>Locatie Campus: {aula}</p>
+          ) : (<p style={{ margin: '0 0 5px 0', color: '#999', fontSize: '1.1em', fontStyle: 'italic' }}>Locatie Campus: Onbekend</p>)}
 
     <div style={{ display: 'flex', gap: '10px' }}>
       <button

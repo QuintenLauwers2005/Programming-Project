@@ -11,6 +11,8 @@ export default function AdminBedrijfProfiel() {
   const [companyData, setCompanyData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+      const [aula, setAula] = useState(null);
+  
 
   useEffect(() => {
     axios.get(`http://localhost:5000/api/bedrijf/${id}`)
@@ -24,6 +26,17 @@ export default function AdminBedrijfProfiel() {
       })
       .finally(() => {
         setLoading(false);
+      });
+  }, [id]);
+
+  useEffect(() => {
+    axios.get(`http://localhost:5000/api/bedrijf/${id}/aula`)
+      .then(response => {
+        setAula(response.data.aula);
+      })
+      .catch(err => {
+        console.error("Fout bij ophalen van aula:", err);
+        setError("Kon aula niet ophalen.");
       });
   }, [id]);
 
@@ -81,6 +94,8 @@ export default function AdminBedrijfProfiel() {
           </div>
           <p style={{ margin: '0 0 5px 0', color: '#333', fontSize: '1.1em' }}>{companyData.vertegenwoordiger}</p>
           <p style={{ color: '#007bff', fontSize: '1em' }}>{companyData.telefoon}</p>
+          {aula? (<p style={{ margin: '0 0 5px 0', color: '#333', fontSize: '1.1em' }}>Locatie Campus: {aula}</p>
+          ) : (<p style={{ margin: '0 0 5px 0', color: '#999', fontSize: '1.1em', fontStyle: 'italic' }}>Locatie Campus: Onbekend</p>)}
         </div>
       </section>
 
