@@ -97,7 +97,7 @@ export default function RegistratiePage() {
   };
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
+    <div style={{ fontFamily: 'Arial, sans-serif' }}>
       <header>
         <Navbar />
       </header>
@@ -184,11 +184,27 @@ export default function RegistratiePage() {
                 placeholder="Voeg een vaardigheid toe"
                 value={inputSkill}
                 onChange={(e) => setInputSkill(e.target.value)}
-                style={{ ...inputStyle, marginRight: '10px', flex: 1 }}
+                style={{
+                  ...inputStyle,
+                  marginRight: '10px',
+                  flex: 1,
+                  height: '40px', // match the button height
+                  boxSizing: 'border-box'
+                }}
               />
               <button
                 onClick={handleAddSkill}
-                style={{ padding: '10px', backgroundColor: '#4a90e2', color: 'white', border: 'none', borderRadius: '4px' }}>
+                style={{
+                  padding: '0 16px',           // horizontal padding only
+                  height: '40px',              // match input height
+                  backgroundColor: '#4a90e2',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  boxSizing: 'border-box',
+                  lineHeight: '1'             // prevent vertical stretching
+                }}
+              >
                 +
               </button>
             </div>
