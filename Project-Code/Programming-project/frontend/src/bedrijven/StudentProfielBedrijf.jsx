@@ -45,18 +45,6 @@ function StudentPublicProfile() {
 
       <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
 
-        {cvLink && (
-          <a
-            href={`http://localhost:5000${cvLink}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="cv-download-link"
-            style={{ display: 'inline-block', marginBottom: '20px', color: '#007bff', textDecoration: 'underline', fontWeight: 'bold' }}
-          >
-            Bekijk CV (PDF)
-          </a>
-        )}
-
         {/* Profiel Hoofding */}
         <section style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>
           {studentData.profielFotoUrl ? (
@@ -102,6 +90,19 @@ function StudentPublicProfile() {
               </a>
             </p>
           )}
+
+          <p style={{ margin: '10px 0', color: '#555' }}><strong>CV:</strong>  {cvLink && (
+          <a
+            href={`http://localhost:5000${cvLink}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="cv-download-link"
+            style={{ display: 'inline-block', marginBottom: '20px', color: '#007bff', textDecoration: 'underline', fontWeight: 'bold' }}
+          >
+            Bekijk CV (PDF)
+          </a>
+        )}</p>
+         
         </section>
 
         {/* Vaardigheden */}
