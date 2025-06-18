@@ -617,38 +617,58 @@ app.post('/api/speeddate', (req, res) => {
         }
 
         // ✅ INSERT speeddate
-        const insertSql = ` INSERT INTO speeddate (student_id, bedrijf_id, tijdstip, locatie, status) VALUES (?, ?, ?, ?, ?)`;
+        const insertSql = `INSERT INTO speeddate (student_id, bedrijf_id, tijdstip, locatie, status) VALUES (?, ?, ?, ?, ?)`;
 
-          db.query(insertSql, [student_id, bedrijf_id, tijdstip, locatie, status], (err, result) => {
+        db.query(insertSql, [student_id, bedrijf_id, tijdstip, locatie, status], (err, result) => {
           if (err) return res.status(500).json({ error: err.message });
 
-        // Haal studentnaam op
+          // Haal studentnaam op
           const getStudentSql = `SELECT voornaam, naam FROM student WHERE student_id = ?`;
 
           db.query(getStudentSql, [student_id], (err2, studentResults) => {
-          if (err2) return res.status(500).json({ error: err2.message });
+            if (err2) return res.status(500).json({ error: err2.message });
 
-          const { voornaam, naam } = studentResults[0] || { voornaam: 'Student', naam: '' };
-          const volledigeNaam = `${voornaam} ${naam}`.trim();
+            const { voornaam, naam } = studentResults[0] || { voornaam: 'Student', naam: '' };
+            const volledigeNaam = `${voornaam} ${naam}`.trim();
 
-          // ✅ INSERT melding met naam
-          const boodschap = `📅 ${volledigeNaam} heeft een speeddate ingepland op ${tijdstip} te ${locatie || 'onbekende locatie'}.`;
-          const insertMeldingSql = `
-            INSERT INTO melding (gebruiker_id, boodschap)
-            VALUES (?, ?)
-          `;
+            // Haal bedrijfsnaam op
+            const getBedrijfSql = `SELECT naam FROM bedrijf WHERE bedrijf_id = ?`;
 
-          db.query(insertMeldingSql, [bedrijf_id, boodschap], (err3) => {
-            if (err3) return res.status(500).json({ error: err3.message });
+            db.query(getBedrijfSql, [bedrijf_id], (err3, bedrijfResults) => {
+              if (err3) return res.status(500).json({ error: err3.message });
 
-            res.status(201).json({ message: 'Afspraak en melding succesvol opgeslagen.' });
+              const bedrijfsNaam = bedrijfResults[0]?.naam || 'een bedrijf';
+
+              // ✅ INSERT melding voor het bedrijf
+              const boodschapBedrijf = `📅 ${volledigeNaam} heeft een speeddate ingepland op ${tijdstip} te ${locatie || 'onbekende locatie'}.`;
+
+              // ✅ INSERT melding voor de student
+              const boodschapStudent = `✅ Je hebt een speeddate ingepland met ${bedrijfsNaam} op ${tijdstip} te ${locatie || 'onbekende locatie'}.`;
+
+              const insertMeldingSql = `
+                INSERT INTO melding (gebruiker_id, boodschap) VALUES (?, ?)
+              `;
+
+              // Eerst melding voor bedrijf toevoegen
+              db.query(insertMeldingSql, [bedrijf_id, boodschapBedrijf], (err4) => {
+                if (err4) return res.status(500).json({ error: err4.message });
+
+                // Dan melding voor student toevoegen
+                db.query(insertMeldingSql, [student_id, boodschapStudent], (err5) => {
+                  if (err5) return res.status(500).json({ error: err5.message });
+
+                  // ✅ Alles gelukt
+                  res.status(201).json({ message: 'Afspraak en meldingen succesvol opgeslagen.' });
+                });
+              });
+            });
           });
         });
-      });
       });
     });
   });
 });
+
 
 
 app.delete('/api/meldingen/:meldingId', (req, res) => {
