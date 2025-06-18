@@ -1,5 +1,3 @@
-// src/Pages/RegistratieBedrijfPage.jsx
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Components/Navbar';
@@ -21,6 +19,7 @@ export default function RegistratieBedrijfPage() {
   const [telefoon, setTelefoon] = useState('');
   const [email, setEmail] = useState('');
   const [wachtwoord, setWachtwoord] = useState('');
+  const [bevestigWachtwoord, setBevestigWachtwoord] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const [error, setError] = useState('');
@@ -58,7 +57,7 @@ export default function RegistratieBedrijfPage() {
     e.preventDefault();
     const isWachtwoordGeldig = Object.values(wachtwoordValidatie).every(Boolean);
 
-    if (!naam || !adres || !vertegenwoordiger || !telefoon || !email || !wachtwoord) {
+    if (!naam || !adres || !vertegenwoordiger || !telefoon || !email || !wachtwoord || !bevestigWachtwoord) {
       setError('Vul alle velden in.');
       return;
     }
@@ -80,7 +79,8 @@ export default function RegistratieBedrijfPage() {
         vertegenwoordiger,
         telefoon,
         email,
-        wachtwoord
+        wachtwoord,
+        bevestigWachtwoord,
       });
 
       if (response.status === 201) {
@@ -107,7 +107,7 @@ export default function RegistratieBedrijfPage() {
         <input type="text" placeholder="Bedrijfsnaam *" value={naam} onChange={(e) => setNaam(e.target.value)} required style={inputStyle} />
         <input type="text" placeholder="Adres *" value={adres} onChange={(e) => setAdres(e.target.value)} required style={inputStyle} />
         <input type="text" placeholder="Vertegenwoordiger *" value={vertegenwoordiger} onChange={(e) => setVertegenwoordiger(e.target.value)} required style={inputStyle} />
-        <input type="text" placeholder="Telefoonnummer *" value={telefoon} onChange={(e) => setTelefoon(e.target.value)} required style={inputStyle} />
+        <input type="tel" placeholder="Telefoonnummer *" value={telefoon} onChange={(e) => setTelefoon(e.target.value)} required style={inputStyle} />
         <input type="email" placeholder="Email *" value={email} onChange={(e) => setEmail(e.target.value)} required style={inputStyle} />
 
         <div style={{ position: 'relative', marginBottom: '15px' }}>
@@ -134,6 +134,15 @@ export default function RegistratieBedrijfPage() {
             <Requirement label="Minstens één speciaal teken" met={wachtwoordValidatie.speciaalteken} />
           </div>
         )}
+
+        <input
+          type="password"
+          placeholder="Bevestig Wachtwoord *"
+          value={bevestigWachtwoord}
+          onChange={(e) => setBevestigWachtwoord(e.target.value)}
+          required
+          style={inputStyle}
+        />
 
         <button type="button" onClick={handleSubmit} style={submitStyle}>Registreer</button>
 

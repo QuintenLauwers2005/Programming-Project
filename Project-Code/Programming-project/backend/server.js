@@ -849,6 +849,7 @@ app.post('/api/studentenToevoegen', async (req, res) => {
     naam,
     email,
     wachtwoord,
+    WachtwoordBevestiging,
     opleiding,
     specialisatie,
     opleidingsjaar,
@@ -856,10 +857,22 @@ app.post('/api/studentenToevoegen', async (req, res) => {
   } = req.body;
 
   try {
-    // Wachtwoord hashen
+    //Check of email al bestaat
+    const [rows] = await db.promise().query(
+      'SELECT * FROM gebruiker WHERE email = ?',
+      [email]
+    );
+    if (rows.length > 0) {
+      return res.status(400).json({ error: 'Gebruiker met dit e-mailadres bestaat al.' });
+    }
+
+    // Wachtwoordvergelijking
+    if (wachtwoord !== WachtwoordBevestiging) {
+      return res.status(400).json({ error: 'Wachtwoorden komen niet overeen.' });
+    }
+
     const hashedPassword = await bcrypt.hash(wachtwoord, 10);
 
-    // Voeg gebruiker toe met gehashte wachtwoord
     const insertGebruikerSql = `
       INSERT INTO gebruiker (email, wachtwoord, rol)
       VALUES (?, ?, 'student')
@@ -870,7 +883,6 @@ app.post('/api/studentenToevoegen', async (req, res) => {
 
       const gebruikerId = result.insertId;
 
-      // Voeg toe aan studententabel
       const insertStudentSql = `
         INSERT INTO student (
           student_id, voornaam, naam, opleiding, specialisatie, opleidingsjaar, adres, email
@@ -899,9 +911,11 @@ app.post('/api/studentenToevoegen', async (req, res) => {
       });
     });
   } catch (err) {
-    res.status(500).json({ error: 'Interne serverfout bij hashing: ' + err.message });
+    res.status(500).json({ error: 'Interne serverfout: ' + err.message });
   }
 });
+
+
 
 app.post('/api/bedrijvenToevoegen', async (req, res) => {
   const {
@@ -910,14 +924,35 @@ app.post('/api/bedrijvenToevoegen', async (req, res) => {
     vertegenwoordiger,
     telefoon,
     email,
-    wachtwoord
+    wachtwoord,
+    bevestigWachtwoord
   } = req.body;
 
   try {
-    // Wachtwoord hashen
+    // 🔎 Check of email of bedrijfsnaam al bestaat
+    const [emailRows] = await db.promise().query(
+      'SELECT * FROM gebruiker WHERE email = ?',
+      [email]
+    );
+    if (emailRows.length > 0) {
+      return res.status(400).json({ error: 'Gebruiker met dit e-mailadres bestaat al.' });
+    }
+
+    const [naamRows] = await db.promise().query(
+      'SELECT * FROM bedrijf WHERE naam = ?',
+      [naam]
+    );
+    if (naamRows.length > 0) {
+      return res.status(400).json({ error: 'Bedrijf met deze naam bestaat al.' });
+    }
+
+    // 🔐 Wachtwoordvergelijking
+    if (wachtwoord !== bevestigWachtwoord) {
+      return res.status(400).json({ error: 'Wachtwoorden komen niet overeen.' });
+    }
+
     const hashedPassword = await bcrypt.hash(wachtwoord, 10);
 
-    // Voeg gebruiker toe met gehashte wachtwoord
     const insertGebruikerSql = `
       INSERT INTO gebruiker (email, wachtwoord, rol)
       VALUES (?, ?, 'bedrijf')
@@ -930,7 +965,6 @@ app.post('/api/bedrijvenToevoegen', async (req, res) => {
 
       const gebruikerId = result.insertId;
 
-      // Voeg bedrijf toe
       const insertBedrijfSql = `
         INSERT INTO bedrijf (
           bedrijf_id, naam, locatie, vertegenwoordiger, telefoon, logo_link
@@ -944,7 +978,7 @@ app.post('/api/bedrijvenToevoegen', async (req, res) => {
         adres,
         vertegenwoordiger,
         telefoon,
-        'logo_' + naam
+        'logo_' + naam +'.png'
       ];
 
       db.query(insertBedrijfSql, values, (err2) => {
@@ -959,9 +993,11 @@ app.post('/api/bedrijvenToevoegen', async (req, res) => {
       });
     });
   } catch (err) {
-    res.status(500).json({ error: 'Interne serverfout bij hashing: ' + err.message });
+    res.status(500).json({ error: 'Interne serverfout: ' + err.message });
   }
 });
+
+
 
 app.get('/api/speeddate-config', (req, res) => {
   db.query('SELECT beginuur, einduur FROM speeddate_config LIMIT 1', (err, results) => {

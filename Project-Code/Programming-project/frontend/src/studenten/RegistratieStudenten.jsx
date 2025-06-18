@@ -21,6 +21,7 @@ export default function RegistratieStudentPage() {
   const [opleidingsjaar, setOpleidingsjaar] = useState('');
   const [adres, setAdres] = useState('');
   const [wachtwoord, setWachtwoord] = useState('');
+  const [wachtwoordBevestiging, setWachtwoordBevestiging] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const [error, setError] = useState('');
@@ -63,46 +64,40 @@ export default function RegistratieStudentPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const isWachtwoordGeldig = Object.values(wachtwoordValidatie).every(Boolean);
-    if (!isWachtwoordGeldig) {
-      setError("Je wachtwoord voldoet niet aan alle eisen.");
-      return;
-    }
-    
-    if (!Voornaam || !naamAchternaam || !mail || !opleiding || !specialisatie || !opleidingsjaar || !adres || !wachtwoord) {
+    if (!Voornaam || !naamAchternaam || !mail || !opleiding || !specialisatie || !opleidingsjaar || !adres || !wachtwoord || !wachtwoordBevestiging) {
       setError('Vul alle verplichte velden in');
       return;
     }
+
     if (!isWachtwoordGeldig) {
       setError("Je wachtwoord voldoet niet aan alle eisen.");
+      return;
+    }
+
+    if (wachtwoord !== wachtwoordBevestiging) {
+      setError("Wachtwoorden komen niet overeen.");
       return;
     }
 
     if (!isValidEmail(mail)) {
       setError('Voer een geldig e-mailadres in.');
-      setSuccess(false);
-      return;
-    }
-
-    if (wachtwoord.length <= 5) {
-      setError('Gebruik een langere wachtwoord');
-      setSuccess(false);
       return;
     }
 
     setError('');
 
     try {
-      // POST naar backend
       const response = await axios.post('http://localhost:5000/api/studentenToevoegen', {
         voornaam: Voornaam,
         naam: naamAchternaam,
         email: mail,
         wachtwoord: wachtwoord,
+        WachtwoordBevestiging: wachtwoordBevestiging,
         opleiding: opleiding,
         specialisatie: specialisatie,
-        opleidingsjaar: Number(opleidingsjaar), // Zorg dat dit een nummer is
+        opleidingsjaar: Number(opleidingsjaar),
         adres: adres
       });
 
@@ -111,7 +106,7 @@ export default function RegistratieStudentPage() {
         setError('');
         setTimeout(() => {
           navigate('/login');
-        }, 2000); 
+        }, 2000);
       }
     } catch (err) {
       setError(err.response?.data?.error || 'Er is iets misgegaan');
@@ -121,9 +116,7 @@ export default function RegistratieStudentPage() {
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
-      <header>
-        <Navbar />
-      </header>
+      <header><Navbar /></header>
 
       <section style={{ margin: '30px 0', textAlign: 'center' }}>
         <h2>Registreer als Student</h2>
@@ -131,205 +124,88 @@ export default function RegistratieStudentPage() {
       </section>
 
       <section style={{ maxWidth: '400px', margin: '0 auto', padding: '20px' }}>
-        <input
-          type="text"
-          placeholder="Voornaam *"
-          value={Voornaam}
-          onChange={(e) => setVoornaam(e.target.value)}
-          style={{
-            width: '100%',
-            padding: '10px',
-            marginBottom: '15px',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            boxSizing: 'border-box'
-          }}
-          required
-        />
+        <input type="text" placeholder="Voornaam *" value={Voornaam} onChange={(e) => setVoornaam(e.target.value)} required style={inputStyle} />
+        <input type="text" placeholder="Achternaam *" value={naamAchternaam} onChange={(e) => setNaamAchternaam(e.target.value)} required style={inputStyle} />
+        <input type="email" placeholder="Email *" value={mail} onChange={(e) => setMail(e.target.value)} required style={inputStyle} />
+        <input type="text" placeholder="Opleiding *" value={opleiding} onChange={(e) => setOpleiding(e.target.value)} required style={inputStyle} />
+        <input type="text" placeholder="Specialisatie *" value={specialisatie} onChange={(e) => setSpecialisatie(e.target.value)} required style={inputStyle} />
+        <input type="number" placeholder="Opleidingsjaar *" value={opleidingsjaar} onChange={(e) => setOpleidingsjaar(e.target.value)} required style={inputStyle} />
+        <input type="text" placeholder="Adres *" value={adres} onChange={(e) => setAdres(e.target.value)} required style={inputStyle} />
 
-        <input
-          type="text"
-          placeholder="Achternaam *"
-          value={naamAchternaam}
-          onChange={(e) => setNaamAchternaam(e.target.value)}
-          style={{
-            width: '100%',
-            padding: '10px',
-            marginBottom: '15px',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            boxSizing: 'border-box'
-          }}
-          required
-        />
-        
-        <input
-          type="email"
-          placeholder="Email *"
-          value={mail}
-          onChange={(e) => setMail(e.target.value)}
-          required
-          style={{
-            width: '100%',
-            padding: '10px',
-            marginBottom: '15px',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            boxSizing: 'border-box'
-          }}
-        />
+        {/* Wachtwoordveld */}
+        <div style={{ position: 'relative', width: '100%', marginBottom: '15px' }}>
+          <input type={passwordVisible ? 'text' : 'password'} placeholder="Wachtwoord *" value={wachtwoord} onChange={handleWachtwoordChange} onFocus={() => setShowValidation(true)} required style={{ ...inputStyle, paddingRight: '45px' }} />
+          <button type="button" onClick={() => setPasswordVisible(!passwordVisible)} style={toggleButtonStyle}>
+            <img src={passwordVisible ? eyeSlashIconPath : eyeIconPath} alt="Toggle wachtwoord" style={{ height: '20px', width: '20px', opacity: 0.7 }} />
+          </button>
+        </div>
 
-        <input
-          type="text"
-          placeholder="Opleiding *"
-          value={opleiding}
-          onChange={(e) => setOpleiding(e.target.value)}
-          style={{
-            width: '100%',
-            padding: '10px',
-            marginBottom: '15px',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            boxSizing: 'border-box'
-          }}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Specialisatie *"
-          value={specialisatie}
-          onChange={(e) => setSpecialisatie(e.target.value)}
-          style={{
-            width: '100%',
-            padding: '10px',
-            marginBottom: '15px',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            boxSizing: 'border-box'
-          }}
-          required
-        />
-        <input
-          type="number"
-          placeholder="Opleidingsjaar *"
-          value={opleidingsjaar}
-          onChange={(e) => setOpleidingsjaar(e.target.value)}
-          style={{
-            width: '100%',
-            padding: '10px',
-            marginBottom: '15px',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            boxSizing: 'border-box'
-          }}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Adres *"
-          value={adres}
-          onChange={(e) => setAdres(e.target.value)}
-          style={{
-            width: '100%',
-            padding: '10px',
-            marginBottom: '15px',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            boxSizing: 'border-box'
-          }}
-          required
-        />
-          <div style={{ 
-            position: 'relative', 
-            width: '100%', 
-            marginBottom: '15px'
-          }}>
-            <input
-              type={passwordVisible ? 'text' : 'password'}
-              placeholder="Wachtwoord *"
-              value={wachtwoord}
-              onChange={handleWachtwoordChange}
-              onFocus={() => setShowValidation(true)}
-              required
-              style={{
-                width: '100%',
-                padding: '10px 45px 10px 10px',
-                border: '1px solid #ccc',
-                borderRadius: '4px',
-                boxSizing: 'border-box' 
-              }}
-            /> 
-            <button 
-              type="button" 
-              onClick={() => setPasswordVisible(!passwordVisible)} 
-              style={{
-                position: 'absolute',
-                right: '0px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                width: '45px',
-                height: '100%',
-                background: 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              <img 
-                src={passwordVisible ? eyeSlashIconPath : eyeIconPath} 
-                alt="Toggle wachtwoord" 
-                style={{ height: '20px', width: '20px', opacity: 0.7 }} 
-              />
-            </button>
+        {/* Validatiecriteria */}
+        {showValidation && (
+          <div style={{ marginBottom: '15px' }}>
+            <Requirement label="Minstens 5 tekens" met={wachtwoordValidatie.lengte} />
+            <Requirement label="Minstens één hoofdletter" met={wachtwoordValidatie.hoofdletter} />
+            <Requirement label="Minstens één kleine letter" met={wachtwoordValidatie.kleineletter} />
+            <Requirement label="Minstens één cijfer" met={wachtwoordValidatie.cijfer} />
+            <Requirement label="Minstens één speciaal teken" met={wachtwoordValidatie.speciaalteken} />
           </div>
-          {showValidation && (
-            <div style={{ marginBottom: '15px' }}>
-              <Requirement label="Minstens 5 tekens" met={wachtwoordValidatie.lengte} />
-              <Requirement label="Minstens één hoofdletter" met={wachtwoordValidatie.hoofdletter} />
-              <Requirement label="Minstens één kleine letter" met={wachtwoordValidatie.kleineletter} />
-              <Requirement label="Minstens één cijfer" met={wachtwoordValidatie.cijfer} />
-              <Requirement label="Minstens één speciaal teken" met={wachtwoordValidatie.speciaalteken} />
-            </div>
-          )}
-        <button
-          type="button"
-          onClick={handleSubmit}
-          style={{
-            width: '100%',
-            padding: '10px',
-            backgroundColor: '#4a90e2',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer'
-          }}
-        >
-          Registreer
-        </button>
+        )}
+
+        {/* Bevestigingsveld */}
+        <input type={passwordVisible ? 'text' : 'password'} placeholder="Bevestig Wachtwoord *" value={wachtwoordBevestiging} onChange={(e) => setWachtwoordBevestiging(e.target.value)} required style={inputStyle} />
+
+        <button type="button" onClick={handleSubmit} style={submitStyle}>Registreer</button>
         {error && <p style={{ color: 'red', marginTop: '15px' }}>{error}</p>}
         {success && <p style={{ color: 'green', marginTop: '15px' }}>Registratie is compleet!</p>}
       </section>
 
       <section style={{ textAlign: 'center', marginTop: '20px' }}>
-        <button
-          onClick={handleLogin}
-          style={{
-            color: '#4a90e2',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            fontWeight: 'bold'
-          }}
-        >
-          Terug naar Login
-        </button>
+        <button onClick={handleLogin} style={loginButtonStyle}>Terug naar Login</button>
       </section>
 
-      <footer>
-       <Footer />
-      </footer>
+      <footer><Footer /></footer>
     </div>
   );
 }
+
+const inputStyle = {
+  width: '100%',
+  padding: '10px',
+  marginBottom: '15px',
+  border: '1px solid #ccc',
+  borderRadius: '4px',
+  boxSizing: 'border-box'
+};
+
+const toggleButtonStyle = {
+  position: 'absolute',
+  right: '0px',
+  top: '50%',
+  transform: 'translateY(-50%)',
+  width: '45px',
+  height: '100%',
+  background: 'transparent',
+  border: 'none',
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center'
+};
+
+const submitStyle = {
+  width: '100%',
+  padding: '10px',
+  backgroundColor: '#4a90e2',
+  color: 'white',
+  border: 'none',
+  borderRadius: '4px',
+  cursor: 'pointer'
+};
+
+const loginButtonStyle = {
+  color: '#4a90e2',
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
+  fontWeight: 'bold'
+};

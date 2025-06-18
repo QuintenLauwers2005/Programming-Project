@@ -45,8 +45,8 @@ function Navbar() {
       <div className="top-bar">
         <Link to="/" className="logo-link"><Logo /></Link>
           
-          <div class="nav-title-wrapper">
-  <div class="career-launchName">Career Launch</div>
+          <div className="nav-title-wrapper">
+  <div className="career-launchName">Career Launch</div>
 </div>
 
         <div className="top-bar-right">
