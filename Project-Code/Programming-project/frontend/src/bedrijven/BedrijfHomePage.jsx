@@ -10,7 +10,6 @@ function BedrijfHomePage() {
   const [stats, setStats] = useState(null) // for your numbers from SQL
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
-  const [activeFaqIndex, setActiveFaqIndex] = useState(null);
 
   useEffect(() => {
     // Replace this URL with your actual backend API endpoint that returns your stats
@@ -100,7 +99,7 @@ function BedrijfHomePage() {
         </section>
 
         {/* Testimonial */}
-        <section className="testimonial enhanced-box">
+        <section id='testimonial' className="testimonial enhanced-box">
           <h2>Ervaringen van studenten</h2>
 
         <div className="studentenverklaring">
