@@ -7,14 +7,15 @@ import LogoUploadForm from '../Components/LogoUpload';
 
 export default function BedrijfInstellingen() {
   const navigate = useNavigate();
-  const { id } = useParams(); 
+  const { id } = useParams();
   const [bedrijf, setBedrijf] = useState(null);
   const [form, setForm] = useState({
     naam: '',
     url: '',
     locatie: '',
     vertegenwoordiger: '',
-    telefoon: ''
+    telefoon: '',
+    bio: '' // ✅ bio toegevoegd
   });
 
   useEffect(() => {
@@ -26,7 +27,8 @@ export default function BedrijfInstellingen() {
           url: res.data.url || '',
           locatie: res.data.locatie || '',
           vertegenwoordiger: res.data.vertegenwoordiger || '',
-          telefoon: res.data.telefoon || ''
+          telefoon: res.data.telefoon || '',
+          bio: res.data.bio || '' // ✅ bio opgehaald
         });
       })
       .catch((err) => {
@@ -67,7 +69,7 @@ export default function BedrijfInstellingen() {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <input 
+          <input
             name="naam"
             type="text"
             placeholder="Naam"
@@ -105,6 +107,21 @@ export default function BedrijfInstellingen() {
             onChange={handleChange}
             style={inputStyle}
           />
+
+          {/* ✅ Bio-veld */}
+          <textarea
+            name="bio"
+            placeholder="Over ons / bio"
+            value={form.bio}
+            onChange={handleChange}
+            rows={6}
+            style={{
+              ...inputStyle,
+              resize: 'vertical',
+              fontFamily: 'Arial, sans-serif'
+            }}
+          />
+
           <button type="submit" style={buttonStyle}>Opslaan</button>
         </form>
       </div>
@@ -133,4 +150,3 @@ const buttonStyle = {
   fontSize: '1em',
   cursor: 'pointer'
 };
-

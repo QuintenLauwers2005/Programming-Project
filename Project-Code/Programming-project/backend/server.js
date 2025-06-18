@@ -480,7 +480,7 @@ app.get('/api/bedrijf/:id', (req, res) => {
 // PUT: Bedrijf bijwerken
 app.put('/api/bedrijf/:id', (req, res) => { 
   const bedrijfId = req.params.id;
-  const { naam, locatie, vertegenwoordiger, telefoon, url, aula } = req.body;
+  const { naam, locatie, vertegenwoordiger, telefoon, url, aula,bio } = req.body;
 
   let sql;
   let values;
@@ -489,17 +489,17 @@ app.put('/api/bedrijf/:id', (req, res) => {
   if (aula !== undefined && aula !== null) {
     sql = `
       UPDATE bedrijf 
-      SET naam = ?, locatie = ?, vertegenwoordiger = ?, telefoon = ?, url = ?, aula = ?
+      SET naam = ?, locatie = ?, vertegenwoordiger = ?, telefoon = ?, url = ?, aula = ?, bio = ?
       WHERE bedrijf_id = ?
     `;
-    values = [naam, locatie, vertegenwoordiger, telefoon, url, aula, bedrijfId];
+    values = [naam, locatie, vertegenwoordiger, telefoon, url, aula,bio, bedrijfId];
   } else {
     sql = `
       UPDATE bedrijf 
-      SET naam = ?, locatie = ?, vertegenwoordiger = ?, telefoon = ?, url = ?
+      SET naam = ?, locatie = ?, vertegenwoordiger = ?, telefoon = ?, url = ?,bio = ?
       WHERE bedrijf_id = ?
     `;
-    values = [naam, locatie, vertegenwoordiger, telefoon, url, bedrijfId];
+    values = [naam, locatie, vertegenwoordiger, telefoon, url, bio, bedrijfId];
   }
 
   // Update bedrijf
