@@ -1,0 +1,106 @@
+/* src/Admin/HomePageAdmin.css */
+
+.admin-content {
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.admin-content h1 {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.admin-dashboard-container {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 25px;
+}
+
+.stat-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 200px;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card-number {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #10154d;
+}
+
+.stat-card-label {
+  font-size: 1rem;
+  color: #555;
+  text-align: center;
+  margin: 10px 0;
+}
+
+/* 👇 HIER IS DE NIEUWE STIJL VOOR DE KNOP 👇 */
+.stat-card-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 20px; /* Maakt de knop pilvormig */
+  padding: 8px 25px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 15px;
+  transition: background-color 0.2s;
+}
+
+.stat-card:hover .stat-card-button {
+  background-color: #0056b3; /* Donkerder bij hover op de kaart */
+}
+
+/* =======================================
+   Responsive Stijlen voor Mobiel
+   ======================================= */
+@media (max-width: 768px) {
+  .admin-content {
+    padding: 1rem;
+  }
+  
+  .admin-dashboard-container {
+    padding: 1.5rem;
+  }
+  
+  /* Op tablet 2 kolommen */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  /* Op de smalste schermen 1 kolom */
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .stat-card {
+    min-height: 180px; /* Iets minder hoog op mobiel */
+  }
+}
