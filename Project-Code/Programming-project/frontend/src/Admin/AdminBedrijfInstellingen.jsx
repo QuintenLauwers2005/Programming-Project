@@ -117,8 +117,8 @@ export default function AdminBedrijfInstellingen() {
         />
 
         <button type="submit" style={buttonStyle}>Opslaan</button>
-      </form>
-      <button
+
+        <button
         type="button"
         onClick={() => {
           if (window.confirm("Ben je zeker dat je dit bedrijf wil verwijderen?")) {
@@ -135,6 +135,7 @@ export default function AdminBedrijfInstellingen() {
       >
         Verwijder Bedrijf
       </button>
+      </form>
 
 
       <Footer />
