@@ -42,7 +42,7 @@ export default function BedrijfInstellingen() {
     e.preventDefault();
     axios.put(`http://localhost:5000/api/bedrijf/${id}`, form)
       .then(() => {
-        navigate(`/BedrijfsInstellingen/${id}`);
+        navigate(`/BedrijfBedrijfProfilePage`);
       })
       .catch((err) => {
         console.error("Fout bij updaten bedrijf:", err);
