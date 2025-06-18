@@ -52,7 +52,7 @@ export default function AdminBedrijfInstellingen() {
 
     axios.put(`http://localhost:5000/api/bedrijf/${id}`, updateData)
       .then(() => {
-        navigate("/AdminBedrijvenLijst");
+        navigate(`/admin/bedrijf/${id}/profiel`);
       })
       .catch((err) => {
         console.error("Fout bij updaten bedrijf:", err);
@@ -139,7 +139,7 @@ export default function AdminBedrijfInstellingen() {
             if (window.confirm("Ben je zeker dat je dit bedrijf wil verwijderen?")) {
               axios.delete(`http://localhost:5000/api/bedrijf/${id}`)
                 .then(() => {
-                  navigate(`/admin/bedrijf/${id}/profiel`);
+                  navigate("/AdminBedrijven");
                 })
                 .catch(err => {
                   console.error("Fout bij verwijderen bedrijf:", err);
