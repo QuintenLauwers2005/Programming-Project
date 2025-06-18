@@ -3,9 +3,11 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../Components/AdminNavBar';
 import Footer from '../Components/Footer';
+import { useNavigate } from 'react-router-dom';
 
 export default function AdminStudentInstellingen() {
-  const { id } = useParams(); // student id uit URL
+   const navigate = useNavigate();
+  const { id } = useParams(); // student id uit URL 
   const [student, setStudent] = useState(null);
   const [form, setForm] = useState({
     voornaam: '',
@@ -131,6 +133,24 @@ export default function AdminStudentInstellingen() {
 
         <button type="submit" style={buttonStyle}>Opslaan</button>
       </form>
+      <button
+        type="button"
+        onClick={() => {
+          if (window.confirm("Ben je zeker dat je deze student wil verwijderen?")) {
+            axios.delete(`http://localhost:5000/api/student/${id}`)
+              .then(() => {
+                navigate("/AdminStudentenLijst"); // pas aan naar juiste route
+              })
+              .catch(err => {
+                console.error("Fout bij verwijderen student:", err);
+              });
+          }
+        }}
+        style={{ ...buttonStyle, backgroundColor: 'red', marginTop: '10px' }}
+      >
+        Verwijder Student
+      </button>
+
 
       <Footer />
     </div>

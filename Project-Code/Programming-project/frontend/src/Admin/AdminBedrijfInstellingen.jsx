@@ -3,8 +3,10 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../Components/AdminNavBar';
 import Footer from '../Components/Footer';
+import { useNavigate } from 'react-router-dom';
 
 export default function AdminBedrijfInstellingen() {
+   const navigate = useNavigate();
   const { id } = useParams(); // haalt bedrijf-id uit de URL
   const [bedrijf, setBedrijf] = useState(null);
   const [form, setForm] = useState({
@@ -17,7 +19,7 @@ export default function AdminBedrijfInstellingen() {
   });
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/bedrijf/${id}`)
+    axios.get(`http://localhost:5000/api/bedrijf/${id}`) 
       .then((res) => {
         setBedrijf(res.data);
         setForm({
@@ -116,6 +118,24 @@ export default function AdminBedrijfInstellingen() {
 
         <button type="submit" style={buttonStyle}>Opslaan</button>
       </form>
+      <button
+        type="button"
+        onClick={() => {
+          if (window.confirm("Ben je zeker dat je dit bedrijf wil verwijderen?")) {
+          axios.delete(`http://localhost:5000/api/bedrijf/${id}`)
+            .then(() => {
+              navigate("/AdminBedrijvenLijst"); // pas aan naar juiste route
+          })
+            .catch(err => {
+          console.error("Fout bij verwijderen bedrijf:", err);
+          });
+          }
+        }}
+        style={{ ...buttonStyle, backgroundColor: 'red', marginTop: '10px' }}
+      >
+        Verwijder Bedrijf
+      </button>
+
 
       <Footer />
     </div>
