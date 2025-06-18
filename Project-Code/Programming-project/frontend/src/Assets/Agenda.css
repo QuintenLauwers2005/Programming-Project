@@ -1,62 +1,210 @@
 /* src/Assets/Agenda.css */
 
-.page {
-  padding: 20px;
+.page-wrapper {
+  background-color: #f5f5f5;
   min-height: 100vh;
+}
+
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #e8e8e8;
+  min-height: 100vh;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.page {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.top-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: white;
-  border: 1px solid #aaa;
-  margin-bottom: 20px;
-  font-size: 14px;
-  cursor: pointer;
+/* Verbeterde Tijdconfiguratie */
+.time-settings {
+  margin: 30px 0;
+  padding: 25px;
+  background: white;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border: 1px solid #ddd;
 }
 
-.card {
-  padding: 20px;
-  width: 250px;
-  background-color: #e8e8e8;
-  border: 1px solid lightgray;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
-  margin-bottom: 15px;
+.time-settings h3 {
+  margin: 0 0 20px 0;
+  text-align: center;
+  color: #333;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.time-settings-row {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.time-input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.time-settings-row label {
+  font-weight: bold;
+  color: #555;
+  min-width: 80px;
+}
+
+.time-settings-row input[type="time"] {
+  padding: 10px;
+  border: 2px solid #1a1a5c;
   border-radius: 8px;
+  background-color: white;
+  font-size: 16px;
+  color: #1a1a5c;
+  width: 140px;
+}
+
+.time-settings-buttons {
+  text-align: center;
+}
+
+.time-settings .save-button {
+  background-color: #1a1a5c;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.time-settings .save-button:hover {
+  background-color: #2a2a7a;
+}
+
+/* Verbeterde Cards */
+.card {
+  padding: 25px;
+  width: 320px;
+  background-color: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  margin-bottom: 20px;
+  border-radius: 12px;
   position: relative;
   text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .time {
   font-weight: bold;
-  font-size: 24px;
-  margin-bottom: 5px;
+  font-size: 26px;
+  margin-bottom: 10px;
+  color: #1a1a5c;
+  padding: 8px;
+  background-color: #f8f9ff;
+  border-radius: 8px;
+  border: 2px solid #e8e9ff;
 }
 
 .company {
   font-size: 18px;
-  margin-bottom: 3px;
+  margin-bottom: 15px;
+  color: #333;
+  font-weight: 500;
 }
 
-.room {
-  font-size: 16px;
-  color: #444;
+.lokaal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.lokaal input {
+  padding: 8px 12px;
+  width: 120px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  text-align: center;
+  transition: border-color 0.2s ease;
+}
+
+.lokaal input:focus {
+  border-color: #1a1a5c;
+  outline: none;
+}
+
+.lokaal .save-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.lokaal .save-button:hover {
+  background-color: #218838;
 }
 
 .cancel-button {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  font-size: 10px;
-  padding: 5px 8px;
-  border: 1px solid #999;
-  background-color: white;
+  width: 100%;
+  margin-top: 10px;
+  font-size: 14px;
+  padding: 10px;
+  border: 1px solid #dc3545;
+  background-color: #dc3545;
+  color: white;
   cursor: pointer;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
 }
 
+.cancel-button:hover {
+  background-color: #c82333;
+}
+
+/* No appointments */
+.no-appointments {
+  padding: 40px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  text-align: center;
+  max-width: 400px;
+  margin: 20px 0;
+}
+
+.no-appointments p {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+}
+
+/* Modals - ongewijzigd */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -98,86 +246,49 @@
   background-color: #005fa3;
 }
 
-.weigenKnopAdmin {
-  background-color:red ;
-  color: whitesmoke;
-  border: 3px solid black;
-  border-radius: 0.2rem;
-  margin-top: 15px;
-  padding: 3px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
-}
-
-.weigenKnopAdmin:hover {
-  background-color: rgb(204, 1, 1);
-  box-shadow: 0 0 10px rgba(0,0,0,0.6);
-}
-
-.time-settings {
-  margin: 30px 0;
-  padding: 20px;
-  background: #f5f5f5;
-  border-radius: 10px;
-  max-width: 600px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.time-settings-row {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-.time-settings-row label {
-  font-weight: bold;
-  color: #333;
-  min-width: 80px;
-}
-
-.time-settings-row input[type="time"] {
-  padding: 10px;
-  border: 2px solid #1a1a5c;
-  border-radius: 8px;
-  background-color: white;
-  font-size: 1em;
-  color: #1a1a5c;
-  width: 130px;
-}
-
-.time-settings .save-button {
-  background-color: #1a1a5c;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 1em;
-  transition: background-color 0.2s ease;
-  margin-left: 10px;
-}
-
-.time-settings .save-button:hover {
-  background-color: #2a2a7a;
-}
-
+/* Responsive */
 @media (max-width: 768px) {
-  .page {
+  .page-container {
     padding: 10px;
   }
+  
   .card {
     width: 95%;
+    max-width: 350px;
   }
+  
   .time {
-    font-size: 1.3rem;
+    font-size: 22px;
   }
+  
   .company {
-    font-size: 1rem;
+    font-size: 16px;
   }
+  
+  .time-settings {
+    padding: 20px;
+  }
+  
+  .time-settings-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .time-input-group {
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .lokaal {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
   .modal {
     padding: 20px;
   }
+  
   .modal h3 {
     font-size: 1.2rem;
   }
