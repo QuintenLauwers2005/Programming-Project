@@ -3,8 +3,10 @@ import '../Components/VacaturePage.css';
 import Footer from '../Components/Footer';
 import NavBar from '../Components/BedrijfNavBar';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function VacaturePage() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     functie: '',
     synopsis: '',
@@ -30,6 +32,7 @@ export default function VacaturePage() {
       bedrijf_id: gebruiker_id
     })
       .then(() => {
+        navigate(`/BedrijfVacaturelijst`);
         alert("Vacature succesvol aangemaakt.");
         setForm({ functie: '', synopsis: '', contract_type: '' });
       })
