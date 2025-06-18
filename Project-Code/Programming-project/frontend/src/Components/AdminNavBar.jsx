@@ -137,7 +137,7 @@ function Navbar() {
               )}
             </div>
             <button className="login-btn" onClick={handleLogout}>
-              👤<span className="btn-text">&nbsp;Uitloggen</span>
+              ➡️<span className="btn-text">&nbsp;Uitloggen</span>
             </button>
           </div>
           
