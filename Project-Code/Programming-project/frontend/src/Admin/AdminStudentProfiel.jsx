@@ -56,7 +56,7 @@ function AdminStudentProfiel() {
         {/* Profiel Hoofding */}
         <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee', marginTop:'70px' }}>
           <img 
-            src={studentData.profielFotoUrl || '/default-avatar.png'} 
+            src={`http://localhost:5000${studentData.profielFotoUrl}` || "./blank-profile-picture.png"} 
             alt={`Profiel van ${studentData.name || ''}`}
             style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', marginRight: '30px' }} 
           />
@@ -121,7 +121,7 @@ function AdminStudentProfiel() {
           <p style={{ margin: '10px 0', color: '#555' }}><strong>Opleiding:</strong> {studentData.opleiding}</p>
           <p style={{ margin: '10px 0', color: '#555' }}><strong>Instelling:</strong> {studentData.instelling}</p>
           <p style={{ margin: '10px 0', color: '#555' }}><strong>Verwacht afstudeerjaar:</strong> {studentData.afstudeerjaar}</p>
-          <p style={{ margin: '10px 0', color: '#555' }}><strong>LinkedIn:</strong> <a href={studentData.linkedinurl} target='_blank'>{studentData.linkedinurl}</a></p>
+          <p style={{ margin: '10px 0', color: '#555' }}><strong>LinkedIn:</strong> <a href={studentData.linkedinurl} target='_blank' rel="noreferrer">{studentData.linkedinurl}</a></p>
         </section>
       </div>
 

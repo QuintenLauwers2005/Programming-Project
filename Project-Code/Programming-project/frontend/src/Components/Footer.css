@@ -3,20 +3,22 @@
   color: #fff;
   padding: 40px 20px 20px;
   font-family: 'Segoe UI', sans-serif;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .footer-content {
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; 
   max-width: 1200px;
-  margin: auto;
+  margin: 0 auto;
   gap: 2rem;
 }
 
 .footer-section {
   flex: 1;
-  min-width: 200px;
+  min-width: 220px; /* genoeg ruimte per sectie */
   text-align: left;
 }
 
@@ -29,6 +31,7 @@
 .footer-section ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .footer-section ul li {
@@ -38,6 +41,7 @@
 .footer-section a {
   color: #ccc;
   text-decoration: none;
+  transition: color 0.3s ease;
 }
 
 .footer-section a:hover {
@@ -45,11 +49,16 @@
   text-decoration: underline;
 }
 
+.social-icons {
+  padding-left: 0;
+  display: flex;
+  gap: 15px;
+}
+
 .social-icons a {
-  display: inline-block;
-  margin-right: 10px;
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: #ccc;
+  transition: color 0.3s ease;
 }
 
 .social-icons a:hover {
@@ -65,45 +74,35 @@
   color: #aaa;
 }
 
+/* Responsive voor mobiele schermen */
 @media (max-width: 768px) {
-  .footer {
-    padding: 25px 15px 15px;
-  }
-
   .footer-content {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 0px; 
+    gap: 1.5rem;
   }
 
   .footer-section {
-    text-align: center;
     width: 100%;
-    min-width: unset; 
+    min-width: unset;
   }
 
   .footer-section h4 {
-    font-size: 1rem;
-    margin-bottom: 0px; 
-    padding-bottom: 0px;
-  }
-
-  .social-icons {
-    justify-content: center;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
   }
 
   .footer-section ul {
     display: inline-block;
-    text-align: center;
   }
 
   .footer-section ul li {
     margin: 5px 0;
   }
 
-  .footer-section p, .footer-section a {
-    font-size: 0.9rem;
+  .social-icons {
+    justify-content: center;
   }
 
   .footer-bottom {
