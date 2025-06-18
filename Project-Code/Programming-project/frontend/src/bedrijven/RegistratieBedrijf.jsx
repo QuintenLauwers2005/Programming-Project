@@ -88,7 +88,7 @@ export default function RegistratieBedrijfPage() {
         setError('');
         setTimeout(() => {
           navigate('/login');
-        }, 2000);
+        }, 500);
       }
     } catch (err) {
       setError(err.response?.data?.error || 'Er is iets misgegaan.');
