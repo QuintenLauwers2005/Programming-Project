@@ -118,6 +118,7 @@ export default function AdminBedrijfInstellingen() {
 
         <button type="submit" style={buttonStyle}>Opslaan</button>
       </form>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
       <button
         type="button"
         onClick={() => {
@@ -131,10 +132,11 @@ export default function AdminBedrijfInstellingen() {
           });
           }
         }}
-        style={{ ...buttonStyle, backgroundColor: 'red', marginTop: '10px' }}
+        style={{ ...buttonStyle, backgroundColor: 'red', marginTop: '10px' ,maxWidth: '500px'}}
       >
         Verwijder Bedrijf
       </button>
+      </div>
 
 
       <Footer />

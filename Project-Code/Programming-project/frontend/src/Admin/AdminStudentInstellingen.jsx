@@ -68,7 +68,7 @@ export default function AdminStudentInstellingen() {
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif' }}>
-      <Navbar />
+      <Navbar />  
 
       <section style={{ margin: '30px 0', textAlign: 'center' }}>
         <h2>Studentgegevens aanpassen</h2>
@@ -133,6 +133,7 @@ export default function AdminStudentInstellingen() {
 
         <button type="submit" style={buttonStyle}>Opslaan</button>
       </form>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
       <button
         type="button"
         onClick={() => {
@@ -146,10 +147,11 @@ export default function AdminStudentInstellingen() {
               });
           }
         }}
-        style={{ ...buttonStyle, backgroundColor: 'red', marginTop: '10px' }}
+        style={{ ...buttonStyle, backgroundColor: 'red', marginTop: '10px',maxWidth: '500px'}}
       >
         Verwijder Student
       </button>
+      </div>
 
 
       <Footer />
