@@ -79,7 +79,6 @@ export default function BedrijfVacatureLijst() {
       synopsis: editVacature.synopsis
     })
       .then(() => {
-        alert('Vacature succesvol bijgewerkt!');
         setShowEditModal(false);
 
         // Vacatures herladen
