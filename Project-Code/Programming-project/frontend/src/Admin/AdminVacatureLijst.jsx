@@ -6,7 +6,6 @@ import Footer from '../Components/Footer';
 import { useNavigate } from 'react-router-dom';
 
 export default function AdminVacatureLijst() {
-  const [editMode, setEditMode] = useState(false);
   const [editData, setEditData] = useState({ functie: '', contract_type: '', synopsis: '' });
   const [vacatures, setVacatures] = useState([]);
   const [filteredVacatures, setFilteredVacatures] = useState([]);
@@ -93,7 +92,6 @@ export default function AdminVacatureLijst() {
       contract_type: vacature.contract_type,
       synopsis: vacature.synopsis
     });
-    setEditMode(true);
     setShowModal(true);
   };
 
@@ -122,7 +120,6 @@ export default function AdminVacatureLijst() {
         setVacatures(updated);
         setFilteredVacatures(updated);
         setShowModal(false);
-        setEditMode(false);
       })
       .catch(err => {
         alert('Fout bij bewerken');
