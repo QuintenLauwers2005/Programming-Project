@@ -121,7 +121,7 @@ export default function AdminAgenda() {
         <div className="page">
           {/* Tijdconfiguratie */}
           <div className="time-settings">
-            <h3>Speeddate uren aanpassen</h3>
+            <h3>Begin- en eindtijden van de speeddates instellen</h3>
             <div className="time-settings-row">
               <div className="time-input-group">
                 <label>Beginuur:</label>

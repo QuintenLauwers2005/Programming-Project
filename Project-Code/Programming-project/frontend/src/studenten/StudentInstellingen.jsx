@@ -118,7 +118,7 @@ export default function RegistratiePage() {
             type="text"
             name="voornaam"
             value={form.voornaam}
-            readOnly
+            hidden
             style={inputStyle}
             placeholder="Voornaam"
           />
@@ -126,7 +126,7 @@ export default function RegistratiePage() {
             type="text"
             name="naam"
             value={form.naam}
-            readOnly
+            hidden
             style={inputStyle}
             placeholder="Achternaam"
           />
