@@ -75,7 +75,7 @@ export default function Bedrijfsagenda() {
       setTimeout(() => {
         fetchAfspraken();
         setNotificatie(null);
-      }, 1500);
+      }, 600);
 
     } catch (err) {
       console.error('Fout bij bijwerken status:', err);

@@ -68,7 +68,7 @@ export default function AdminStudentInstellingen() {
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif' }}>
-      <Navbar />
+      <Navbar />  
 
       <section style={{ margin: '30px 0', textAlign: 'center' }}>
         <h2>Studentgegevens aanpassen</h2>

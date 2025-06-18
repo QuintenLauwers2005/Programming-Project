@@ -131,7 +131,7 @@ export default function AdminBedrijfInstellingen() {
           });
           }
         }}
-        style={{ ...buttonStyle, backgroundColor: 'red', marginTop: '10px' }}
+        style={{ ...buttonStyle, backgroundColor: 'red', marginTop: '10px' ,maxWidth: '500px'}}
       >
         Verwijder Bedrijf
       </button>
