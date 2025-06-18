@@ -115,7 +115,7 @@ export default function BedrijfProfilePage() {
   return (
     <div style={{ fontFamily: 'Arial, sans-serif' }}>
       <Navbar />
-      <div style={{padding:'20px'}}>
+      <div style={{padding:'20px', maxWidth: '900px', margin:'auto'}}>
       <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee', marginTop:'70px' }}>
         <img 
           src={`http://localhost:5000${companyData.logo_link}`}       
