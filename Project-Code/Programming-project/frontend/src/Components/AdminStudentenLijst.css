@@ -1,0 +1,100 @@
+.admin-page-content {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.admin-page-content h1 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.filter-form {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.filter-input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 250px;
+}
+
+.studenten-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.student-card {
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.student-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.student-card-naam {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0 0 8px 0;
+}
+
+.student-card-email, .student-card-opleiding {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 4px 0;
+}
+
+.toon-meer-container {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.toonmeer-btn {
+  padding: 10px 25px;
+  border: 1px solid #007bff;
+  background-color: white;
+  color: #007bff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.toonmeer-btn:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .admin-page-content {
+    padding: 1rem;
+  }
+  
+  .filter-form {
+    flex-direction: column;
+  }
+
+  .filter-input {
+    width: 100%;
+  }
+
+  .studenten-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .studenten-grid {
+    grid-template-columns: 1fr;
+  }
+}

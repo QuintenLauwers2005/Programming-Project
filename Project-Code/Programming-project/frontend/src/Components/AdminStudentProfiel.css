@@ -1,0 +1,119 @@
+.profile-page {
+  font-family: Arial, sans-serif;
+}
+.profile-content {
+  padding: 2rem 70px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.loading-message, .error-message {
+  text-align: center;
+  padding: 40px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40px;
+  margin-top: 50px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+.profile-picture {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 30px;
+  flex-shrink: 0;
+}
+.profile-details {
+  flex: 1;
+}
+.profile-title {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+.profile-title h2 {
+  margin: 0;
+  font-size: 2em;
+  color: #007bff;
+}
+.profile-title button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+.profile-opleiding {
+  margin: 0 0 5px 0;
+  font-size: 1.1em;
+}
+.profile-email {
+  color: #007bff;
+  font-size: 1em;
+}
+
+.profile-section, .profile-section-skills {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+.profile-section h3, .profile-section-skills h3 {
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+}
+.profile-section p {
+  line-height: 1.6;
+  color: #555;
+}
+.no-data-text {
+  color: #777;
+}
+
+.skills-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.skill-tag {
+  background-color: #007bff; 
+  color: white; 
+  padding: 8px 15px; 
+  border-radius: 20px; 
+  font-size: 0.9em; 
+}
+
+
+@media (max-width: 768px) {
+  .profile-content {
+    padding: 1rem 20px;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .profile-picture {
+    width: 120px;
+    height: 120px;
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .profile-title {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

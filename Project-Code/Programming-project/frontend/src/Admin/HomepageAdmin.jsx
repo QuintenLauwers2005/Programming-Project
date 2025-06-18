@@ -56,8 +56,8 @@ function HomePageAdmin() {
 
             {/* Container met vierkante grid lay-out */}
             <div className='AdminHome-Container' style={{
-                backgroundColor: '#f9f9f9',
-                border: '1px solid #ddd',
+                backgroundColor: '#f8f9ff',
+                border: '2px solid #e8e9ff',
                 borderRadius: '1rem',
                 padding: '2rem',
                 margin: '40px auto',

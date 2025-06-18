@@ -68,7 +68,7 @@ export default function Agenda() {
           ))
         ) : (
           <div className="no-appointments">
-            <p>Geen afspraken gevonden.</p>
+            <p>U moet eerst inloggen om u speeddates te zien.</p>
           </div>
         )}
       </div>
