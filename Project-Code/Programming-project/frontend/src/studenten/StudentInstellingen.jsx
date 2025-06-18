@@ -16,6 +16,7 @@ export default function RegistratiePage() {
     email: '',
     adres: '',
     specialisatie: '',
+    opleiding: '', // ✅ toegevoegd
     linkedin: '',
     bio: '',
     skills: []
@@ -38,6 +39,7 @@ export default function RegistratiePage() {
           email: res.data.email || '',
           adres: res.data.adres || '',
           specialisatie: res.data.specialisatie || '',
+          opleiding: res.data.opleiding || '', // ✅ toegevoegd
           linkedin: res.data.linkedinurl || '',
           bio: res.data.bio || '',
           skills: skills
@@ -74,21 +76,23 @@ export default function RegistratiePage() {
     e.preventDefault();
 
     try {
-      // 1. Update studentinfo (voornaam & naam los meesturen)
+      // 1. Update studentinfo (inclusief opleiding)
       await axios.put(`http://localhost:5000/api/student/${gebruikerId}`, {
         voornaam: form.voornaam,
         naam: form.naam,
         email: form.email,
         adres: form.adres,
         specialisatie: form.specialisatie,
+        opleiding: form.opleiding, // ✅ toegevoegd
         linkedin: form.linkedin,
         bio: form.bio
       });
 
-      // 2. Update skills via aparte endpoint
+      // 2. Update skills
       await axios.put(`http://localhost:5000/api/student/${gebruikerId}/skills`, {
         skills: form.skills
       });
+
       navigate('/StudentProfilePage');
     } catch (err) {
       console.error('Fout bij opslaan studentgegevens of skills:', err);
@@ -113,7 +117,6 @@ export default function RegistratiePage() {
 
       <section style={{ maxWidth: '400px', margin: '0 auto', padding: '20px' }}>
         <form onSubmit={handleSubmit}>
-          {/* 🔒 Naamvelden readonly tonen */}
           <input
             type="text"
             name="voornaam"
@@ -160,6 +163,15 @@ export default function RegistratiePage() {
           />
           <input
             type="text"
+            name="opleiding"
+            placeholder="Opleiding"
+            value={form.opleiding}
+            onChange={handleInputChange}
+            style={inputStyle}
+            required
+          />
+          <input
+            type="text"
             name="linkedin"
             placeholder="LinkedIn"
             value={form.linkedin}
@@ -188,21 +200,21 @@ export default function RegistratiePage() {
                   ...inputStyle,
                   marginRight: '10px',
                   flex: 1,
-                  height: '40px', // match the button height
+                  height: '40px',
                   boxSizing: 'border-box'
                 }}
               />
               <button
                 onClick={handleAddSkill}
                 style={{
-                  padding: '0 16px',           // horizontal padding only
-                  height: '40px',              // match input height
+                  padding: '0 16px',
+                  height: '40px',
                   backgroundColor: '#4a90e2',
                   color: 'white',
                   border: 'none',
                   borderRadius: '4px',
                   boxSizing: 'border-box',
-                  lineHeight: '1'             // prevent vertical stretching
+                  lineHeight: '1'
                 }}
               >
                 +
@@ -210,9 +222,26 @@ export default function RegistratiePage() {
             </div>
             <ul style={{ listStyle: 'none', padding: 0, marginTop: '10px' }}>
               {form.skills.map(skill => (
-                <li key={skill} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px', background: '#f1f1f1', padding: '5px 10px', borderRadius: '4px' }}>
+                <li key={skill} style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '5px',
+                  background: '#f1f1f1',
+                  padding: '5px 10px',
+                  borderRadius: '4px'
+                }}>
                   {skill}
-                  <button type="button" onClick={() => handleRemoveSkill(skill)} style={{ background: 'none', border: 'none', color: '#e00', cursor: 'pointer' }}>✕</button>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveSkill(skill)}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: '#e00',
+                      cursor: 'pointer'
+                    }}
+                  >✕</button>
                 </li>
               ))}
             </ul>
@@ -220,7 +249,15 @@ export default function RegistratiePage() {
 
           <button
             type="submit"
-            style={{ width: '100%', padding: '10px', backgroundColor: '#4a90e2', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+            style={{
+              width: '100%',
+              padding: '10px',
+              backgroundColor: '#4a90e2',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}>
             Opslaan
           </button>
         </form>

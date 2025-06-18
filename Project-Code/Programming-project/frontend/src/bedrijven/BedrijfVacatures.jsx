@@ -149,7 +149,13 @@ export default function BedrijfVacatureLijst() {
                 />
               </div>
               <div className="vacature-info">
-                <p className="bedrijf">{vacature.bedrijf}</p>
+                <p 
+                  className="bedrijf" 
+                  style={{ cursor: 'pointer', color: '#007bff', textDecoration: 'underline' }}
+                  onClick={() => navigate('/BedrijfBedrijfProfilePage')}
+                >
+                  {vacature.bedrijf}
+                </p>
                 <p className="beschrijving">{vacature.synopsis}</p>
                 <p className="functie">
                   Functie: {vacature.functie}<br />
