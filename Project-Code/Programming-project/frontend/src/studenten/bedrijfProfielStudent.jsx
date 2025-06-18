@@ -47,33 +47,33 @@ export default function BedrijfProfileStudent() {
       });
   }, []);
 
-  // Genereer tijdsopties o.b.v. configuratie
+  // Genereer tijdsopties
   const generateTimeOptions = () => {
-  const options = [];
+    const options = [];
 
-  const [startHour, startMinute] = timeConfig.beginuur.split(':').map(Number);
-  const [endHour, endMinute] = timeConfig.einduur.split(':').map(Number);
+    const [startHour, startMinute] = timeConfig.beginuur.split(':').map(Number);
+    const [endHour, endMinute] = timeConfig.einduur.split(':').map(Number);
 
-  let current = new Date();
-  current.setHours(startHour, startMinute, 0, 0);
+    let current = new Date();
+    current.setHours(startHour, startMinute, 0, 0);
 
-  const end = new Date();
-  end.setHours(endHour, endMinute, 0, 0);
+    const end = new Date();
+    end.setHours(endHour, endMinute, 0, 0);
 
-  while (current <= end) {
-    const hours = String(current.getHours()).padStart(2, '0');
-    const minutes = String(current.getMinutes()).padStart(2, '0');
-    const time = `${hours}:${minutes}`;
+    while (current <= end) {
+      const hours = String(current.getHours()).padStart(2, '0');
+      const minutes = String(current.getMinutes()).padStart(2, '0');
+      const time = `${hours}:${minutes}`;
 
-    if (!unavailableTimes.includes(time)) {
-      options.push(<option key={time} value={time}>{time}</option>);
+      if (!unavailableTimes.includes(time)) {
+        options.push(<option key={time} value={time}>{time}</option>);
+      }
+
+      current.setMinutes(current.getMinutes() + 10);
     }
 
-    current.setMinutes(current.getMinutes() + 10);
-  }
-
-  return options;
-};
+    return options;
+  };
 
   const handleOpenModal = (vacature) => {
     setSelectedVacature(vacature);
@@ -81,18 +81,15 @@ export default function BedrijfProfileStudent() {
     setShowModal(true);
 
     axios.get(`http://localhost:5000/api/speeddate/unavailable`, {
-  params: { student_id: studentId, bedrijf_id: id }
-})
-.then((res) => {
-  setUnavailableTimes(res.data);
-  setSelectedVacature(vacature);
-  setSelectedTime('');
-  setShowModal(true);
-})
-.catch((err) => {
-  console.error('Fout bij ophalen van bezette tijdstippen:', err);
-  alert('Tijdsloten konden niet worden opgehaald');
-});
+      params: { student_id: studentId, bedrijf_id: id }
+    })
+      .then((res) => {
+        setUnavailableTimes(res.data);
+      })
+      .catch((err) => {
+        console.error('Fout bij ophalen van bezette tijdstippen:', err);
+        alert('Tijdsloten konden niet worden opgehaald');
+      });
   };
 
   const handleConfirm = () => {
@@ -106,7 +103,7 @@ export default function BedrijfProfileStudent() {
       bedrijf_id: id,
       vacature_id: selectedVacature ? selectedVacature.vacature_id : null,
       tijdstip: selectedTime + ':00',
-      locatie: 'Aula 1',
+      locatie: companyData.aula, // ✅ aula komt uit companyData
       status: 'bevestigd'
     })
       .then(() => {
@@ -118,47 +115,14 @@ export default function BedrijfProfileStudent() {
       });
   };
 
-  if (loading) {
-    return <div style={{ textAlign: 'center', padding: '20px' }}><h2>Laden...</h2></div>;
-  }
-
+  if (loading) return <div style={{ textAlign: 'center', padding: '20px' }}><h2>Laden...</h2></div>;
   if (error) {
     return (
       <div style={{ textAlign: 'center', color: 'red', padding: '20px' }}>
         <h2>{error}</h2>
         <button
           onClick={() => navigate('/BedrijvenLijst')}
-          style={{
-            marginTop: '10px',
-            padding: '10px 20px',
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer'
-          }}
-        >
-          Terug naar bedrijvenlijst
-        </button>
-      </div>
-    );
-  }
-
-  if (!companyData) {
-    return (
-      <div style={{ textAlign: 'center', padding: '20px' }}>
-        <h2>Geen bedrijf gevonden</h2>
-        <button
-          onClick={() => navigate('/BedrijvenLijst')}
-          style={{
-            marginTop: '10px',
-            padding: '10px 20px',
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer'
-          }}
+          style={{ marginTop: '10px', padding: '10px 20px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
         >
           Terug naar bedrijvenlijst
         </button>
