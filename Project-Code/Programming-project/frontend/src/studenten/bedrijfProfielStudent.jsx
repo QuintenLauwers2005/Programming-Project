@@ -174,7 +174,7 @@ export default function BedrijfProfileStudent() {
       <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee', marginTop: '70px' }}>
         <img
           src={`http://localhost:5000${companyData.logo_link}`}
-          alt={`Logo van ${companyData.naam}`}
+          alt={`${companyData.naam} bedrijfslogo`}
           style={{ width: '150px', height: '150px', borderRadius: '8px', objectFit: 'cover', marginRight: '30px' }}
         />
         <div>

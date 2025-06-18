@@ -71,7 +71,7 @@ function StudentProfilePage() {
     style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', marginRight: '30px' }}
   />
 ) : (
-  <img src="./blank-profile-picture.png" alt="No profile picture found" style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', marginRight: '30px' }}/>  // or whatever fallback you want
+  <img src="./blank-profile-picture.png" alt="geen foto beschikbaar" style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', marginRight: '30px' }}/>  // or whatever fallback you want
 )}
 
 
