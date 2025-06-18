@@ -159,6 +159,29 @@ export default function BedrijfBedrijfProfilePage() {
           </div>
         </section>
 
+                {/* Over ons / Bio */}
+        {companyData.bio && (
+          <section style={{
+            marginBottom: '30px',
+            padding: '20px',
+            backgroundColor: '#f1f1f1',
+            borderRadius: '8px'
+          }}>
+            <h3 style={{
+              borderBottom: '2px solid #ccc',
+              paddingBottom: '10px',
+              marginBottom: '15px',
+              color: '#333'
+            }}>
+              Over ons
+            </h3>
+            <p style={{ color: '#555', lineHeight: '1.6' }}>
+              {companyData.bio}
+            </p>
+          </section>
+        )}
+
+
         {/* 📄 Vacatures */}
         <section style={{ marginBottom: '30px' }}>
           <h3 style={{
