@@ -33,7 +33,6 @@ export default function VacaturePage() {
     })
       .then(() => {
         navigate(`/BedrijfVacaturelijst`);
-        alert("Vacature succesvol aangemaakt.");
         setForm({ functie: '', synopsis: '', contract_type: '' });
       })
       .catch(err => {
