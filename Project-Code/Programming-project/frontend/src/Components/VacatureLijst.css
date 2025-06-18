@@ -146,29 +146,29 @@ button {
 }
 
 .bewerken-btn{
-background-color:#4a90e2;
+background-color:#1a1a5c;
 border-radius: 0.5rem;
 color: whitesmoke;
-border: #357ab8;
+border: #2a2a8d;
 box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 height: 35px;
 }
 
 .bewerken-btn:hover{
-  background-color:#357ab8;
+  background-color:#2a2a8d;
 }
 
 .verwijder-btn{
-background-color:#e70000;
+background-color:#ce0000;
 color: whitesmoke;
-border: #c00000;
+border: #ff0000;
 border-radius: 0.5rem;
 box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 height: 35px;
 }
 
 .verwijder-btn:hover{
-  background-color:#c00000;
+  background-color:#ff0000;
 }
 
 .modal-overlay {

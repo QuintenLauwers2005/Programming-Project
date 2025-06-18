@@ -50,8 +50,9 @@ main {
 }
 
 .enhanced-box {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
+  background-color: #f8f9ff;
+  border: 2px solid #e8e9ff;
+  color: #1a1a5c;
   border-radius: 1rem;
   padding: 2rem;
   margin-bottom: 3rem;
@@ -199,8 +200,8 @@ main {
 }
 
 .faq-blok {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
+  background-color: #f8f9ff;
+  border: 2px solid #e8e9ff;
   height: 150px;
   flex: 1;
   min-width: 250px;
