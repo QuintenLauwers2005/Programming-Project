@@ -427,7 +427,8 @@ app.get('/api/bedrijf/:id', (req, res) => {
       v.synopsis,
       v.open,
       b.url,
-      g.email
+      g.email,
+      b.bio
     FROM bedrijf b
     LEFT JOIN vacature v ON b.bedrijf_id = v.bedrijf_id
     LEFT JOIN gebruiker g ON b.bedrijf_id = g.gebruiker_id
@@ -455,6 +456,7 @@ app.get('/api/bedrijf/:id', (req, res) => {
       url:results[0].url,
       aula:results[0].aula,
       email:results[0].email,
+      bio:results[0].bio,
       vacatures: []
     };
 
