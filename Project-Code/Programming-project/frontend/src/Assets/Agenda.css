@@ -180,13 +180,13 @@
 }
 
 .top-button:hover {
-  background-color: #eef0ff; /* iets donkerder tint van de originele */
-  border-color: #d6d8f5;      /* subtiel donkerder rand */
+  background-color: #eef0ff;
+  border-color: #d6d8f5;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
 .top-button:active {
-  background-color: #e2e5ff;  /* nog iets donkerder */
+  background-color: #e2e5ff;
   border-color: #c3c7f0;
   transform: scale(0.97);
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);

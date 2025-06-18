@@ -100,7 +100,6 @@ export default function BedrijfVacatureLijst() {
     axios.delete(`http://localhost:5000/api/vacatures/${vacatureId}`)
       .then(() => {
         setVacatures(prev => prev.filter(v => v.vacature_id !== vacatureId));
-        alert('Vacature verwijderd!');
       })
       .catch(err => alert('Fout bij verwijderen:', err.message));
   };
