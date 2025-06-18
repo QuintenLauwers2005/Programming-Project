@@ -17,12 +17,20 @@ export default function AdminVacatureLijst() {
   const [loadingMore, setLoadingMore] = useState(false);
   const limit = 2;
 
+  useEffect(() => {
+  console.log('Nieuwe vacatures:', vacatures.map(v => v.vacature_id));
+}, [vacatures]);
+
   const fetchVacatures = useCallback((page) => {
     setLoadingMore(true);
+    console.log("API wordt opgeroepen!");
     axios.get(`http://localhost:5000/api/vacatures?page=${page}&limit=${limit}`)
       .then((res) => {
         if (res.data.length < limit) setHasMore(false);
-        setVacatures(prev => [...prev, ...res.data]);
+        setVacatures(prev => {
+        const newVacatures = res.data.filter(newV => !prev.some(oldV => oldV.vacature_id === newV.vacature_id));
+        return [...prev, ...newVacatures];
+      });
       })
       .catch((err) => {
         console.error('Fout bij ophalen vacatures:', err.message);
@@ -131,6 +139,7 @@ export default function AdminVacatureLijst() {
           <input type="text" name="functie" placeholder="Functie" value={filters.functie} onChange={handleFilterChange} />
           <input type="text" name="contractType" placeholder="Contracttype" value={filters.contractType} onChange={handleFilterChange} />
         </div>
+        
 
         <section className="enhanced-box">
           <div className="vacature-wrapper">
