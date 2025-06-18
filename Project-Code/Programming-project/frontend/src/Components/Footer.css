@@ -18,7 +18,7 @@
 
 .footer-section {
   flex: 1;
-  min-width: 220px; /* genoeg ruimte per sectie */
+  min-width: 220px;
   text-align: left;
 }
 
@@ -74,8 +74,11 @@
   color: #aaa;
 }
 
-/* Responsive voor mobiele schermen */
 @media (max-width: 768px) {
+  .footer {
+    padding: 25px 15px 15px;
+  }
+
   .footer-content {
     flex-direction: column;
     align-items: center;
@@ -84,25 +87,32 @@
   }
 
   .footer-section {
+    text-align: center;
     width: 100%;
-    min-width: unset;
+    min-width: unset; 
   }
 
   .footer-section h4 {
     font-size: 1.1rem;
     margin-bottom: 8px;
+    padding-bottom: 0px;
+  }
+
+  .social-icons {
+    justify-content: center;
   }
 
   .footer-section ul {
     display: inline-block;
+    text-align: center;
   }
 
   .footer-section ul li {
     margin: 5px 0;
   }
 
-  .social-icons {
-    justify-content: center;
+  .footer-section p, .footer-section a {
+    font-size: 0.9rem;
   }
 
   .footer-bottom {
