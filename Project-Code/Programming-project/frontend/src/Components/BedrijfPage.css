@@ -66,6 +66,7 @@
 .bedrijf-card {
   cursor: pointer;
   background: white;
+  border: 2px solid #e8e9ff;
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 4px 6px rgba(0,0,0,0.07);

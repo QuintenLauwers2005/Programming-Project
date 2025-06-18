@@ -12,6 +12,8 @@ export default function BedrijfProfileStudent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [unavailableTimes, setUnavailableTimes] = useState([]);
+      const [aula, setAula] = useState(null);
+  
 
   // Modal state
   const [showModal, setShowModal] = useState(false);
@@ -33,6 +35,17 @@ export default function BedrijfProfileStudent() {
       })
       .finally(() => {
         setLoading(false);
+      });
+  }, [id]);
+
+  useEffect(() => {
+    axios.get(`http://localhost:5000/api/bedrijf/${id}/aula`)
+      .then(response => {
+        setAula(response.data.aula);
+      })
+      .catch(err => {
+        console.error("Fout bij ophalen van aula:", err);
+        setError("Kon aula niet ophalen.");
       });
   }, [id]);
 
@@ -174,13 +187,15 @@ export default function BedrijfProfileStudent() {
       <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px', paddingBottom: '20px', borderBottom: '1px solid #eee', marginTop: '70px' }}>
         <img
           src={`http://localhost:5000${companyData.logo_link}`}
-          alt={`Logo van ${companyData.naam}`}
+          alt={`${companyData.naam} bedrijfslogo`}
           style={{ width: '150px', height: '150px', borderRadius: '8px', objectFit: 'cover', marginRight: '30px' }}
         />
         <div>
           <h2 style={{ margin: '0 0 10px 0', fontSize: '2em', color: '#007bff' }}>{companyData.naam}</h2>
           <p style={{ margin: '0 0 5px 0', color: '#333', fontSize: '1.1em' }}>{companyData.vertegenwoordiger}</p>
           <p style={{ color: '#007bff', fontSize: '1em' }}>{companyData.telefoon}</p>
+          {aula? (<p style={{ margin: '0 0 5px 0', color: '#333', fontSize: '1.1em' }}>Locatie Campus: {aula}</p>
+          ) : (<p style={{ margin: '0 0 5px 0', color: '#999', fontSize: '1.1em', fontStyle: 'italic' }}>Locatie Campus: Onbekend</p>)}
         </div>
       </section>
 

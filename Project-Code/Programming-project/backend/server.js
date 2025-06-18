@@ -13,21 +13,24 @@ app.use(cors())
 app.use(express.json())
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // serve images
 
-// aanpassen als de database verandert
-/*const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'carrierlauch'
-  
-})*/
+const db = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
+});
 
 
 
-/*res.json({
-  ...studentData,
-  vaardigheden: vaardigheidArray // dit moet een array zijn zoals [{naam: 'React'}, {naam: 'SQL'}]
-});*/
+db.connect(err => {
+  if (err) throw err
+  console.log('MySQL connected.')
+})
+
+
+app.listen(port, () => {
+  console.log(`Server draait op http://localhost:${port}`)
+})
 
 app.get('/api/student/:id', (req, res) => {
   const studentId = req.params.id;
@@ -86,25 +89,54 @@ app.get('/api/student/:id', (req, res) => {
   });
 });
 
+// Student verwijderen
+app.delete('/api/student/:id', (req, res) => {
+  const studentId = req.params.id;
 
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  // Eerst de studentrecord verwijderen
+  db.query('DELETE FROM student WHERE student_id = ?', [studentId], (err1) => {
+    if (err1) {
+      console.error('Fout bij verwijderen uit student:', err1);
+      return res.status(500).json({ error: 'Fout bij verwijderen uit student' });
+    }
+
+    // Daarna de gebruikerrecord verwijderen
+    db.query('DELETE FROM gebruiker WHERE gebruiker_id = ?', [studentId], (err2) => {
+      if (err2) {
+        console.error('Fout bij verwijderen uit gebruiker:', err2);
+        return res.status(500).json({ error: 'Fout bij verwijderen uit gebruiker' });
+      }
+
+      res.json({ message: 'Student en gebruiker verwijderd' });
+    });
+  });
 });
 
 
+// Bedrijf verwijderen
+app.delete('/api/bedrijf/:id', (req, res) => {
+  const bedrijfId = req.params.id;
 
-db.connect(err => {
-  if (err) throw err
-  console.log('MySQL connected.')
-})
+  // Eerst bedrijf-record verwijderen
+  db.query('DELETE FROM bedrijf WHERE bedrijf_id = ?', [bedrijfId], (err1) => {
+    if (err1) {
+      console.error('Fout bij verwijderen uit bedrijf:', err1);
+      return res.status(500).json({ error: 'Fout bij verwijderen uit bedrijf' });
+    }
+
+    // Daarna de gekoppelde gebruiker verwijderen
+    db.query('DELETE FROM gebruiker WHERE gebruiker_id = ?', [bedrijfId], (err2) => {
+      if (err2) {
+        console.error('Fout bij verwijderen uit gebruiker:', err2);
+        return res.status(500).json({ error: 'Fout bij verwijderen uit gebruiker' });
+      }
+
+      res.json({ message: 'Bedrijf en gebruiker verwijderd' });
+    });
+  });
+});
 
 
-app.listen(port, () => {
-  console.log(`Server draait op http://localhost:${port}`)
-})
 
 // login gegevens checken
 app.post('/api/login', (req, res) => {
