@@ -1,4 +1,4 @@
-import React, { useState, useEffect, UseCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import '../Assets/Agenda.css';
 import Navbar from '../Components/BedrijfNavBar';
 import Footer from '../Components/Footer';
@@ -13,7 +13,7 @@ export default function Bedrijfsagenda() {
   const navigate = useNavigate();
 
   // 🔁 Functie om afspraken opnieuw op te halen
-  const fetchAfspraken = UseCallback (() => {
+  const fetchAfspraken = useCallback (() => {
     fetch(`http://localhost:5000/api/afspraken?gebruiker_id=${gebruiker_id}`)
       .then(res => res.json())
       .then(data => {
