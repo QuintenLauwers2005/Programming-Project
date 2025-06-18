@@ -13,6 +13,7 @@ export default function BedrijfProfilePage() {
   const [error, setError] = useState(null);
 
   const [showModal, setShowModal] = useState(false);
+  // eslint-disable-next-line
   const [selectedVacature, setSelectedVacature] = useState(null);
   const [selectedTime, setSelectedTime] = useState('');
     const [aula, setAula] = useState(null);
