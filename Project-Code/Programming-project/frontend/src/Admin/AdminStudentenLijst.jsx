@@ -84,17 +84,7 @@ function AdminStudentenLijst() {
     <div
       key={student.id}
       onClick={() => navigate(`/admin/student/${student.id}/profiel`)}
-      style={{
-        width: '300px',
-        height: '200px',
-        padding: '15px',
-        border: '1px solid #ddd',
-        borderRadius: '8px',
-        backgroundColor: '#f9f9f9',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-        cursor: 'pointer',
-        boxSizing: 'border-box',
-      }}
+      className='student-Card'
     >
       <p style={{ fontSize: '18px', fontWeight: 'bold' }}>{student.voornaam} {student.naam}</p>
       <p>{student.email}</p>
