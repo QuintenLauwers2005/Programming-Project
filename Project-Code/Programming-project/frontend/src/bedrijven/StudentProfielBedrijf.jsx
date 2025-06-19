@@ -36,7 +36,11 @@ function StudentPublicProfile() {
         setLoading(false);
       });
 
-    axios.get(`http://localhost:5000/api/student/${student_id}/cv`)
+    axios.get(`http://localhost:5000/api/student/${student_id}/cv`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+      })
       .then(res => setCvLink(res.data.cv_link))
       .catch(() => setCvLink(null));
   }, [student_id]);

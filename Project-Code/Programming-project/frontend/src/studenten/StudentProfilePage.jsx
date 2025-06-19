@@ -46,9 +46,18 @@ function StudentProfilePage() {
 
    useEffect(() => {
   const userId = localStorage.getItem('gebruiker_id');
+  const token = localStorage.getItem('token');  // zorg dat je token zo heet in localStorage
+  if (!token) {
+    setError('Geen geldige sessie, graag opnieuw inloggen.');
+    setLoading(false);
+    return;
+  }
 
-  axios.get(`http://localhost:5000/api/student/${userId}/cv`)
-    .then((res) => {
+  axios.get(`http://localhost:5000/api/student/${userId}/cv`, {
+   headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }).then((res) => {
       setCvLink(res.data.cv_link);
     })
     .catch((err) => {

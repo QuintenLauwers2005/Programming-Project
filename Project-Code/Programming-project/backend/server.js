@@ -1163,8 +1163,17 @@ app.post('/api/upload-cv', upload.single('cv'), (req, res) => {
   });
 });
 
-app.get('/api/student/:id/cv', (req, res) => {
+app.get('/api/student/:id/cv', authenticateToken, (req, res) => {
   const studentId = req.params.id;
+
+   // Autorisatiecheck: alleen admin, bedrijf, of de student zelf mag dit zien
+  if (
+    req.user.rol !== 'admin' &&
+    req.user.rol !== 'bedrijf' &&
+    req.user.id !== studentId
+  ) {
+    return res.status(403).json({ error: 'Geen toegang tot deze studentgegevens' });
+  }
 
   const query = 'SELECT cv_link FROM student WHERE student_id = ?';
   db.query(query, [studentId], (err, results) => {
