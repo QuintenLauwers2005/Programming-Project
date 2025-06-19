@@ -15,8 +15,17 @@ export default function AdminAgenda() {
   const [filterBedrijf, setFilterBedrijf] = useState('');
 
   useEffect(() => {
+    const token = localStorage.getItem('token');  // zorg dat je token zo heet in localStorage
+  if (!token) {
+    console.log('Geen geldige sessie, graag opnieuw inloggen.');
+    return;
+  }
     // Haal alle afspraken op
-    fetch('http://localhost:5000/api/afspraken/all')
+    fetch('http://localhost:5000/api/afspraken/all', {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+      }) 
       .then(res => res.json())
       .then(data => setAfspraken(data))
       .catch(err => console.error('Fout bij ophalen van afspraken:', err));
@@ -55,7 +64,16 @@ export default function AdminAgenda() {
       })
       .then(() => {
         // Nieuwe data ophalen
-        return fetch('http://localhost:5000/api/afspraken/all')
+        const token = localStorage.getItem('token');  // zorg dat je token zo heet in localStorage
+  if (!token) {
+    console.log('Geen geldige sessie, graag opnieuw inloggen.');
+    return;
+  }
+        return fetch('http://localhost:5000/api/afspraken/all', {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+      }) 
           .then(res => res.json())
           .then(setAfspraken);
       })

@@ -54,10 +54,19 @@ function Navbar() {
 };
 
   useEffect(() => {
+     const token = localStorage.getItem('token');  // zorg dat je token zo heet in localStorage
+  if (!token) {
+    console.log('Geen geldige sessie, graag opnieuw inloggen.');
+    return;
+  }
     const gebruikerId = localStorage.getItem("gebruiker_id");
     if (!gebruikerId) return;
 
-    fetch(`http://localhost:5000/api/meldingen/${gebruikerId}`)
+    fetch(`http://localhost:5000/api/meldingen/${gebruikerId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+      })
       .then(res => res.json())
       .then(data => setMeldingen(data))
       .catch(err => console.error("Meldingen ophalen mislukt:", err));
@@ -85,7 +94,7 @@ function Navbar() {
         <div className="top-bar-right">
           <div className="desktop-only">
             <div ref={buttonRef} className="navigatie-button-popout">
-                           <button
+                          <button
   className="notificatie-btn"
   onClick={async () => {
     const gebruikerId = localStorage.getItem("gebruiker_id");

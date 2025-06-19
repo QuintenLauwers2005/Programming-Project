@@ -674,26 +674,14 @@ app.delete('/api/meldingen/:meldingId', (req, res) => {
   });
 });
 
-
-
-app.get('/api/afspraken/bedrijf/:bedrijfId', (req, res) => {
-  const bedrijfId = req.params.bedrijfId;
-
-  const sql = `
-    SELECT s.speeddate_id AS id, s.tijdstip AS time, st.voornaam, st.naam, s.locatie
-    FROM speeddate s
-    JOIN student st ON s.student_id = st.student_id
-    WHERE s.bedrijf_id = ?
-  `;
-
-  db.query(sql, [bedrijfId], (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(results);
-  });
-});
-
 // alle afspraken opvragen. voor admin agenda
-app.get('/api/afspraken/all', (req, res) => {
+app.get('/api/afspraken/all', authenticateToken,(req, res) => {
+
+    if (
+    req.user.rol !== 'admin' 
+  ) {
+    return res.status(403).json({ error: 'Geen toegang tot deze studentgegevens' });
+  }
   const sql = `
     SELECT 
       s.speeddate_id AS id,
@@ -719,9 +707,15 @@ app.get('/api/afspraken/all', (req, res) => {
   });
 });
 
-
-app.get('/api/afspraken', (req, res) => {
+app.get('/api/afspraken', authenticateToken,(req, res) => {
   const gebruikerId = req.query.gebruiker_id;  // gebruiker_id vanuit query
+
+   if (
+    req.user.rol !== 'bedrijf' &&
+    req.user.rol !== 'student'
+  ) {
+    return res.status(403).json({ error: 'Geen toegang tot deze studentgegevens' });
+  }
 
   if (!gebruikerId) {
     return res.status(400).json({ error: 'gebruiker_id is verplicht' });
@@ -869,9 +863,17 @@ app.put('/api/speeddate/:id/status', (req, res) => {
 
 
 
-
-app.get('/api/meldingen/:gebruikerId', (req, res) => {
+//aanpassen
+app.get('/api/meldingen/:gebruikerId', authenticateToken,(req, res) => {
   const gebruikerId = req.params.gebruikerId;
+
+  if (
+    req.user.rol !== 'bedrijf' &&
+    req.user.rol !== 'student' &&
+    req.user.rol !== 'admin'
+  ) {
+    return res.status(403).json({ error: 'Geen toegang tot deze studentgegevens' });
+  }
 
   const sql = `
     SELECT melding_id, boodschap, datum, gelezen 
@@ -1199,7 +1201,7 @@ app.get('/api/student/:id/cv', authenticateToken, (req, res) => {
 
 
 
-
+//aanpassen
 app.get('/api/speeddate/:id/student', (req, res) => {
   const speeddateId = req.params.id;
 
@@ -1285,6 +1287,8 @@ app.get('/api/bedrijf/:id/aula', (req, res) => {
   });
 });
 
+
+//aanpassen
 app.get('/api/speeddate/unavailable', (req, res) => {
   const { student_id, bedrijf_id } = req.query;
 

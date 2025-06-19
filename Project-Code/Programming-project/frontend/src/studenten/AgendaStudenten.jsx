@@ -11,10 +11,19 @@ export default function AgendaStudenten() {
   const navigate = useNavigate();
 
   useEffect(() => {
+       const token = localStorage.getItem('token');  // zorg dat je token zo heet in localStorage
+  if (!token) {
+    console.log('Geen geldige sessie, graag opnieuw inloggen.');
+    return;
+  }
     const gebruiker_id = localStorage.getItem('gebruiker_id');
     if (!gebruiker_id) return;
 
-    fetch(`http://localhost:5000/api/afspraken?gebruiker_id=${gebruiker_id}`)
+    fetch(`http://localhost:5000/api/afspraken?gebruiker_id=${gebruiker_id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+      }) 
       .then(res => res.json())
       .then(data => {
         setAfspraken(data);

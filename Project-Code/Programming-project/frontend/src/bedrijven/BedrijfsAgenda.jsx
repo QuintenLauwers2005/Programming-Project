@@ -14,7 +14,16 @@ export default function Bedrijfsagenda() {
 
   // 🔁 Functie om afspraken opnieuw op te halen
   const fetchAfspraken = useCallback (() => {
-    fetch(`http://localhost:5000/api/afspraken?gebruiker_id=${gebruiker_id}`)
+       const token = localStorage.getItem('token');  // zorg dat je token zo heet in localStorage
+  if (!token) {
+    console.log('Geen geldige sessie, graag opnieuw inloggen.');
+    return;
+  }
+    fetch(`http://localhost:5000/api/afspraken?gebruiker_id=${gebruiker_id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+      }) 
       .then(res => res.json())
       .then(data => {
         console.log('Afspraken geladen:', data);
