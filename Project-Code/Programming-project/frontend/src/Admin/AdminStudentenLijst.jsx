@@ -8,14 +8,23 @@ import Footer from '../Components/Footer';
 import '../Components/AdminStudentenLijst.css';
 
 function AdminStudentenLijst() {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
   const [studenten, setStudenten] = useState([]);
   const [filters, setFilters] = useState({ naam: '', opleiding: '' });
   const [showAll, setShowAll] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/studenten')
+    const token = localStorage.getItem('token');  // zorg dat je token zo heet in localStorage
+  if (!token) {
+    console.log('Geen geldige sessie, graag opnieuw inloggen.');
+    return;
+  }
+    axios.get('http://localhost:5000/api/studenten', {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+      }) 
       .then((response) => setStudenten(response.data))
       .catch((error) => console.error('Fout bij ophalen studenten:', error))
       .finally(() => setLoading(false));

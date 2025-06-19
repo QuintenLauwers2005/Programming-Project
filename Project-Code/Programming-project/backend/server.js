@@ -310,7 +310,14 @@ WHERE b.bedrijf_id = ${BedrijfID}`, (err, results) => {
 });
 
 // alle studenten ophalen
-app.get('/api/studenten', (req, res) => {
+app.get('/api/studenten',authenticateToken, (req, res) => {
+
+  if (
+    req.user.rol !== 'admin'
+  ) {
+    return res.status(403).json({ error: 'Geen toegang tot deze studentgegevens' });
+  }
+
   const sql = `
     SELECT 
       student_id,
