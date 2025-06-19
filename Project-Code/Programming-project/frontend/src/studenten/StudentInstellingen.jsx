@@ -15,7 +15,7 @@ export default function RegistratiePage() {
     naam: '',
     email: '',
     adres: '',
-    specialisatie: '',
+    specialisatie: '', 
     opleiding: '', // ✅ toegevoegd
     linkedin: '',
     bio: '',
@@ -25,8 +25,17 @@ export default function RegistratiePage() {
   const [inputSkill, setInputSkill] = useState('');
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/student/${gebruikerId}`)
-      .then(res => {
+      const token = localStorage.getItem('token');  // zorg dat je token zo heet in localStorage
+  if (!token) {
+    console.log('Geen geldige sessie, graag opnieuw inloggen.');
+    return;
+  }
+    // studentgegevens ophalen bij component mount of id wijziging
+   axios.get(`http://localhost:5000/api/student/${gebruikerId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+      }) .then(res => {
         const fullName = res.data.name || '';
         const [voornaam, ...rest] = fullName.trim().split(' ');
         const naam = rest.join(' ');

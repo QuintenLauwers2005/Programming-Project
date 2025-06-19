@@ -17,10 +17,18 @@ function StudentPublicProfile() {
       setLoading(false);
       return;
     }
-
-    axios.get(`http://localhost:5000/api/student/${student_id}`)
-      .then(res => {
-        setStudentData(res.data);
+   const token = localStorage.getItem('token');  // zorg dat je token zo heet in localStorage
+  if (!token) {
+    console.log('Geen geldige sessie, graag opnieuw inloggen.');
+    return;
+  }
+    // studentgegevens ophalen bij component mount of id wijziging
+   axios.get(`http://localhost:5000/api/student/${student_id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+      }).then(res => {
+        setStudentData(res.data); 
         setLoading(false);
       })
       .catch(() => {
