@@ -14,8 +14,16 @@ function AdminStudentProfiel() {
   const { id } = useParams();
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/student/${id}`)
-      .then(res => { 
+      const token = localStorage.getItem('token');  // zorg dat je token zo heet in localStorage
+  if (!token) {
+    console.log('Geen geldige sessie, graag opnieuw inloggen.');
+    return;
+  }
+    axios.get(`http://localhost:5000/api/student/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }})
+      .then(res => {  
         setStudentData(res.data);
       })
       .catch(err => {

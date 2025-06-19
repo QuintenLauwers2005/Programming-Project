@@ -27,30 +27,32 @@ export default function LoginPage() {
         password
       });
 
-      const { gebruiker_id, rol, naam,logo_link,message } = response.data;
+      // Let op: backend moet hier een token terugsturen
+      const { token, gebruiker_id, rol, naam, logo_link, message } = response.data;
 
-      console.log('Login response:', response.data);
+      // JWT-token opslaan
+      localStorage.setItem('token', token);
 
       localStorage.setItem('gebruiker_id', gebruiker_id);
-      localStorage.setItem('rol', rol);
+      localStorage.setItem('rol', rol); 
 
       if (naam) {
         localStorage.setItem('naam', naam);
-        localStorage.removeItem('Bedrijf_Logo')
-      } else if(logo_link) {
-        localStorage.removeItem('naam')
-        localStorage.setItem('Bedrijf_Logo',logo_link); // schoonmaken indien geen naam
+        localStorage.removeItem('Bedrijf_Logo');
+      } else if (logo_link) {
+        localStorage.removeItem('naam');
+        localStorage.setItem('Bedrijf_Logo', logo_link);
       }
 
       console.log(message);
 
       setTimeout(() => {
         if(localStorage.getItem('rol') === 'student')
-        navigate('/HomePageStudent');
-          if(localStorage.getItem('rol') === 'bedrijf')
-        navigate('/BedrijfHomePage');
-      if(localStorage.getItem('rol') === 'admin')
-        navigate('/HomePageAdmin');
+          navigate('/HomePageStudent');
+        else if(localStorage.getItem('rol') === 'bedrijf')
+          navigate('/BedrijfHomePage');
+        else if(localStorage.getItem('rol') === 'admin')
+          navigate('/HomePageAdmin');
       }, 100);
 
     } catch (err) {
@@ -85,7 +87,7 @@ export default function LoginPage() {
                 padding: '10px',
                 border: '1px solid #ccc',
                 borderRadius: '4px',
-                boxSizing: 'border-box' // Belangrijk voor consistente breedte
+                boxSizing: 'border-box'
               }}
               placeholder="Email"
             />
@@ -93,7 +95,6 @@ export default function LoginPage() {
 
           <div style={{ marginBottom: '15px' }}>
             <label style={{ display: 'block', marginBottom: '5px' }}>Wachtwoord:</label>
-            {/* Wrapper div met position: relative */}
             <div style={{ position: 'relative', width: '100%' }}>
               <input
                 type={passwordVisible ? 'text' : 'password'}
@@ -102,10 +103,10 @@ export default function LoginPage() {
                 required
                 style={{
                   width: '100%',
-                  padding: '10px 40px 10px 10px', // Padding rechts voor het icoon
+                  padding: '10px 40px 10px 10px',
                   border: '1px solid #ccc',
                   borderRadius: '4px',
-                  boxSizing: 'border-box' // Belangrijk voor consistente breedte
+                  boxSizing: 'border-box'
                 }}
                 placeholder="Wachtwoord"
               />
@@ -125,6 +126,7 @@ export default function LoginPage() {
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}
+                aria-label="Wachtwoord zichtbaarheid wisselen"
               >
                 <img 
                   src={passwordVisible ? eyeSlashIconPath : eyeIconPath} 
@@ -170,7 +172,7 @@ export default function LoginPage() {
       </section>
 
       <footer>
-       <Footer />
+        <Footer />
       </footer>
     </div>
   );

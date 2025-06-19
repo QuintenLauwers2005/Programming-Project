@@ -21,17 +21,28 @@ function StudentProfilePage() {
 
   // Ophalen studentgegevens
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/student/${studentId}`)
-      .then(res => {
-        setStudentData(res.data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Fout bij ophalen student:', err.message);
-        setError('Kon studentgegevens niet ophalen');
-        setLoading(false);
-      });
-  }, [studentId]);
+  const token = localStorage.getItem('token');  // zorg dat je token zo heet in localStorage
+  if (!token) {
+    setError('Geen geldige sessie, graag opnieuw inloggen.');
+    setLoading(false);
+    return;
+  }
+
+  axios.get(`http://localhost:5000/api/student/${studentId}`, {
+   headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  .then(res => {
+    setStudentData(res.data);
+    setLoading(false);
+  })
+  .catch(err => {
+    console.error('Fout bij ophalen student:', err.response?.data || err.message);
+    setError('Kon studentgegevens niet ophalen');
+    setLoading(false);
+  });
+}, [studentId]);
 
    useEffect(() => {
   const userId = localStorage.getItem('gebruiker_id');

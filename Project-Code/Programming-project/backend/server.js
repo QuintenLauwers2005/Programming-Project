@@ -8,6 +8,8 @@ const path = require('path');
 require('dotenv').config();
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 
 app.use(cors())
 app.use(express.json())
@@ -32,8 +34,32 @@ app.listen(port, () => {
   console.log(`Server draait op http://localhost:${port}`)
 })
 
-app.get('/api/student/:id', (req, res) => {
-  const studentId = req.params.id;
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader?.split(' ')[1];
+
+  if (!token) return res.status(401).json({ error: 'Geen token meegegeven' });
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ error: 'Token ongeldig of verlopen' });
+    req.user = user;
+    next();
+  });
+}
+
+
+app.get('/api/student/:id', authenticateToken, (req, res) => {
+  const studentId = parseInt(req.params.id);
+
+  // Autorisatiecheck: alleen admin, bedrijf, of de student zelf mag dit zien
+  if (
+    req.user.rol !== 'admin' &&
+    req.user.rol !== 'bedrijf' &&
+    req.user.id !== studentId
+  ) {
+    return res.status(403).json({ error: 'Geen toegang tot deze studentgegevens' });
+  }
+
   const sql = `
     SELECT 
       s.student_id,
@@ -171,8 +197,16 @@ app.post('/api/login', (req, res) => {
         return res.status(401).json({ error: 'Wachtwoord is incorrect' });
       }
 
+      // ✅ Maak de JWT-token aan
+      const token = jwt.sign(
+        { id: gebruiker.gebruiker_id, rol: gebruiker.rol },
+        process.env.JWT_SECRET,
+        { expiresIn: '1d' }
+      );
+
       res.json({
         message: 'Login succesvol',
+        token, // ✅ stuur de token mee naar frontend
         gebruiker_id: gebruiker.gebruiker_id,
         rol: gebruiker.rol,
         naam: gebruiker.rol === 'student' ? gebruiker.student_naam : null,
@@ -184,6 +218,7 @@ app.post('/api/login', (req, res) => {
     }
   });
 });
+
 
 
 
@@ -330,70 +365,7 @@ app.post('/api/vacatures', (req, res) => {
 });
 
 
-//studenten ophalen
-app.get('/api/student/:id', (req, res) => {
-  const studentId = req.params.id;
 
-  const sql = `
-    SELECT 
-      s.student_id,
-      s.voornaam,
-      s.naam,
-      s.email,
-      s.opleiding,
-      s.opleidingsjaar,
-      s.profiel_foto_url,
-      v.id AS vaardigheid_id,
-      v.naam AS vaardigheid_naam,
-      s.linkedin_url,
-      s.bio,
-      s.adres,
-      s.specialisatie,
-      s.telefoon
-    FROM student s
-    LEFT JOIN student_vaardigheid sv ON s.student_id = sv.student_id
-    LEFT JOIN vaardigheid v ON sv.vaardigheid_id = v.id
-    WHERE s.student_id = ?
-  `;
-
-  db.query(sql, [studentId], (err, results) => {
-    if (err) {
-      console.error('Databasefout:', err);
-      return res.status(500).json({ error: 'Interne serverfout' });
-    }
-
-    if (results.length === 0) {
-      return res.status(404).json({ error: 'Student niet gevonden' });
-    }
-
-    const studentInfo = {
-      id: results[0].student_id.toString(),
-      name: (results[0].voornaam || '') + ' ' + (results[0].naam || ''),
-      email: results[0].email,
-      opleiding: results[0].opleiding,
-      instelling: 'Erasmushogeschool Brussel',  // nog hardcoded
-      afstudeerjaar: results[0].opleidingsjaar,
-      adres: results[0].adres,
-      profielFotoUrl: results[0].profiel_foto_url,
-      linkedinurl: results[0].linkedin_url,
-      bio: results[0].bio,
-      specialisatie:results[0].specialisatie,
-      telefoon: results[0].telefoon,
-      vaardigheden: []
-    };
-
-    results.forEach(row => {
-      if (row.vaardigheid_id && row.vaardigheid_naam) {
-        studentInfo.vaardigheden.push({
-          id: row.vaardigheid_id.toString(),
-          naam: row.vaardigheid_naam
-        });
-      }
-    });
-
-    res.json(studentInfo);
-  });
-});
 
 //bedrijven ophalen
 app.get('/api/bedrijven', (req, res) => {

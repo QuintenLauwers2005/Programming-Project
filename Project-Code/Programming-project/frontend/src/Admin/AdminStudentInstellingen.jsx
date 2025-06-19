@@ -18,12 +18,20 @@ export default function AdminStudentInstellingen() {
     linkedin: '',
     bio: '',
     opleiding: '',  // nieuw veld toegevoegd
-  });
+  }); 
 
   useEffect(() => {
+     const token = localStorage.getItem('token');  // zorg dat je token zo heet in localStorage
+  if (!token) {
+    console.log('Geen geldige sessie, graag opnieuw inloggen.');
+    return;
+  }
     // studentgegevens ophalen bij component mount of id wijziging
-    axios.get(`http://localhost:5000/api/student/${id}`)
-      .then((res) => {
+   axios.get(`http://localhost:5000/api/student/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+      }).then((res) => {
         setStudent(res.data);
         const fullName = res.data.name || '';
         const [voornaam, ...rest] = fullName.trim().split(' ');
