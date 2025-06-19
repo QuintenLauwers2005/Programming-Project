@@ -33,6 +33,7 @@ Dit project is opgebouwd met de volgende technologieën:
 * **HTML**, **CSS**, **JavaScript**
 * **React.js** — voor het bouwen van een interactieve SPA.
 * **router react** — voor verbinden van alle documenten met elkaar.
+* **JWT authenticator** - extra beveiliging zodat je de gegevens niet in de browser kan ophalen
 
 ### 🗄️ Database
 
