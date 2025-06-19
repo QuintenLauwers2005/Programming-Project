@@ -863,7 +863,7 @@ app.put('/api/speeddate/:id/status', (req, res) => {
 
 
 
-//aanpassen
+
 app.get('/api/meldingen/:gebruikerId', authenticateToken,(req, res) => {
   const gebruikerId = req.params.gebruikerId;
 
@@ -1200,33 +1200,6 @@ app.get('/api/student/:id/cv', authenticateToken, (req, res) => {
 });
 
 
-
-//aanpassen
-app.get('/api/speeddate/:id/student', (req, res) => {
-  const speeddateId = req.params.id;
-
-  const sql = `
-    SELECT 
-      s.student_id
-    FROM speeddate sp
-    JOIN student s ON sp.student_id = s.student_id
-    WHERE sp.speeddate_id = ?
-  `;
-
-  db.query(sql, [speeddateId], (err, results) => {
-    if (err) {
-      console.error('Databasefout:', err);
-      return res.status(500).json({ error: 'Databasefout' });
-    }
-
-    if (results.length === 0) {
-      return res.status(404).json({ error: 'Speeddate of student niet gevonden' });
-    }
-
-    res.json(results[0]);
-  });
-});
-
 app.post('/api/upload/logo', upload.single('logo'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
 
@@ -1288,9 +1261,15 @@ app.get('/api/bedrijf/:id/aula', (req, res) => {
 });
 
 
-//aanpassen
-app.get('/api/speeddate/unavailable', (req, res) => {
+app.get('/api/speeddate/unavailable',authenticateToken, (req, res) => {
   const { student_id, bedrijf_id } = req.query;
+
+   if (
+    req.user.rol !== 'student' &&
+    req.user.id !== student_id
+  ) {
+    return res.status(403).json({ error: 'Geen toegang tot deze studentgegevens' });
+  }
 
   const sql = `
     SELECT tijdstip FROM speeddate

@@ -157,6 +157,11 @@ export default function StudentVacatureLijst() {
 };
 
   const handleOpenModal = (vacature) => {
+    const token = localStorage.getItem('token');  // zorg dat je token zo heet in localStorage
+  if (!token) {
+    console.log('Geen geldige sessie, graag opnieuw inloggen.');
+    return;
+  }
     setSelectedVacature(vacature);
     setSelectedTime('');
     setShowModal(true);
@@ -164,9 +169,12 @@ export default function StudentVacatureLijst() {
     const student_id = localStorage.getItem('gebruiker_id');
   const bedrijf_id = vacature.bedrijf_id;
 
-  fetch(`http://localhost:5000/api/speeddate/unavailable?student_id=${student_id}&bedrijf_id=${bedrijf_id}`)
+  fetch(`http://localhost:5000/api/speeddate/unavailable?student_id=${student_id}&bedrijf_id=${bedrijf_id}`, { 
+      headers: {
+      Authorization: `Bearer ${token}`}
+    })
     .then(res => res.json())
-    .then(data => setUnavailableTimes(data))
+    .then(data => setUnavailableTimes(data)) 
     .catch(err => console.error('Fout bij ophalen onbeschikbare tijdstippen:', err));
 };
   

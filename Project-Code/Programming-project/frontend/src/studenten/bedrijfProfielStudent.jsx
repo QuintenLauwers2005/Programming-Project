@@ -82,8 +82,15 @@ export default function BedrijfProfileStudent() {
   };
 
   const handleOpenModal = (vacature) => {
-    axios.get(`http://localhost:5000/api/speeddate/unavailable`, {
-      params: { student_id: studentId, bedrijf_id: id }
+    const token = localStorage.getItem('token');  // zorg dat je token zo heet in localStorage
+  if (!token) {
+    console.log('Geen geldige sessie, graag opnieuw inloggen.');
+    return;
+  }
+    axios.get(`http://localhost:5000/api/speeddate/unavailable`, { 
+      params: { student_id: studentId, bedrijf_id: id },
+      headers: {
+      Authorization: `Bearer ${token}`}
     })
     .then((res) => {
       setUnavailableTimes(res.data);
