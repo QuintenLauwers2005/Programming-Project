@@ -7,7 +7,7 @@ import LogoUploadForm from '../Components/LogoUpload';
 
 export default function BedrijfInstellingen() {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const  id  = localStorage.getItem('gebruiker_id');
   const [bedrijf, setBedrijf] = useState(null);
   const [form, setForm] = useState({
     naam: '',

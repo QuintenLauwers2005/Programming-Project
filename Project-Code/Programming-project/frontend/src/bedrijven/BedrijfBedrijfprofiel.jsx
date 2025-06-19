@@ -132,7 +132,7 @@ export default function BedrijfBedrijfProfilePage() {
 
             <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
               <button
-                onClick={() => navigate(`/BedrijfsInstellingen/${id}`)}
+                onClick={() => navigate(`/BedrijfsInstellingen`)}
                 style={buttonStyle('#007bff')}
                 onMouseOver={(e) => e.target.style.backgroundColor = '#0056b3'}
                 onMouseOut={(e) => e.target.style.backgroundColor = '#007bff'}
