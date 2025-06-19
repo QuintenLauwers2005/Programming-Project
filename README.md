@@ -1,5 +1,5 @@
 # project beschrijving 
-We hebben de Carrierlaunch-app ontwikkeld om een brug te slaan tussen studenten en bedrijven door middel van speeddates. Het doel is om studenten op een makkelijkere efficiënte manier kennis te laten maken met potentiële werkgevers, terwijl bedrijven snel gemotiveerde jonge talenten kunnen ontdekken. Zo creëren we waardevolle connecties, stagekansen en toekomstige werkrelaties.
+We hebben de Carrierlaunch-app ontwikkeld om een brug te maken tussen studenten en bedrijven door middel van speeddates. Het doel is om studenten op een makkelijkere efficiënte manier kennis te laten maken met potentiële werkgevers, terwijl bedrijven snel gemotiveerde jonge talenten kunnen ontdekken. Zo creëren we waardevolle connecties, stagekansen en toekomstige werkrelaties.
 
 # 📦 Project Setup Handleiding
 
