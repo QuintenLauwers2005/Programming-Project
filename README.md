@@ -15,8 +15,8 @@ Zorg ervoor dat je het volgende hebt geïnstalleerd:
 
 > ℹ️ **Standaardpoorten:**
 >
-> * MySQL/MariaDB (database): `3306`
-> * Host server: `5000`
+> * Frontend poort: `3000`
+> * Backend poort: `5000`
 
 ---
 
