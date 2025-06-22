@@ -55,7 +55,7 @@ app.get('/api/student/:id', authenticateToken, (req, res) => {
   if (
     req.user.rol !== 'admin' &&
     req.user.rol !== 'bedrijf' &&
-    req.user.id !== studentId
+    req.user.id !== parseInt(studentId)
   ) {
     return res.status(403).json({ error: 'Geen toegang tot deze studentgegevens' });
   }
@@ -1179,7 +1179,7 @@ app.get('/api/student/:id/cv', authenticateToken, (req, res) => {
   if (
     req.user.rol !== 'admin' &&
     req.user.rol !== 'bedrijf' &&
-    req.user.id !== studentId
+    req.user.id !== parseInt(studentId)
   ) {
     return res.status(403).json({ error: 'Geen toegang tot deze studentgegevens' });
   }
@@ -1266,7 +1266,7 @@ app.get('/api/speeddate/unavailable',authenticateToken, (req, res) => {
 
    if (
     req.user.rol !== 'student' &&
-    req.user.id !== student_id
+    req.user.id !== parseInt(student_id)
   ) {
     return res.status(403).json({ error: 'Geen toegang tot deze studentgegevens' });
   }
