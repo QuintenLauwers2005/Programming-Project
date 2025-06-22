@@ -115,7 +115,7 @@ export default function RegistratieStudentPage() {
   };
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
+    <div style={{ fontFamily: 'Arial, sans-serif'}}>
       <header><Navbar /></header>
 
       <section style={{ margin: '30px 0', textAlign: 'center' }}>
