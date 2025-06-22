@@ -97,7 +97,7 @@ export default function RegistratieBedrijfPage() {
   };
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
+    <div style={{ fontFamily: 'Arial, sans-serif'}}>
       <Navbar />
       <section style={{ textAlign: 'center', margin: '30px 0' }}>
         <h2>Registreer als Bedrijf</h2>
