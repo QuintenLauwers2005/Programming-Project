@@ -74,6 +74,8 @@ function App() {
         <Route path="/BedrijfBedrijfProfilePage" element={<BedrijfBedrijfProfilePage />} />
         <Route path="/BedrijfVacaturelijst" element={<BedrijfVacatureLijst />} />
         <Route path="/StudentInstellingen" element={<StudentInstellingen />} />
+        <Route path="/BedrijfsInstellingen" element={<BedrijfInstellingen />} />
+        
 
 
 
