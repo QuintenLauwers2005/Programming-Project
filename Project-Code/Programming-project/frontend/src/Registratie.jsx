@@ -7,7 +7,7 @@ export default function RegistratiePage() {
   const navigate = useNavigate();
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
+    <div style={{ fontFamily: 'Arial, sans-serif'}}>
       {/* Navigatie */}
       <header>
         <Navbar />
